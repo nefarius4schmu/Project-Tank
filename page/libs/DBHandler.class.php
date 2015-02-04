@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* database handler
+* @author Steffen Lange
+*/
 class DBHandler{
 	
 	private $db = null;

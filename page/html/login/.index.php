@@ -1,4 +1,10 @@
 <?php
+/**
+* Project Tank Webpage
+* login page, requested by WGP API
+* handles user login and prepares basic information
+* @author Steffen Lange
+*/
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 $debug = false;

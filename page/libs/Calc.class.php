@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* class for basic calculations
+* @author Steffen Lange
+*/
 class Calc{
 	
 	public static function hexToRgb($hexStr){

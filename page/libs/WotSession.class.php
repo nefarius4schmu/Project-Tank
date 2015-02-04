@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* extendes Session class to handle user session
+* @author Steffen Lange
+*/
 include_once(dirname(__FILE__)."\\Session.class.php");
 class WotSession extends Session{
 	

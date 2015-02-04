@@ -1,5 +1,9 @@
 <?php
-/* ===================================================================================== */
+/**
+* Project Tank Webpage
+* webpage for user settings
+* @author Steffen Lange
+*//* ===================================================================================== */
 $playerInfo = $_page["playerInfo"];
 $hasClan = isset($playerInfo["clan"]);
 $clanLogoMedium = $hasClan ? $playerInfo["clan"]["emblems"]["medium"] : "images/icons/settings/conference_call-32.png";

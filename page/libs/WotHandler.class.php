@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* handle and pre calc WGP API calls
+* @author Steffen Lange
+*/
 class WotHandler{
 	
 	private $wotData = null;

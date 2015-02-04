@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* basic handler for Wargaming.net Public API
+* @author Steffen Lange
+*/
 class WotData{
 	// login
 	private $applicationID = '751e3d9076d6833b0e2ebd5e16edecb8';

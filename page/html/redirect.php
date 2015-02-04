@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* webpage for custom redirects
+* @author Steffen Lange
+*/
 /* ===================================================================================== */
 if(!isset($_page)) exit();
 if(!isset($redirect)) _error(ERROR_REDIRECT_NOT_SET);

@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* logout page
+* @author Steffen Lange
+*/
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 if($_page["login"] === false) _error(ERROR_IS_LOGOUT);

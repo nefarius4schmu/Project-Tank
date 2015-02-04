@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* basic handler for server sessions
+* @author Steffen Lange
+*/
 class Session{
 	
 	private static $started = false;

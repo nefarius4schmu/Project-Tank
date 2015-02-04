@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* definitions and global functions
+* @author Steffen Lange
+*/
 if(!defined("ERROR_MISSING_LOGIN"))  define("ERROR_MISSING_LOGIN", 4000);
 if(!defined("ERROR_LOGIN_AUTH"))  define("ERROR_LOGIN_AUTH", 4001);
 if(!defined("ERROR_LOGIN_FAILED"))  define("ERROR_LOGIN_FAILED", 4002);

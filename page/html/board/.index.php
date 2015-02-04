@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* basic layout for board webpages
+* @author Steffen Lange
+*/
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 _def("wot");

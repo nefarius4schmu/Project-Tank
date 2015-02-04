@@ -1,5 +1,10 @@
 <?php 
 _def("db");
+/**
+* Project Tank Webpage
+* basic database connection handler
+* @author Steffen Lange
+*/
 class DB {
     private static $link = null ;
 

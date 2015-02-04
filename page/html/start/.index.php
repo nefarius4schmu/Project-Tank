@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* webpage for user without login
+* @author Steffen Lange
+*/
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 _lib("PageDefaults");

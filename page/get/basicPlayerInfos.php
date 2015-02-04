@@ -1,4 +1,10 @@
 <?php
+/**
+* Project Tank Webpage
+* getter for basic player information
+* @deprecated
+* @author Steffen Lange
+*/
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 _lib("WotData");

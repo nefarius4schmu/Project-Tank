@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* handler for webpage board navigation
+* @author Steffen Lange
+*/
 _def("router");
 class BoardNav{
 	

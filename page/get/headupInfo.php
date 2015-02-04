@@ -1,4 +1,10 @@
 <?php
+/**
+* Project Tank Webpage
+* getter for headup display basic information
+* @deprecated
+* @author Steffen Lange
+*/
 error_log(E_ALL);
 include_once("../login.php");
 if(!isset($activeLogin)) return exitOnError(100);

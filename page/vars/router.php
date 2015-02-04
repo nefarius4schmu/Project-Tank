@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* definitions
+* @author Steffen Lange
+*/
 if(!defined("ROUTE_START"))  define("ROUTE_START", "start");
 if(!defined("ROUTE_HOME"))  define("ROUTE_HOME", "home");
 if(!defined("ROUTE_EVENTS"))  define("ROUTE_EVENTS", "events");

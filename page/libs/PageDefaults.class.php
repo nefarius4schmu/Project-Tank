@@ -1,4 +1,10 @@
 <?php
+/**
+* Project Tank Webpage
+* handler for webpage default elements
+* @depricated
+* @author Steffen Lange
+*/
 _def("wot");
 /* ===================================================================================== */
 class PageDefaults{

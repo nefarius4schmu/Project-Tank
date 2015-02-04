@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* webpage router class
+* @author Steffen Lange
+*/
 _def("router");
 class Router{
 	private static $default = ROUTE_START;

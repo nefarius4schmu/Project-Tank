@@ -1,4 +1,9 @@
 <?php
+/**
+* Project Tank Webpage
+* basic handler for debug output
+* @author Steffen Lange
+*/
 class Debug{
 	
 	const STYLE_ERROR = "background-color:#ffe7e7;border:1px solid #FC8787;";

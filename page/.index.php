@@ -1,4 +1,10 @@
 <?php
+/**
+* Project Tank Webpage
+* 
+* @version 0.3.2
+* @author Steffen Lange
+*/
 error_log(E_ALL);
 //$debug = true;
 /* ===================================================================================== */
