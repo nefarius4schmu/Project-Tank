@@ -1,9 +1,9 @@
 <?php
+if(!isset($_page)) exit();
+/* ===================================================================================== */
 _lib("PageDefaults");
-//include_once("libs/WotData.class.php");
-//$wot = new WotData();
-
-$redirectError = isset($_GET["redirect"]) ? $_GET["redirect"]*1 : 0;
+/* ===================================================================================== */
+$redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
 /* ===================================================================================== */	
 ?>
 <!DOCTYPE html>
@@ -45,7 +45,7 @@ function printRedirectError($errorCode){
 		case 2: 
 		case 4:
 		default:
-			Debug::e("Login fehlgeschlagen!<br>Bitte versuchen Sie es erneut.($errorCode)");
+			Debug::e("Es ist ein Fehler aufgetreten!<br>Bitte versuchen Sie es sp&auml;ter erneut.($errorCode)");
 			break;
 	}
 }

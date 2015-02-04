@@ -29,6 +29,10 @@ h2{
 	position: relative;
 }
 
+.container{
+	width: auto;
+}
+
 .navbar{
 	border-radius: 0;
 }

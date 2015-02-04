@@ -13,20 +13,33 @@ _get("login", $loginData);
 //Debug::v($_SESSION);
 
 // set current page infos
-$_page = [
-	"login" => isset($loginData) && $loginData !== false,
-	"user"=> isset($loginData) ? $loginData : false,
-];
 
-$_location = isset($_GET["g"]) ? Router::getLocation($_GET["g"], $_page["login"]) : Router::getDefault($_page["login"]);
+$_isLogin = isset($loginData) && $loginData !== false;
+$_user = isset($loginData) ? $loginData : false;
+$_isError =  isset($_GET["e"]);
+
+if(!$_isError)
+	$_location = isset($_GET["g"]) ? Router::getLocation($_GET["g"], $_isLogin) : Router::getDefault($_isLogin);
+else
+	$_location = Router::getDefault();	
+
 $_routeType = Router::getType($_location);
 $_isRedirect = isset($_GET["r"]) && $_GET["r"] == "1";
+
+
+
+$_page = [
+	"login"=>$_isLogin,
+	"user"=>$_user,
+	"error"=>$_isError ? $_GET["e"] : null,
+];
 
 //Debug::v($_page);
 //Debug::r($_GET);
 //	exit();
 
-if(!$_isRedirect)
+if($_isError) _load($_location, $_page);
+else if(!$_isRedirect){
 	switch($_routeType){
 		case ROUTETYPE_BOARD:
 			$_page["board"] = $_location;
@@ -37,7 +50,7 @@ if(!$_isRedirect)
 //		case ROUTETYPE_BOARD: 	_loadBoard($_location, $_page); break;
 		default: _error(ERROR_ROUTE_UNKNOWN_TYPE);
 	}
-else
+}else
 	_redirect($_location, $_page);
 	
 /* ===================================================================================== */
