@@ -1,0 +1,53 @@
+#ErrorDocument 404 http://der_komplette_pfad_zur_Datei
+#Redirect 301 [alte_seite] [neue_seite]
+
+# close access for libwww library
+SetEnvIf User-Agent ^libwww pissoff
+Order allow,deny
+Allow from all
+Deny from env=pissoff
+
+# enable error reporting
+php_value error_reporting 2047
+
+# mod_rewrite
+<IfModule mod_rewrite.c>
+
+Options +FollowSymlinks
+RewriteEngine on
+
+# deny access to htaccess
+RewriteRule ^\.htaccess$ - [F]
+
+ # redirect login
+
+#RewriteRule login/index\.php [L,R=404]
+
+
+RewriteRule redirect/(.*) .index.php?g=$1&r=1 [QSA]
+RewriteRule index.htm .index.php
+
+RewriteRule ^([a-zA-Z]*)/$ .index.php?g=$1 [QSA]
+
+#RewriteRule login .index.php?g=login [QSA]
+#RewriteRule home .index.php?g=home [QSA]
+#RewriteRule events .index.php?g=events [QSA]
+#RewriteRule clan .index.php?g=clan [QSA]
+#RewriteRule clanwars .index.php?g=clanwars [QSA]
+#RewriteRule settings/(.*) .index.php?g=settings&b=$1
+#RewriteRule settings$ .index.php?g=settings [QSA]
+#RewriteRule imprint/$ .index.php?g=imprint [QSA]
+
+RewriteRule error/(.*) .index.php?e=$1 [QSA]
+
+
+RewriteRule images/(.*) img/$1 [L]
+RewriteRule (.*)/images/(.*) img/$2 [L]
+RewriteRule (.*)/css/(.*) css/$2 [L]
+
+
+#RewriteRule ^(.*)\.htm$ $1.php
+#RewriteRule ^(.*)/(.*)\.htm$ index.php?main=$1&sub=$2 [QSA]
+#RewriteRule ^(.*)/^(.*)/(.*)\.htm$ [L,R=404]
+
+</IfModule>

@@ -1,0 +1,29 @@
+header {
+	background: #101010 url('images/header/default/header_1650.jpg');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+@media (min-width: 1651px){
+	header {
+		background: url('images/header/default/header_1920.jpg');
+	}
+}
+
+@media (min-width: 1921px){
+	header {
+		background: url('images/header/default/header_2308.jpg');
+	}
+}
+pre{
+	margin: 0;
+	text-align: center;
+}
+.btn-large {
+	height: 50px;
+	width: 200px;
+	font-size: 24px;
+}
+.btn-login {
+	margin-top: 140px;
+}

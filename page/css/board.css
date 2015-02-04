@@ -1,0 +1,312 @@
+body{
+	min-width: 960px;
+	background-size: auto;
+	color: #373b3f;
+	font-family: Open Sans,"Helvetica CY",Helvetica,Arial,sans-serif;
+	text-align: center;
+	background: #f2f2f2; /* Old browsers */
+	background: -moz-linear-gradient(left,  rgba(242,242,242,1) 0%, rgba(249,249,249,1) 50%, rgba(242,242,242,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(242,242,242,1)), color-stop(50%,rgba(249,249,249,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
+	background: url('../images/content_bg.jpg') repeat-y 50% 0 #fcfcfc;
+}
+
+ul{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+h2{
+	font-weight: 700;
+}
+
+*{
+	position: relative;
+}
+
+.navbar{
+	border-radius: 0;
+}
+
+.navbar a{
+	color: inherit;
+}
+
+.navbar p{
+	cursor: default;
+}
+
+.navbar-brand{
+	margin: 0;
+}
+
+.navbar-fixed-left{
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+}
+
+.nav>li.active,
+.nav>li>a:focus, .nav>li>a:hover {
+	background-color: rgba(255,255,255,.1);
+}
+
+.nav-stacked>li+li {
+	margin: 0;
+}
+
+.topbar .container{
+	position: static;
+}
+
+.navbar-header {
+	position: absolute;
+	left: 0;
+	width: 240px;
+}
+
+.navbar-header .navbar-brand{
+	float: none;
+}
+
+.sidebar,
+.topbar {
+/*	background-color: #333;*/
+/*	background-color: #2a2d30;*/
+	background-color: rgba(0,0,0,.8);
+	color: #838383;
+}
+
+.topbar {
+/*	border-bottom: 1px solid red;*/
+/*	box-shadow: 0px 1px 4px 2px rgba(0,0,0,0.5);*/
+}
+
+.sidebar{
+	width: 240px;
+	margin: 50px 0 0;
+	border: 0;
+}
+
+.sidebar-header{
+	padding: 10px;
+/*	background-color: rgba(255,255,255,.4);*/
+	background-color: rgba(0,0,0,.8);
+}
+
+.sidebar-content{
+	padding: 10px;
+	background-color: rgba(0,0,0,.6);
+/*	background-color: rgba(255,255,255,.2);*/
+}
+
+.sidebar-nav,
+.sidebar-nav h5{
+	text-align: left;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.sidebar-nav h5{
+	padding: 0 15px;
+	font-size: 11px;
+}
+
+.sidebar-nav i{
+	width: 30px;
+	text-align: center;
+}
+
+.content {
+	margin: 50px 0 0 240px;
+	padding: 10px;
+	text-align: left;
+/*	z-index: -1;*/
+}
+
+/* side bar contents */
+
+.sidebar-info{
+	min-height: 50px;
+}
+
+.sidebar-info h4{
+	margin: 5px;
+}
+
+.row,
+.sidebar-info h5,
+.sidebar-info ul.row{
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar-info ul.row{
+	text-align: left;
+}
+
+.sidebar-info h5 i,
+.sidebar-info h5 span{
+	display: inline-block;
+	min-width: 28px;
+	height: 28px;
+	line-height: 28px;
+	vertical-align: middle;
+}
+
+
+/* span color themes */
+
+span.error	{color: red;}
+span.warning{color: yellow;}
+span.success{color: limegreen;}
+span.info	{color: #008fff;}
+span.boon	{color: #000;}
+span.average{color: #ffcc00;}
+span.good	{color: limegreen;}
+span.elite	{color: #008fff;}
+span.legend	{color: #f300d6;}
+
+/* custom boxes */
+
+.b-info{
+	background-color: rgba(255, 255, 255, 0.7);
+	padding: 5px;
+	margin: 10px 0;
+	box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.5);
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff #e2e2e2 #e2e2e2 #fff;
+}
+
+/* bs-callout boxes by Chris Pratt 
+ * http://cpratt.co/twitter-bootstrap-callout-css-styles/
+ */
+
+.bs-callout {
+	color: #777;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+.bs-callout h4 {
+	color: #777;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code {
+    border-radius: 3px;
+}
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+
+
+.bs-callout-default h4	{color:#777}
+.bs-callout-primary h4	{color:#428bca}
+.bs-callout-success h4	{color:#5cb85c}
+.bs-callout-danger h4	{color:#d9534f}
+.bs-callout-warning h4	{color:#f0ad4e}
+.bs-callout-info h4		{color:#5bc0de}
+
+.bs-callout-default	{border-left-color:#777}
+.bs-callout-primary	{border-left-color:#428bca}
+.bs-callout-success	{border-left-color:#5cb85c}
+.bs-callout-danger	{border-left-color:#d9534f}
+.bs-callout-warning	{border-left-color:#f0ad4e}
+.bs-callout-info	{border-left-color:#5bc0de}
+
+/* custom callouts */
+
+.bs-callout-custom{
+	padding: 0;
+	border-radius: 0;
+	border-color: #777;
+	border-width: 3px 0px 0px;
+	background-color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.bs-callout-custom h4{
+	margin: 0;
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.bs-callout-custom h4,
+.bs-callout-custom > div{
+	padding: 10px;
+}
+
+.bs-callout-custom.bs-callout-default	{border-color:#777}
+.bs-callout-custom.bs-callout-primary	{border-color:#428bca}
+.bs-callout-custom.bs-callout-success	{border-color:#5cb85c}
+.bs-callout-custom.bs-callout-danger	{border-color:#d9534f}
+.bs-callout-custom.bs-callout-warning	{border-color:#f0ad4e}
+.bs-callout-custom.bs-callout-info		{border-color:#5bc0de}
+
+/* tooltips */
+
+span[data-tooltip]{
+	cursor: default;
+}
+
+span[data-tooltip]:hover:after{
+	content: attr(data-tooltip);
+	position: absolute;
+	left: 100%;
+	padding: 0 4px;
+	margin-left: 10px;
+	min-width: 50px;
+	color: #838383;
+	background-color: rgba(0,0,0,.9);
+	border-radius: 6px;
+	text-align: left;
+	z-index: 999;
+}
+
+span[data-tooltip]:hover:before{
+	content: '';
+	position: absolute;
+	left: 100%;
+	top: 4px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 5px 10px 5px 0;
+	border-color: transparent rgba(0,0,0,.8) transparent transparent;
+}
+
+span[data-tooltip].tooltip-nowrap:after{
+	white-space: nowrap;
+	padding: 2px 4px;
+}
+
+/* image container */
+
+i.wot{
+	display: inline-block;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+i.wot.wot-emblem-large{
+	width: 64px;
+	height: 64px;
+}
+
+i.wot.wot-rank {
+	min-width: 28px;
+	min-height: 28px;
+}

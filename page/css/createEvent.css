@@ -1,0 +1,4 @@
+#showMaps .dd-options {
+	max-height: 410px;
+	overflow: auto;
+}
