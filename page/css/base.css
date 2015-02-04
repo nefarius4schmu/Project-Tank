@@ -74,6 +74,8 @@ h1{
 	font-size: 70px;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
+	white-space: nowrap;
+	text-transform: uppercase;
 }
 
 #page-nav {

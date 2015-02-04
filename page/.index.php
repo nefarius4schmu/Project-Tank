@@ -13,10 +13,10 @@ _get("login", $loginData);
 //Debug::v($_SESSION);
 
 // set current page infos
-
 $_isLogin = isset($loginData) && $loginData !== false;
 $_user = isset($loginData) ? $loginData : false;
 $_isError =  isset($_GET["e"]);
+$_isMessage = isset($_GET["m"]);
 
 if(!$_isError)
 	$_location = isset($_GET["g"]) ? Router::getLocation($_GET["g"], $_isLogin) : Router::getDefault($_isLogin);
@@ -32,6 +32,7 @@ $_page = [
 	"login"=>$_isLogin,
 	"user"=>$_user,
 	"error"=>$_isError ? $_GET["e"] : null,
+	"message"=>$_isMessage ? $_GET["m"] : null,
 ];
 
 //Debug::v($_page);

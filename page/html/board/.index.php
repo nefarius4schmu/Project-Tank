@@ -6,6 +6,7 @@ _def("wot");
 _lib("WotData");
 _lib("WotHandler");
 _lib("Calc");
+_lib("BoardNav");
 /* ===================================================================================== */
 $activePage = $_page["board"];
 $activePageClass = " class='active'";
@@ -14,17 +15,16 @@ $wh = new WotHandler(new WotData());
 $playerInfo = $wh->getBasicPlayerInfo($wotUser);
 if($playerInfo === false || empty($playerInfo)) _error(ERROR_API_GET_PLAYER_INFO);
 /* ===================================================================================== */
-$hasClan = true;//isset($playerInfo["clan"]);
+$hasClan = false;//isset($playerInfo["clan"]);
 $useTheme = false;
 /* ===================================================================================== */
 $userStyle = $hasClan && $useTheme ? getUserThemeStyle($playerInfo["clan"]["color"]): false;
 $clanTag = $hasClan ? $playerInfo["clan"]["tag"] : CLAN_NONE_TAG;
 $clanName = $hasClan ? $playerInfo["clan"]["name"] : CLAN_NONE_NAME;
-$clanImage = $hasClan ? $playerInfo["clan"]["emblems"]["large"] : CLAN_NONE_IMAGE_URL;
+$clanImageURL = $hasClan ? $playerInfo["clan"]["emblems"]["large"] : CLAN_NONE_IMAGE_URL;
 $clanRole = $hasClan ? $playerInfo["clan"]["role"] : CLAN_NONE_ROLE;
 $clanRole_i18n = $hasClan ? $playerInfo["clan"]["role_i18n"] : CLAN_NONE_ROLE_I18N;
 $clanRoleImgURL = $hasClan ? PATH_IMG_RANK.$clanRole.PATH_IMG_RANK_EXT : null;
-$clanRoleImg = $clanRoleImgURL !== null ? "<i class='wot wot-rank' style='background-image:url($clanRoleImgURL)'></i>" : null;
 $userName = $wotUser["userName"];
 $statsWins = $playerInfo["stats"]["wins"];
 $statsBattles = $playerInfo["stats"]["battles"];
@@ -34,6 +34,10 @@ $statsHits = $playerInfo["stats"]["hits"];
 $statsShots = $playerInfo["stats"]["shots"];
 $statsHitAvg = $playerInfo["stats"]["avgHitratePerBattle"];
 $ratingGlobal = $playerInfo["rating"]["global"];
+
+
+$clanImage = $clanImageURL != CLAN_NONE_IMAGE_URL ? "<i class='wot wot-emblem-large' style='background-image: url($clanImageURL)'></i>" : "<i class='wot wot-emblem-large wot-noclan'></i>";
+$clanRoleImage = $clanRoleImgURL !== null ? "<i class='wot wot-rank' style='background-image:url($clanRoleImgURL)'></i>" : null;
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -63,7 +67,7 @@ $ratingGlobal = $playerInfo["rating"]["global"];
 		<div class='sidebar-header'>
 			<div class='sidebar-info'>
 				<div class='sidebar-logo'>
-					<i class='wot wot-emblem-large' style='background-image: url(<?=$clanImage;?>)'></i>
+					<?=$clanImage;?>
 				</div>
 				<h4><?=$clanTag;?></h4>
 				<small><?=$clanName;?></small>
@@ -73,9 +77,9 @@ $ratingGlobal = $playerInfo["rating"]["global"];
 			<div class='sidebar-info'>
 				<h4><?=$userName;?></h4>
 				<h5>
-					<?=$clanRoleImg;?>
+					<?=$clanRoleImage;?>
 					<span><?=$clanRole_i18n;?></span>
-					<?=$clanRoleImg;?>
+					<?=$clanRoleImage;?>
 				</h5>
 				<ul class='row'>
 					<li class='col-md-6'>
@@ -99,11 +103,24 @@ $ratingGlobal = $playerInfo["rating"]["global"];
 		</div>
 		<div class='sidebar-nav'>
 			<h5>Navigation</h5>
-			<ul class='nav nav-stacked'>
-				<li<?=getActivePageClass(ROUTE_HOME, $activePage);?>><a href='<?=URL_ROOT.ROUTE_HOME;?>/'><i class='fa <?=Router::getFaImg(ROUTE_HOME);?>'></i><?=Router::getName(ROUTE_HOME)?></a></li>
-				<li<?=getActivePageClass(ROUTE_CLAN, $activePage);?>><a href='<?=URL_ROOT.ROUTE_CLAN;?>/'><i class='fa <?=Router::getFaImg(ROUTE_CLAN);?>'></i><?=Router::getName(ROUTE_CLAN)?></a></li>
-				<li<?=getActivePageClass(ROUTE_EVENTS, $activePage);?>><a href='<?=URL_ROOT.ROUTE_EVENTS;?>/'><i class='fa <?=Router::getFaImg(ROUTE_EVENTS);?>'></i><?=Router::getName(ROUTE_EVENTS)?></a></li>
-				<li<?=getActivePageClass(ROUTE_CLANWARS, $activePage);?>><a href='<?=URL_ROOT.ROUTE_CLANWARS;?>/'><i class='fa <?=Router::getFaImg(ROUTE_CLANWARS);?>'></i><?=Router::getName(ROUTE_CLANWARS)?></a></li>
+			<ul class='nav nav-stacked'><?php
+				$navs = BoardNav::getNavigations(true);
+//				Debug::r($locs);
+				foreach($navs as $nav){
+					$reqClan = BoardNav::hasReqClan($nav);
+					$enabled = !$reqClan || ($reqClan && $hasClan);
+					$options = [
+						"enabled"=>$enabled,
+						"loc"=>$nav,
+						"title"=>BoardNav::getTitle($nav),
+						"url"=>URL_ROOT.$nav,
+						"faimg"=>BoardNav::getFaImg($nav),
+						"tooltip"=>$enabled ? null : TOOLTIP_REQ_CLAN,
+					];
+					echo getPageNavLink($options, $activePage);
+//				Debug::r($options);
+				}
+			?>
 			</ul>
 		</div>
 	</div>
@@ -133,5 +150,25 @@ function getUserThemeStyle($hexColor){
 			color: $cssColor;
 			background-color: $cssRGBA;
 		}";
+}
+
+function getPageNavLink($options, $activePage){
+	$isEnabled = isset($options["enabled"]) && $options["enabled"];
+	$isLoc = isset($options["loc"]);
+	$isTitle = isset($options["title"]);
+	$isURL = isset($options["url"]);
+	$isTarget = isset($options["target"]);
+	$isFaImg = isset($options["faimg"]);
+	$isTooltip = isset($options["tooltip"]);
+	// =============================================
+	$active = $isLoc && $options["loc"] == $activePage ? " active" : null;
+	$enabled = $isEnabled ? null : " disabled";
+	$img = $isFaImg ? "<i class='fa ".$options["faimg"]."'></i>" : null;
+	$url = $isEnabled && $isURL ? $options["url"] : "#";
+	$target = $isTarget ? " target='".$options["target"]."'" : null;
+	$title = $isTitle ? $options["title"] : null;
+	$tooltip = $isTooltip ? " data-tooltip='".$options["tooltip"]."'" : null;
+	$tooltipClass = $isTooltip ? " tooltip-text" : null;
+	return "<li class='".$active.$tooltipClass.$enabled."'".$tooltip."><a href='$url'".$target.">".$img.$title."</a></li>";
 }
 ?>

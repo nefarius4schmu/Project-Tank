@@ -1,10 +1,13 @@
 <?php
 if(!isset($_page)) exit();
 /* ===================================================================================== */
-if($_page["login"] !== false) _error(ERROR_LOGIN_EXISTS);
-else if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH);
-if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH);
-else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED);
+$debug = false;
+$isLogin = $_page["login"] !== false;
+/* ===================================================================================== */
+//if() _error(ERROR_LOGIN_EXISTS);
+if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH, null, $debug);
+if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH, null, $debug);
+else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"]) ? $_GET["code"] : null, $debug);
 //Debug::r($_GET);
 
 /**
@@ -22,7 +25,9 @@ _lib("DBHandler");
 /* get account info / clan id ========================================================== */
 $wotData = new WotData();
 $playerInfo = $wotData->getPlayerInfo($_GET["account_id"]);
-if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") _error(ERROR_API_GET_PLAYER_INFO);
+if($debug) Debug::r($playerInfo);
+//exit();
+if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") _error(ERROR_API_GET_PLAYER_INFO, $playerInfo, $debug);
 $playerData = $playerInfo["data"][$_GET["account_id"]];
 
 if(!isset($playerData["clan_id"]) || empty($playerData["clan_id"])){
@@ -33,7 +38,7 @@ $_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"
 $_page["user"] = WotSession::getLoginData();
 /* ===================================================================================== */
 $dbh = new DBHandler(DB::getLink());
-if($dbh === false) _error(ERROR_DB_CONNECTION);
+if($dbh === false) _error(ERROR_DB_CONNECTION, null, $debug);
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -83,10 +88,11 @@ $firstLogin = false;
 
 // update login database
 $result = $dbh->accountLogin($_GET["account_id"], $_GET["nickname"]);
-if($result === false) _error(ERROR_DB_LOGIN); // do smth else cause page is printed
+if($result === false) _error(ERROR_DB_LOGIN, null, $debug); // do smth else cause page is printed
 
 //$firstLogin = true;
 //$activeLogin = true;
+if($debug) exit();
 ?>
 <script>window.location.href = "<?=URL_ROOT;?>"</script>
 </body>

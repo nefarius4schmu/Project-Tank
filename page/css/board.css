@@ -25,6 +25,10 @@ h2{
 	font-weight: 700;
 }
 
+pre{
+	z-index: -1;
+}
+
 *{
 	position: relative;
 }
@@ -59,6 +63,13 @@ h2{
 .nav>li.active,
 .nav>li>a:focus, .nav>li>a:hover {
 	background-color: rgba(255,255,255,.1);
+}
+
+.nav>li.disabled>a,
+.nav>li.disabled>a:focus,
+.nav>li.disabled>a:hover{
+	color: #474747;
+	cursor: default;
 }
 
 .nav-stacked>li+li {
@@ -261,14 +272,17 @@ span.legend	{color: #f300d6;}
 
 /* tooltips */
 
+li[data-tooltip],
 span[data-tooltip]{
 	cursor: default;
 }
 
+li[data-tooltip]:hover:after,
 span[data-tooltip]:hover:after{
 	content: attr(data-tooltip);
 	position: absolute;
 	left: 100%;
+	top: 0;
 	padding: 0 4px;
 	margin-left: 10px;
 	min-width: 50px;
@@ -276,9 +290,11 @@ span[data-tooltip]:hover:after{
 	background-color: rgba(0,0,0,.9);
 	border-radius: 6px;
 	text-align: left;
+	text-transform: none;
 	z-index: 999;
 }
 
+li[data-tooltip]:hover:before,
 span[data-tooltip]:hover:before{
 	content: '';
 	position: absolute;
@@ -288,12 +304,22 @@ span[data-tooltip]:hover:before{
 	height: 0;
 	border-style: solid;
 	border-width: 5px 10px 5px 0;
-	border-color: transparent rgba(0,0,0,.8) transparent transparent;
+	border-color: transparent rgba(0,0,0,.9) transparent transparent;
 }
 
-span[data-tooltip].tooltip-nowrap:after{
+.tooltip-nowrap:after{
 	white-space: nowrap;
 	padding: 2px 4px;
+}
+
+.tooltip-small:after{
+	font-size: smaller;
+}
+
+li[data-tooltip].tooltip-text:after,
+span[data-tooltip].tooltip-text:after{
+	min-width: 120px;
+	font-size: smaller;
 }
 
 /* image container */
@@ -305,12 +331,25 @@ i.wot{
 	background-size: cover;
 }
 
-i.wot.wot-emblem-large{
+i.wot-emblem-large{
 	width: 64px;
 	height: 64px;
 }
 
-i.wot.wot-rank {
+i.wot-rank {
 	min-width: 28px;
 	min-height: 28px;
 }
+
+i.wot-noclan{
+	background-image: url(images/wot/clan/noclan_emblem_64x64.png);
+}
+/*
+i.wot-noclan:after{
+	content: 'No Clan';
+	text-transform: uppercase;
+}
+*/
+
+
+

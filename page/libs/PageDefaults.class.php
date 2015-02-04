@@ -34,7 +34,7 @@ class PageDefaults{
 		<a class='home-link' href='<?php echo $redirect;?>' target='_self'></a>
 		<div id='wotLogoHeader' class='header-logo'>
 			<a href='http://worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a>
-			<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>CLAN-ROOM</a></div>	
+			<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>Project Tank</a></div>	
 		</div>
 		<?php
 	}
@@ -47,7 +47,7 @@ class PageDefaults{
 			<a class='home-link' href='<?php echo $redirect;?>' target='_self'></a>
 			<div id='wotLogoHeader' class='header-logo'>
 				<a href='http://worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a>
-				<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>CLAN-ROOM</a></div>	
+				<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>Project Tank</a></div>	
 			</div>
 			<?php
 			if($showHeadup) self::getHeadup($nickname, $role_i18n);

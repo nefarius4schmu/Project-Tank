@@ -20,6 +20,8 @@ if(!defined("ERROR_ROUTE_UNKNOWN_TYPE"))  define("ERROR_ROUTE_UNKNOWN_TYPE", 300
 if(!defined("PAGE_BRAND"))  define("PAGE_BRAND", "Planet Tank");
 if(!defined("PAGE_TITLE_SETTINGS"))  define("PAGE_TITLE_SETTINGS", "Settings");
 
+if(!defined("TOOLTIP_REQ_CLAN"))  define("TOOLTIP_REQ_CLAN", "F&uuml;r diese Funktion m&uuml;ssen Sie Mitglied eines Clans sein.");
+
 if(!defined("TEXT_SETTINGS_TANKS"))  define("TEXT_SETTINGS_TANKS", "Tanks in Garage");
 if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Allow to cache your current tanks in garage in our database for extended functions. This information will only be accessable for authorized members of your current clan.");
 
@@ -46,10 +48,15 @@ function _def($name){
 	include_once("vars/$name.php");
 }
 
-function _error($errorCode){
-	if(isset($debug) && $debug) exit();
+function _error($errorCode, $data=null, $debug=false){
+	if($debug){
+		Debug::e("ERROR: $errorCode");
+		if(isset($data)) Debug::v($data);
+		return;
+	}
 	_lib("Router");
-	header("Location: ".Router::getDefaultRedirectURL()."error/".$errorCode);
+	$msg = isset($data) ? "/&m=".json_encode($data) : null;
+	header("Location: ".Router::getDefaultRedirectURL()."error/".$errorCode.$msg);
 	exit();
 }
 

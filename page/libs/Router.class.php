@@ -14,28 +14,19 @@ class Router{
 		],
 		ROUTE_HOME=>[
 			"login"=>true,
-			"type"=>ROUTETYPE_BOARD,
-			"name"=>"Home",
-			"faimg"=>"fa-home",
-			
+			"type"=>ROUTETYPE_BOARD,	
 		],
 		ROUTE_EVENTS=>[
 			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
-			"name"=>"Events",
-			"faimg"=>"fa-star",
 		],
 		ROUTE_CLAN=>[
 			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
-			"name"=>"Clan",
-			"faimg"=>"fa-users",
 		],
 		ROUTE_CLANWARS=>[
 			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
-			"name"=>"Clanwars",
-			"faimg"=>"fa-trophy",
 		],
 		ROUTE_SETTINGS=>[
 			"login"=>true,
@@ -77,14 +68,6 @@ class Router{
 		return self::isLocation($loc) && isset(self::$locations[$loc]["type"]);
 	}
 	
-	private static function hasName($loc){
-		return self::isLocation($loc) && isset(self::$locations[$loc]["name"]);
-	}
-	
-	private static function hasFaImg($loc){
-		return self::isLocation($loc) && isset(self::$locations[$loc]["faimg"]);
-	}
-	
 	/* ===================================================================================== */
 	
 	public static function getLocation($loc, $isLogin=false){
@@ -100,18 +83,6 @@ class Router{
 		return self::hasType($loc) 
 			? self::$locations[$loc]["type"] 
 			: self::$defaultType;
-	}
-	
-	public static function getName($loc){
-		return self::hasName($loc) 
-			? self::$locations[$loc]["name"] 
-			: self::$loc;
-	}
-	
-	public static function getFaImg($loc){
-		return self::hasFaImg($loc) 
-			? self::$locations[$loc]["faimg"] 
-			: null;
 	}
 	
 	public static function getLoginRedirectURL(){
