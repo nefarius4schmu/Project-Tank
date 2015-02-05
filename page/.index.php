@@ -2,7 +2,7 @@
 /**
 * Project Tank Webpage
 * 
-* @version 0.3.2
+* @version 0.3.4
 * @author Steffen Lange
 */
 error_log(E_ALL);

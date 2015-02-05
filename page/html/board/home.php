@@ -14,7 +14,7 @@ $playerInfo = $_page["playerInfo"];
 $hasClan = isset($playerInfo["clan"]);
 /* ===================================================================================== */
 Debug::s("Hier steht mal was tolles");
-Debug::r($playerInfo);
+//Debug::r($playerInfo);
 /* ===================================================================================== */
 ?>
 

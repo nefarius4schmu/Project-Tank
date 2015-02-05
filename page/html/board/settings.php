@@ -12,9 +12,9 @@ $clanLogoMedium = $hasClan ? $playerInfo["clan"]["emblems"]["medium"] : "images/
 ?>
 <h2><?=PAGE_TITLE_SETTINGS;?></h2>
 <div class='bs-callout bs-callout-danger bs-callout-custom'>
-	<h4>World of Tanks Private Data</h4>
-	<div class='row'>
-		<ul class='row'>
+	<h4>Private Daten</h4>
+	<div class='callout-content'>
+		<ul class='row row-table'>
 			<li class='col-md-6'>
 				<h5><?=TEXT_SETTINGS_TANKS;?></h5>
 				<small><?=TEXT_SETTINGS_TANKS_DESCR;?></small>
@@ -38,6 +38,17 @@ $clanLogoMedium = $hasClan ? $playerInfo["clan"]["emblems"]["medium"] : "images/
 </div>
 <div class='bs-callout bs-callout-custom'>
 	<h4>Global</h4>
-	<div class='row'>content</div>
+	<div class='callout-content'>content</div>
 </div>
+<div class='bs-callout bs-callout-success bs-callout-custom'>
+	<h4>Schmu</h4>
+	<div class='callout-content'>content</div>
+</div>
+<div class='bs-callout bs-callout-warning bs-callout-custom'>
+	<h4>Noch mehr Schmu</h4>
+	<div class='callout-content'>content</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src='js/jquery.ddslick.min.js'></script>
+<script src='js/settings.js'></script>
 
