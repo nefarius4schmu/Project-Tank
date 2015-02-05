@@ -44,7 +44,6 @@ RewriteRule error/(.*) .index.php?e=$1 [QSA]
 RewriteRule images/(.*) img/$1 [L]
 RewriteRule (.*)/images/(.*) img/$2 [L]
 RewriteRule (.*)/css/(.*) css/$2 [L]
-RewriteRule (.*)/js/(.*) js/$2 [L]
 
 
 #RewriteRule ^(.*)\.htm$ $1.php

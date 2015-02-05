@@ -186,7 +186,7 @@ span.error	{color: red;}
 span.warning{color: yellow;}
 span.success{color: limegreen;}
 span.info	{color: #008fff;}
-span.boon	{color: inherit;}
+span.boon	{color: #000;}
 span.average{color: #ffcc00;}
 span.good	{color: limegreen;}
 span.elite	{color: #008fff;}
@@ -274,47 +274,6 @@ span.legend	{color: #f300d6;}
 .bs-callout-custom.bs-callout-warning	{border-color:#f0ad4e}
 .bs-callout-custom.bs-callout-info		{border-color:#5bc0de}
 
-/* custom boxes */
-
-.row-table{
-	display: table;
-	color: #373b3f;
-}
-
-.row-table h5{
-	margin: 3px 0;
-	color: #373b3f;
-	font-weight: 700;
-}
-
-.row-table small{
-	color: #777;
-}
-
-.row-table > li{
-	float: none;
-	display: table-cell;
-	color: #777;
-	vertical-align: middle;
-}
-
-/* ddslick fixes */
-
-.dd-container{
-	line-height: 1;
-	margin: 0 auto;
-}
-
-.dd-selected{
-	color: #373b3f;
-}
-
-.dd-selected:focus,
-.dd-selected:hover{
-	color: #373b3f;
-	text-decoration: none;
-}
-
 /* tooltips */
 
 li[data-tooltip],
@@ -389,12 +348,6 @@ i.wot-rank {
 i.wot-noclan{
 	background-image: url(images/wot/clan/noclan_emblem_64x64.png);
 }
-
-i.wot-norating:after{
-	content: 'No rating';
-}
-
-
 /*
 i.wot-noclan:after{
 	content: 'No Clan';
