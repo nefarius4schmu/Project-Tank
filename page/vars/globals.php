@@ -23,12 +23,13 @@ if(!defined("ERROR_ROUTE_UNKNOWN_TYPE"))  define("ERROR_ROUTE_UNKNOWN_TYPE", 300
 
 
 if(!defined("PAGE_BRAND"))  define("PAGE_BRAND", "Planet Tank");
-if(!defined("PAGE_TITLE_SETTINGS"))  define("PAGE_TITLE_SETTINGS", "Settings");
+if(!defined("PAGE_TITLE_SETTINGS"))  define("PAGE_TITLE_SETTINGS", "Einstellungen");
 
 if(!defined("TOOLTIP_REQ_CLAN"))  define("TOOLTIP_REQ_CLAN", "F&uuml;r diese Funktion m&uuml;ssen Sie Mitglied eines Clans sein.");
 
-if(!defined("TEXT_SETTINGS_TANKS"))  define("TEXT_SETTINGS_TANKS", "Tanks in Garage");
-if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Allow to cache your current tanks in garage in our database for extended functions. This information will only be accessable for authorized members of your current clan.");
+if(!defined("TEXT_SETTINGS_TANKS"))  define("TEXT_SETTINGS_TANKS", "Panzer in der Garage");
+//if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Allow to cache your current tanks in garage in our database for extended functions. This information will only be accessable for authorized members of your current clan.");
+if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Erlaube Mitgliedern deines Clans Einsicht in deine Garage.<br><u>Bitte beachte</u>: Mit der Verwendung der Funktion stimmst du zu, dass wir die betreffenden Daten speichern und verarbeiten d&uuml;rfen. Diese werden nur für erweitere Funktionen verwendet und nicht an Dritte weitergegeben!");
 
 /* ===================================================================================== */
 /* ===================================================================================== */
