@@ -13,6 +13,7 @@ class WotSession extends Session{
 	const WOT_USER_NAME = "userName";
 	const WOT_USER_ID = "userID";
 	const WOT_CLAN_ID = "clanID";
+	const USER_SETTINGS = "settings";
 	
 	private static $data = null;
 	
@@ -33,12 +34,12 @@ class WotSession extends Session{
 	} 
 	
 	public static function startWotSession(){
-		parent::start();
+		if(!self::isWotSession()) parent::start();
 		if(!self::hasLoginData()) self::updateSession();
 	}
 	
 	public static function setLoginData($id, $name, $clan, $token, $expire){
-		if(!self::isWotSession()) self::startWotSession();
+		self::startWotSession();
 		if(!parent::is()) return false;
 		self::$data = [
 			self::WOT_USER_ID=>$id,
@@ -46,14 +47,24 @@ class WotSession extends Session{
 			self::WOT_CLAN_ID=>$clan,
 			self::WOT_TOKEN=>$token,
 			self::WOT_TOKEN_EXPIRES_AT=>$expire,
+			self::USER_SETTINGS=>null,
 		];
 		self::updateSession();
 		return true;
 	}
 	
 	public static function getLoginData(){
-		if(!self::isWotSession()) self::startWotSession();
+		self::startWotSession();
 		return self::isWotLogin() ? parent::get(self::SESSION_KEY) : false;
+	}
+	
+	public static function setSettings($settings){
+		$data = self::getLoginData();
+		if($data === false) return false;
+		$data[self::USER_SETTINGS] = $settings;
+		self::$data = $data;
+		self::updateSession();
+		return true;
 	}
 	
 	public static function logout(){

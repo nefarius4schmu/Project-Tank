@@ -2,6 +2,7 @@
 /**
 * Project Tank Webpage
 * getter for login session data
+* @deprecated
 * @author Steffen Lange
 */
 /**

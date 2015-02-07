@@ -19,17 +19,11 @@ if(!defined("ERROR_API_GET_PLAYER_INFO"))  define("ERROR_API_GET_PLAYER_INFO", 5
 if(!defined("ERROR_API_LOGOUT"))  define("ERROR_API_LOGOUT", 5002);
 if(!defined("ERROR_DB_CONNECTION"))  define("ERROR_DB_CONNECTION", 9099);
 if(!defined("ERROR_DB_LOGIN"))  define("ERROR_DB_LOGIN", 9001);
+if(!defined("ERROR_DB_LOGIN_SETTINGS"))  define("ERROR_DB_LOGIN_SETTINGS", 9002);
+if(!defined("ERROR_DB_SET_SETTINGS"))  define("ERROR_DB_SET_SETTINGS", 9020);
+if(!defined("ERROR_SESSION_SET_SETTINGS"))  define("ERROR_SESSION_SET_SETTINGS", 8020);
 if(!defined("ERROR_ROUTE_UNKNOWN_TYPE"))  define("ERROR_ROUTE_UNKNOWN_TYPE", 3001);
 
-
-if(!defined("PAGE_BRAND"))  define("PAGE_BRAND", "Planet Tank");
-if(!defined("PAGE_TITLE_SETTINGS"))  define("PAGE_TITLE_SETTINGS", "Einstellungen");
-
-if(!defined("TOOLTIP_REQ_CLAN"))  define("TOOLTIP_REQ_CLAN", "F&uuml;r diese Funktion m&uuml;ssen Sie Mitglied eines Clans sein.");
-
-if(!defined("TEXT_SETTINGS_TANKS"))  define("TEXT_SETTINGS_TANKS", "Panzer in der Garage");
-//if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Allow to cache your current tanks in garage in our database for extended functions. This information will only be accessable for authorized members of your current clan.");
-if(!defined("TEXT_SETTINGS_TANKS_DESCR"))  define("TEXT_SETTINGS_TANKS_DESCR", "Erlaube Mitgliedern deines Clans Einsicht in deine Garage.<br><u>Bitte beachte</u>: Mit der Verwendung der Funktion stimmst du zu, dass wir die betreffenden Daten speichern und verarbeiten d&uuml;rfen. Diese werden nur für erweitere Funktionen verwendet und nicht an Dritte weitergegeben!");
 
 /* ===================================================================================== */
 /* ===================================================================================== */
@@ -54,15 +48,17 @@ function _def($name){
 	include_once("vars/$name.php");
 }
 
-function _error($errorCode, $data=null, $debug=false){
-	if($debug){
+function _error($errorCode, $data=null, $debug=false, $getLink=false){
+	if($debug && !$getLink){
 		Debug::e("ERROR: $errorCode");
 		if(isset($data)) Debug::v($data);
 		return;
 	}
 	_lib("Router");
-	$msg = isset($data) ? "/&m=".json_encode($data) : null;
-	header("Location: ".Router::getDefaultRedirectURL()."error/".$errorCode.$msg);
+	$msg = isset($data) ? "/&m=".rawurlencode(json_encode($data)) : null;
+	$location = Router::getDefaultRedirectURL()."error/".$errorCode.$msg;
+	if($getLink) return $location;
+	header("Location: ".$location);
 	exit();
 }
 

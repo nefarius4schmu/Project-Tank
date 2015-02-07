@@ -14,6 +14,7 @@ if(!defined("ROUTE_LOGIN"))  define("ROUTE_LOGIN", "login");
 if(!defined("ROUTE_LOGOUT"))  define("ROUTE_LOGOUT", "logout");
 if(!defined("ROUTE_IMPRINT"))  define("ROUTE_IMPRINT", "imprint");
 if(!defined("ROUTE_BOARD"))  define("ROUTE_BOARD", "board");
+if(!defined("ROUTE_SET"))  define("ROUTE_SET", "set");
 
 if(!defined("ROUTETYPE_DEFAULT"))  define("ROUTETYPE_DEFAULT", 0);
 if(!defined("ROUTETYPE_BOARD"))  define("ROUTETYPE_BOARD", 1);

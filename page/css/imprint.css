@@ -2,6 +2,10 @@
 * Project Tank Webpage
 * @author Steffen Lange
 */
+h1{
+	text-align: center;
+}
+
 .text-link{
 	display: inline-block;
 	color: #007bff

@@ -14,7 +14,7 @@ $redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Project Tank</title>
+	<title><?=PAGE_BRAND;?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/base.css">

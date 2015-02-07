@@ -13,7 +13,7 @@ class Router{
 	
 	private static $defaultType = ROUTETYPE_DEFAULT;
 	
-	private static $locations = [
+	private static $routes = [
 		ROUTE_START=>[
 			"login"=>false,
 		],
@@ -50,6 +50,10 @@ class Router{
 		ROUTE_LOGOUT=>[
 			"login"=>true,
 		],
+		ROUTE_SET=>[
+			"login"=>true,
+			"loc"=>"jobs/set/",
+		],
 		ROUTE_IMPRINT=>[
 			"login"=>false,
 		],
@@ -57,36 +61,44 @@ class Router{
 	
 	/* ===================================================================================== */
 	
-	private static function reqLogin($loc){
-		return isset(self::$locations[$loc]["login"]) && self::$locations[$loc]["login"];
+	private static function reqLogin($id){
+		return isset(self::$routes[$id]["login"]) && self::$routes[$id]["login"];
 	}
 	
-	private static function isLocation($loc){
-		return isset(self::$locations[$loc]);
+	private static function isRoute($id){
+		return isset(self::$routes[$id]);
 	}
 	
-	private static function hasRedirect($loc){
-		return self::isLocation($loc) && isset(self::$locations[$loc]["redirect"]);
+	private static function hasRedirect($id){
+		return self::isRoute($id) && isset(self::$routes[$id]["redirect"]);
 	}
 	
-	private static function hasType($loc){
-		return self::isLocation($loc) && isset(self::$locations[$loc]["type"]);
+	private static function hasType($id){
+		return self::isRoute($id) && isset(self::$routes[$id]["type"]);
+	}
+	
+	private static function hasLocation($id){
+		return self::isRoute($id) && isset(self::$routes[$id]["loc"]);
 	}
 	
 	/* ===================================================================================== */
 	
-	public static function getLocation($loc, $isLogin=false){
-		if(!self::isLocation($loc) || (!$isLogin && self::reqLogin($loc))) return self::getDefault($isLogin);
-		return $loc;
+	public static function getRoute($id, $isLogin=false){
+		if(!isset($id) || !self::isRoute($id) || (!$isLogin && self::reqLogin($id))) return self::getDefault($isLogin);
+		return $id;
+	}
+	
+	public static function getLocation($id){
+		return self::hasLocation($id) ? self::$routes[$id]["loc"] : $id;
 	}
 	
 	public static function getDefault($isLogin=false){
 		return $isLogin ? self::$defaultLogged : self::$default;
 	}
 	
-	public static function getType($loc){
-		return self::hasType($loc) 
-			? self::$locations[$loc]["type"] 
+	public static function getType($id){
+		return self::hasType($id) 
+			? self::$routes[$id]["type"] 
 			: self::$defaultType;
 	}
 	
@@ -98,10 +110,19 @@ class Router{
 		return self::$defaultRedirectURL;
 	}
 	
-	public static function getRedirectData($loc){
-		return self::hasRedirect($loc) 
-			? self::$locations[$loc]["redirect"] 
+	public static function getRedirectData($id){
+		return self::hasRedirect($id) 
+			? self::$routes[$id]["redirect"] 
 			: false;
 	}
 	
+	public static function getBreadcrumbs(){
+		$loc = $_SERVER["REDIRECT_URL"];
+		$crumbs =  explode("/", $loc);
+		$out = [ROUTE_HOME=>self::getLocation(ROUTE_HOME)];
+		foreach($crumbs as $crumb){
+			if(self::isRoute($crumb)) $out[$crumb] = self::getLocation($crumb);
+		}
+		return $out;
+	}
 }

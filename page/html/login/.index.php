@@ -25,26 +25,12 @@ else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"])
 * check session login failed
 */
 /* ===================================================================================== */
+$redirect = URL_ROOT;
+$isError = false;
+/* ===================================================================================== */
 _lib("WotData");
 _lib("DB");
 _lib("DBHandler");
-/* get account info / clan id ========================================================== */
-$wotData = new WotData();
-$playerInfo = $wotData->getPlayerInfo($_GET["account_id"]);
-if($debug) Debug::r($playerInfo);
-//exit();
-if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") _error(ERROR_API_GET_PLAYER_INFO, $playerInfo, $debug);
-$playerData = $playerInfo["data"][$_GET["account_id"]];
-
-if(!isset($playerData["clan_id"]) || empty($playerData["clan_id"])){
-	$playerData["clan_id"] = null;
-}
-/* store login data ==================================================================== */
-$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], $playerData["clan_id"], $_GET["access_token"], $_GET["expires_at"]);
-$_page["user"] = WotSession::getLoginData();
-/* ===================================================================================== */
-$dbh = new DBHandler(DB::getLink());
-if($dbh === false) _error(ERROR_DB_CONNECTION, null, $debug);
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -88,18 +74,46 @@ if($dbh === false) _error(ERROR_DB_CONNECTION, null, $debug);
 	</div>
 <?php
 flush();
+/* prepare handler ===================================================================== */
+$wotData = new WotData();
+$dbh = new DBHandler(DB::getLink());
+if(!$dbh->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, true), $debug);
+/* get account info / clan id ========================================================== */
+$playerInfo = $wotData->getPlayerInfo($_GET["account_id"]);
+if($debug) Debug::r($playerInfo);
+if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") 
+	redirect(_error(ERROR_API_GET_PLAYER_INFO, $playerInfo, $debug, true), $debug);
+$playerData = $playerInfo["data"][$_GET["account_id"]];
+
+if(!isset($playerData["clan_id"]) || empty($playerData["clan_id"])){
+	$playerData["clan_id"] = null;
+}
+/* store login data ==================================================================== */
+$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], $playerData["clan_id"], $_GET["access_token"], $_GET["expires_at"]);
+$_page["user"] = WotSession::getLoginData();
+
 /* ===================================================================================== */	
 // get first login 
 $firstLogin = false;
 
 // update login database
 $result = $dbh->accountLogin($_GET["account_id"], $_GET["nickname"]);
-if($result === false) _error(ERROR_DB_LOGIN, null, $debug); // do smth else cause page is printed
+if($result === false) redirect(_error(ERROR_DB_LOGIN, null, $debug, true), $debug); // do smth else cause page is printed
 
-//$firstLogin = true;
-//$activeLogin = true;
-if($debug) exit();
+// get user settings and store in session
+$result = $dbh->getUserSettings($_GET["account_id"]);
+if($result === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debug, true), $debug); // do smth else cause page is printed
+$result = WotSession::setSettings($result);
+if($result === false) redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug); // do smth else cause page is printed
+
+/* ===================================================================================== */	
+redirect($redirect, $debug);
+/* ===================================================================================== */
+/* ===================================================================================== */
+
+function redirect($location, $debug=false){
+	if(!$debug) echo "<script>window.location.href = '".$location."';</script></body></html>";
+	else Debug::v($location);
+	exit();
+}
 ?>
-<script>window.location.href = "<?=URL_ROOT;?>"</script>
-</body>
-</html>

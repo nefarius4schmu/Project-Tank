@@ -23,7 +23,7 @@ class DBHandler{
 	}
 	
 	private function query($query){
-		if(!$this->isConnection()) return false;
+		if(!$this->isConnection() || empty($query)) return false;
 		try{
 			$sql = $this->db->prepare($query);
 			$sql->execute();
@@ -35,6 +35,7 @@ class DBHandler{
 	}
 	
 	private function queryCount($query){
+		if($this->isDebug()) return $query;
 		$sql = $this->query($query);
 		if($sql === false) return false;
 		if($row = $sql->fetch(PDO::FETCH_NUM)){
@@ -44,18 +45,46 @@ class DBHandler{
 	}
 	
 	private function queryAssoc($query){
+		if($this->isDebug()) return $query;
 		$sql = $this->query($query);
 		if($sql === false) return false;
 		return $sql->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
+	private function queryIndexedArray($query, $index){
+		if($this->isDebug()) return $query;
+		$sql = $this->query($query);
+		if($sql === false) return false;
+		$out = [];
+		while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+			$item = [];
+			foreach($row as $key=>$value)
+				if($key != $index) $item[$key] = $value;
+			$out[$row[$index]] = $item;
+		}
+		return $out;
+	}
+	
+	private function queryKeyValuePair($query){
+		if($this->isDebug()) return $query;
+		$sql = $this->query($query);
+		if($sql === false) return false;
+		$out = [];
+		while($row = $sql->fetch(PDO::FETCH_NUM)){
+			$out[$row[0]] = $row[1];
+		}
+		return $out;
+	}
+	
 	private function queryInsert($query){
+		if($this->isDebug()) return $query;
 		$sql = $this->query($query);
 		if($sql === false) return false;
 		return true;
 	}
 	
 	private function queryEntryExists($query){
+		if($this->isDebug()) return $query;
 		$sql = $this->query($query);
 		if($sql === false) return false;
 		if($row = $sql->fetch(PDO::FETCH_NUM))
@@ -69,8 +98,7 @@ class DBHandler{
 	
 	public function accountExists($accountID){
 		$query = "SELECT accountID FROM user WHERE accountID=$accountID;";
-		if($this->isDebug()) return $query;
-		else return $this->queryEntryExists($query);
+		return $this->queryEntryExists($query);
 	}
 	
 	public function accountLogin($accountID, $nickname){
@@ -80,8 +108,7 @@ class DBHandler{
 //		$query = "INSERT IGNORE INTO user(accountID, nickname, lastLogin) 
 //				VALUES($accountID, '$nickname', now());"
 				//ON DUBLICATE KEY UPDATE lastLogin=now();";
-		if($this->isDebug()) return $query;
-		else return $this->queryInsert($query);
+		return $this->queryInsert($query);
 	}
 	
 	public function addTanks($accountID, $tanks){
@@ -93,8 +120,7 @@ class DBHandler{
 			$query .= "INSERT IGNORE INTO `hasTanks` (`accountID`, `tankID`, `inGarage`) VALUES ('$accountID', '$tankID', '$inGarage');";
 		}
 		if($query == "") return false;
-		if($this->isDebug()) return $query;
-		else return $this->queryInsert($query);
+		return $this->queryInsert($query);
 	}
 	
 	public function getTanks($accountID, $inGarage=null, $limit=null){
@@ -105,8 +131,7 @@ class DBHandler{
 		$query .= isset($inGarage) ? " AND a.inGarage=$inGarage" : "";
 		$query .= " ORDER BY b.level DESC";
 		$query .= isset($limit) ? " LIMIT 0, $limit;" : ";";
-		if($this->isDebug()) return $query;
-		else return $this->queryAssoc($query);
+		return $this->queryAssoc($query);
 	}
 	
 	public function countTanksByLevel($accountID, $level){
@@ -114,8 +139,7 @@ class DBHandler{
 		$query = "SELECT COUNT(a.tankID) as count FROM hasTanks a
 				LEFT JOIN tanks b ON b.tankID = a.tankID
 				WHERE a.accountID='$accountID' AND a.inGarage=1 AND b.level=$level";
-		if($this->isDebug()) return $query;
-		else return $this->queryCount($query);
+		return $this->queryCount($query);
 	}
 	
 	public function updateClan($clanID, $data){
@@ -130,15 +154,38 @@ class DBHandler{
 					WHERE eventID=1 GROUP BY eventID) b 
 				ON b.eventID=a.eventID 
 				WHERE clanID=$clanID;";
-		if($this->isDebug()) return $query;
-		else return $this->queryAssoc($query);
+		return $this->queryAssoc($query);
 	}
 	
 	public function setSettings($accountID, $showTanks){
 		$query = "INSERT INTO settings (accountID, showTanks) VALUES($accountID, $showTanks) ON DUPLICATE KEY UPDATE status=1";
 		if($query == "") return false;
-		if($this->isDebug()) return $query;
-		else return $this->queryInsert($query);
+		return $this->queryInsert($query);
+	}
+	
+	public function getUserSettings($accountID, $settingsIDs=null){
+		$qs = !isset($settingsIDs) ? null : " WHERE settingsID IN (".implode(",", $settingsIDs).")"; 
+//		$query = "SELECT * FROM usersettings WHERE accountID='".$accountID."'".$qs.";";
+		$query = "SELECT s.settingsID, ifnull(u.value, s.defaultValue) as value FROM settings s
+				LEFT JOIN (
+					SELECT * FROM usersettings WHERE accountID='$accountID'
+				) u ON u.settingsID=s.settingsID".$qs.";";
+		return $this->queryKeyValuePair($query);
+	}
+	
+	public function setUserSetting($accountID, $settingsID, $value){
+		$query = "INSERT INTO usersettings(accountID, settingsID, value) VALUES('$accountID', '$settingsID', '$value') ON DUPLICATE KEY UPDATE value='$value';";
+		return $this->queryInsert($query);
+	}
+	
+	public function setUserSettings($accountID, $settings){
+		if(!isset($accountID, $settings)) return false;
+		else if(empty($settings)) return true;
+		$query = "";
+		foreach($settings as $id=>$value){
+			$query .= "INSERT INTO usersettings(accountID, settingsID, value) VALUES('$accountID', '$id', '$value') ON DUPLICATE KEY UPDATE value='$value';";	
+		}
+		return $this->queryInsert($query);
 	}
 	
 	

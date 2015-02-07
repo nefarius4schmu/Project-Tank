@@ -1,6 +1,6 @@
 <?php
 /**
-* Project Tank Webpage
+* <?=PAGE_BRAND;?> Webpage
 * handler for webpage default elements
 * @depricated
 * @author Steffen Lange
@@ -37,10 +37,10 @@ class PageDefaults{
 	public static function getHeaderContent($activeLogin=false, $class=null, $showHeadup=false, $nickname=null, $rank=null){
 		$redirect = $activeLogin ? "home/" : "/";
 		?>
-		<a class='home-link' href='<?php echo $redirect;?>' target='_self'></a>
+		<a class='home-link' href='<?php echo URL_ROOT;?>' target='_self'></a>
 		<div id='wotLogoHeader' class='header-logo'>
 			<a href='http://worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a>
-			<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>Project Tank</a></div>	
+			<div id='pageLogoHeader' class='header-logo'><a href='<?php echo URL_ROOT;?>' target='_self'><?=PAGE_BRAND;?></a></div>	
 		</div>
 		<?php
 	}
@@ -53,7 +53,7 @@ class PageDefaults{
 			<a class='home-link' href='<?php echo $redirect;?>' target='_self'></a>
 			<div id='wotLogoHeader' class='header-logo'>
 				<a href='http://worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a>
-				<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'>Project Tank</a></div>	
+				<div id='pageLogoHeader' class='header-logo'><a href='<?php echo $redirect;?>' target='_self'><?=PAGE_BRAND;?></a></div>	
 			</div>
 			<?php
 			if($showHeadup) self::getHeadup($nickname, $role_i18n);
@@ -150,15 +150,15 @@ class PageDefaults{
 		$classA = isset($class) ? " class='$class'" : "";
 		?>
 		<footer<?php echo $classA;?>>
+			<div class='logo-footer logo-wot pull-left'><a href='http://www.worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a></div>
+			<div class='logo-footer logo-wotdev pull-right'><a href='http://www.wargaming.net/' target='_blank' style='width:100%;height:100%;'></a></div>
 			<div class='f-content'>
 				<ul class='footer-list h-list'>
 					<li class='h-item'>
-						&copy; 2014 Scale-Studios<br>
-						<a href='imprint.php'><strong>Impressum</strong></a>
+						&copy; 2015 Scale-Studios<br>
+						<a href='<?=URL_ROOT.ROUTE_IMPRINT?>'><strong>Impressum</strong></a>
 					</li>
 				</ul>
-				<div class='logo-footer logo-wot'><a href='http://worldoftanks.com/' target='_blank' style='width:100%;height:100%;'></a></div>
-				<div class='logo-footer logo-wotdev'><a href='http://na.wargaming.net/' target='_blank' style='width:100%;height:100%;'></a></div>
 			</div>
 		</footer>
 		<?php
