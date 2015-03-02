@@ -4,6 +4,7 @@
 * definitions
 * @author Steffen Lange
 */
+
 if(!defined("PATH_IMG_RANK")) define("PATH_IMG_RANK", "images/icons/rank/");
 if(!defined("PATH_IMG_RANK_EXT")) define("PATH_IMG_RANK_EXT", ".png");
 if(!defined("PATH_IMG")) define("PATH_IMG", "images/");
@@ -15,6 +16,11 @@ if(!defined("PATH_IMG_TANKS_CHN")) define("PATH_IMG_TANKS_CHN", "images/tanks/ch
 if(!defined("PATH_IMG_TANKS_UK")) define("PATH_IMG_TANKS_UK", "images/tanks/uk/");
 if(!defined("PATH_IMG_TANKS_FR")) define("PATH_IMG_TANKS_FR", "images/tanks/france/");
 if(!defined("PATH_IMG_TANKS_USA")) define("PATH_IMG_TANKS_USA", "images/tanks/usa/");
+
+if(!defined("PATH_ICON_MEMBERS")) define("PATH_ICON_MEMBERS", "images/icons/settings/conference_call-32.png");
+if(!defined("PATH_ICON_GROUP")) define("PATH_ICON_GROUP", "images/icons/settings/group-32.png");
+if(!defined("PATH_ICON_SINGLE")) define("PATH_ICON_SINGLE", "images/icons/settings/contacts-32.png");
+if(!defined("PATH_ICON_LOCK")) define("PATH_ICON_LOCK", "images/icons/settings/lock-32.png");
 
 if(!defined("IMG_TANK_UNKNOWN")) define("IMG_TANK_UNKNOWN", "images/tanks/tank_unkown.png");
 

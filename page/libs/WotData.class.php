@@ -11,11 +11,12 @@ class WotData{
 	private $urlLogout = 'https://api.worldoftanks.eu/wot/auth/logout/';
 
 	// wot api links
-	private $urlClanList = 'https://api.worldoftanks.com/wot/clan/list/';
-	private $urlClanInfo = 'https://api.worldoftanks.eu/wot/clan/info/';
-	private $urlMemberInfo = 'https://api.worldoftanks.com/wot/clan/membersinfo/';
+	private $urlClanList = 'https://api.worldoftanks.eu/wgn/clans/list/';
+	private $urlClanInfo = 'https://api.worldoftanks.eu/wgn/clans/info/';
+	private $urlMembersInfo = 'https://api.worldoftanks.eu/wgn/clans/membersinfo/';
 	private $urlPlayerInfo = 'https://api.worldoftanks.eu/wot/account/info/';
 	private $urlPlayerTank = 'http://api.worldoftanks.eu/wot/tanks/stats/';
+	
 	
 	// required params names
 	private $_paramApplicationID = "application_id";
@@ -24,7 +25,7 @@ class WotData{
 	private $_paramRedirectURI 	= "redirect_uri";
 	private $_paramAccountID 	= "account_id";
 	private $_paramClanID 		= "clan_id";
-	private $_paramMemberID 	= "member_id";
+	private $_paramMemberID 	= "member_id"; // deprecated
 	private $_paramInGarage 	= "in_garage";
 	
 	// optional param names
@@ -74,45 +75,49 @@ class WotData{
 		return array("url"=>$url, "data"=>$data);
 	}
 	
-	public function getClanList($fields=null, $search=null, $limit=null, $orderBy=null, $pageNo=null){
+	public function getClanList($fields=null, $search=null, $language=null, $limit=null, $orderBy=null, $pageNo=null){
 		$a = $this->paramApplicationID();
 		$b = !isset($fields) ? "" : "&".$this->paramFields($fields);
 		$c = !isset($search) ? "" : "&".$this->paramSearch($search);
 		$d = !isset($limit) ? "" : "&".$this->paramLimit($limit);
 		$e = !isset($orderBy) ? "" : "&".$this->paramOrderBy($orderBy);
 		$f = !isset($pageNo) ? "" : "&".$this->paramPageNo($pageNo);
-		$url = $this->urlClanList."?$a".$b.$c.$d.$e.$f;
+		$g = !isset($language) ? "" : "&".$this->paramLanguage($language);
+		$url = $this->urlClanList."?$a".$b.$c.$d.$e.$f.$g;
 		$content = $this->getContents($url);
 		return $content;
 	}
 	
-	public function getClanInfo($clanID, $language=null, $fields=null){
+	public function getClanInfo($clanID, $token=null, $fields=null, $language=null){
 		if(!isset($clanID)) return false;
 		$a = $this->paramApplicationID();
 		$b = $this->paramClanID($clanID);
 		$c = !isset($language) ? "" : "&".$this->paramLanguage($language);
 		$d = !isset($fields) ? "" : "&".$this->paramFields($fields);
-		$url = $this->urlClanInfo."?$a&$b".$c.$d;
+		$e = !isset($token) ? "" : "&".$this->paramAccessToken($token);
+		$url = $this->urlClanInfo."?$a&$b".$c.$d.$e;
 		$content = $this->getContents($url);
 		return $content;
 	}
 	
-	public function getPlayerInfo($accountID, $fields=null){
+	public function getPlayerInfo($accountID, $token=null, $fields=null, $language=null){
+		if(!isset($accountID)) return false;
+		$a = $this->paramApplicationID();
+		$b = $this->paramAccountID($accountID);
+		$c = !isset($language) ? "" : "&".$this->paramLanguage($language);
+		$d = !isset($fields) ? "" : "&".$this->paramFields($fields);
+		$e = !isset($token) ? "" : "&".$this->paramAccessToken($token);
+		$url = $this->urlPlayerInfo."?$a&$b".$c.$d.$e;
+		$content = $this->getContents($url);
+		return $content;
+	}
+	
+	public function getMembersInfo($accountID, $fields=null){
 		if(!isset($accountID)) return false;
 		$a = $this->paramApplicationID();
 		$b = $this->paramAccountID($accountID);
 		$c = !isset($fields) ? "" : "&".$this->paramFields($fields);
-		$url = $this->urlPlayerInfo."?$a&$b".$c;
-		$content = $this->getContents($url);
-		return $content;
-	}
-	
-	public function getMemberInfo($memberID, $fields=null){
-		if(!isset($memberID)) return false;
-		$a = $this->paramApplicationID();
-		$b = $this->paramMemberID($memberID);
-		$c = !isset($fields) ? "" : "&".$this->paramFields($fields);
-		$url = $this->urlMemberInfo."?$a&$b".$c;
+		$url = $this->urlMembersInfo."?$a&$b".$c;
 		$content = $this->getContents($url);
 		return $content;
 	}

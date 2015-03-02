@@ -17,12 +17,16 @@ if(!defined("ERROR_REDIRECT_NOT_SET"))  define("ERROR_REDIRECT_NOT_SET", 2011);
 if(!defined("ERROR_REDIRECT_MISSING_TYPE"))  define("ERROR_REDIRECT_MISSING_TYPE", 2012);
 if(!defined("ERROR_API_GET_PLAYER_INFO"))  define("ERROR_API_GET_PLAYER_INFO", 5001);
 if(!defined("ERROR_API_LOGOUT"))  define("ERROR_API_LOGOUT", 5002);
+if(!defined("ERROR_API_GET_CLAN_MEMBERS_STATS"))  define("ERROR_API_GET_CLAN_MEMBERS_STATS", 5003);
 if(!defined("ERROR_DB_CONNECTION"))  define("ERROR_DB_CONNECTION", 9099);
 if(!defined("ERROR_DB_LOGIN"))  define("ERROR_DB_LOGIN", 9001);
 if(!defined("ERROR_DB_LOGIN_SETTINGS"))  define("ERROR_DB_LOGIN_SETTINGS", 9002);
 if(!defined("ERROR_DB_SET_SETTINGS"))  define("ERROR_DB_SET_SETTINGS", 9020);
 if(!defined("ERROR_SESSION_SET_SETTINGS"))  define("ERROR_SESSION_SET_SETTINGS", 8020);
+if(!defined("ERROR_SESSION_SET_DATA"))  define("ERROR_SESSION_SET_DATA", 8021);
 if(!defined("ERROR_ROUTE_UNKNOWN_TYPE"))  define("ERROR_ROUTE_UNKNOWN_TYPE", 3001);
+if(!defined("ERROR_GET_UNKNOWN_TYPE"))  define("ERROR_GET_UNKNOWN_TYPE", 8500);
+if(!defined("ERROR_GET_MISSING_TYPE"))  define("ERROR_GET_MISSING_TYPE", 8501);
 
 
 /* ===================================================================================== */

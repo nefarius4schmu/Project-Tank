@@ -2,43 +2,96 @@
 * Project Tank Webpage
 * @author Steffen Lange
 */
-.clan-box{
-background: #f5f5f5;
-border: 1px solid #b6b6b6;
-border-radius: 3px;
--moz-border-radius: 3px;
--webkit-border-radius: 3px;
-box-shadow: 1px 2px 4px rgba(0,0,0,.4);
+h2{
+	margin-bottom: 0;
 }
 
-.member-box p {
-margin-left: 10px;
-    }
+h2+h3{
+	margin-top: 0;
+}
 
-span.error {
-    color:red;
+.stats-table{
+	color: #838383;
+	background-color: #484D57;
+	text-align: left;
 }
-span.warning {
-    color:yellow;
+
+.stats-table tr{
+/*	background-color: #484D57;*/
+/*	background-color: rgba(0,0,0,.1);*/
 }
-span.success {
-color:limegreen;
+
+.stats-table tr:nth-child(even){
+/*	background-color: #3C4049;*/
+	background-color: rgba(0,0,0,.1);
 }
-span.info {
-color:rgb(0, 143, 255);
+
+.stats-table th,
+.stats-table td{
+	padding: 7px;
 }
-span.boon {
-color:black;
+
+.stats-table th{
+	text-align: center;
+	width: 100px;
+/*	background-color: #32363D;*/
+	background-color: rgba(0,0,0,.2);
+	border: 1px solid #838383;
 }
-span.average {
-color:rgb(255, 204, 0);
+
+.stats-table td{
+/*	background-color: #484D57;*/
+	border: 1px solid #838383;
+	color: #a0a0a0;
+	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
 }
-span.good {
-color:limegreen;
+
+.stats-table td:nth-child(even){
+/*	background-color: #484D57;*/
 }
-span.elite {
-color:rgb(0, 143, 255);
+.stats-table.fixed-top {
+	position: fixed;
+	top: 88px;
+	box-shadow: 0px 2px 2px -1px black;
 }
-span.legend {
-color:rgb(243, 0, 214);
+
+/* tablesorter */
+
+.stats-table th.header:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+
+.stats-table th.header.headerSortUp,
+.stats-table th.header.headerSortDown {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.stats-table colgroup.sorted{
+	background-color: rgba(0,0,0,.6);
+}
+
+/* custom box */
+
+.icon-title{
+	display: inline-block;
+	font-size: 10px;
+	text-align: center;
+}
+
+.icon-title i{
+	display: block;
+	font-size: 28px;
+	text-align: center;
+}
+
+/* bs custom */
+
+.progress{
+	margin: 0;
+	border-radius: 0;
+}
+
+#loader_membersTable{
+	margin: 50px 0;
 }

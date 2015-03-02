@@ -69,7 +69,7 @@ if($debug){
 <?php
 flush();
 /* ===================================================================================== */
-$dbh = new DBHandler(DB::getLink());
+$dbh = new DBHandler(DB::getLink(DB::DB_PTWG));
 if($debug) $dbh->debug();
 if(!$dbh->isConnection()) $redirect = "error/".ERROR_DB_CONNECTION;
 else{

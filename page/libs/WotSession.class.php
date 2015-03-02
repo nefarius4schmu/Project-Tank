@@ -13,6 +13,7 @@ class WotSession extends Session{
 	const WOT_USER_NAME = "userName";
 	const WOT_USER_ID = "userID";
 	const WOT_CLAN_ID = "clanID";
+	const WOT_PLAYER = "player";
 	const USER_SETTINGS = "settings";
 	
 	private static $data = null;
@@ -48,6 +49,7 @@ class WotSession extends Session{
 			self::WOT_TOKEN=>$token,
 			self::WOT_TOKEN_EXPIRES_AT=>$expire,
 			self::USER_SETTINGS=>null,
+			self::WOT_PLAYER=>null,
 		];
 		self::updateSession();
 		return true;
@@ -63,6 +65,15 @@ class WotSession extends Session{
 		if($data === false) return false;
 		$data[self::USER_SETTINGS] = $settings;
 		self::$data = $data;
+		self::updateSession();
+		return true;
+	}
+	
+	public static function setData($data, $key){
+		$loginData = self::getLoginData();
+		if($loginData === false) return false;
+		$loginData[$key] = $data;
+		self::$data = $loginData;
 		self::updateSession();
 		return true;
 	}

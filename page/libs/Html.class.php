@@ -7,6 +7,7 @@
 class Html{
 
 	/* ===================================================================================== */
+	
 	public static function toDataString($data){
 		if(!is_array($data)) return null;
 		$out = "";
@@ -14,6 +15,14 @@ class Html{
 			$out .= " data-".$name."='".$value."'";
 		}
 		return $out;
+	}
+	
+	public static function createFaImg($options=[]){
+		if(is_string($options)) return "<i class='fa fa-".$options."'></i>";
+		$type = isset($options["type"]) ? " fa-".$options["type"] : null;
+		$class = isset($options["class"]) ? " ".$options["class"] : null;
+		$content = isset($options["content"]) ? $options["content"] : null;
+		return "<i class='fa".$type.$class."'>".$content."</i>";
 	}
 	
 	
@@ -74,5 +83,27 @@ class Html{
 			</li>
 			<li class='col-md-6'>$content</li>
 		</ul>";
+	}
+	
+	public static function createBoardInfo($options){
+		$id = isset($options["id"]) ? " id='".$options["id"]."'" : null;
+		$title = isset($options["title"]) ? $options["title"] : null;
+		$type = isset($options["type"]) ? "-".$options["type"] : null;
+		$class = isset($options["class"]) ? " ".$options["class"] : null;
+		$hasElements = isset($options["elements"]) && !empty($options["elements"]);
+		
+		$rows = "";
+		if($hasElements) foreach($options["elements"] as $e){
+			$eTitle = isset($e["title"]) ? $e["title"] : null;
+			$eContent = isset($e["content"]) ? $e["content"] : null;
+			$disabled = isset($e["disabled"]) && $e["disabled"] ? " disabled": null;
+			$faimg = isset($e["faimg"]) ? self::createFaImg($e["faimg"]) : null;
+			$rows .= "<li class='row".$disabled."'>".$faimg.$eTitle."<span class='pull-right'>".$eContent."</span></li>";
+		}
+		
+		return "<div".$id." class='board-info".$type.$class."'>
+			<h6>".$title."</h6>
+			<ul>".$rows."</ul>
+		</div>";
 	}
 }

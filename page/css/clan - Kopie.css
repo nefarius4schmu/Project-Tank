@@ -1,0 +1,108 @@
+/**
+* Project Tank Webpage
+* @author Steffen Lange
+*/
+.diagramm-wrapper > div+div{
+	margin-top: 10px;
+}
+
+.dt-diagram{
+	
+}
+
+.dt-canvas{
+	
+}
+
+.dt-canvas > table{
+	width: 100%;
+}
+
+.dt-member{
+	
+}
+
+.dt-select{
+	width: 1%;
+	padding: 10px;
+	white-space: nowrap;
+}
+
+.dt-bar{
+	width: 99%;
+}
+
+.dt-modes{
+	
+}
+
+.dt-mode{
+	
+}
+
+.dt-mode.active{
+	background-color: rgba(0, 0, 0, 0.35);
+}
+
+.dt-table {
+}
+
+.dt-table table {
+    width: 100%;
+}
+
+.dt-table th {
+	
+}
+
+.dt-mode-switch {
+}
+
+.dt-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.dt-select{
+	width: 1%;
+	padding: 10px 20px;
+	white-space: nowrap;
+}
+
+.dt-table-head th{
+	padding: 10px;
+	color: #fafafa;
+}
+
+.dt-table-head th+th{
+	text-align: center;
+}
+
+/* flow table */
+
+.flow-table{
+	
+}
+
+.flow-table col{
+	
+}
+
+.flow-table tr{
+	
+}
+
+.flow-table th{
+	
+}
+
+.flow-table td{
+	
+}
+
+/* bs custom */
+.progress{
+	margin: 0;
+	border-radius: 0;
+}
+

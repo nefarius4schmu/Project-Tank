@@ -11,14 +11,15 @@ $debug = false;
 _def("settings");
 _lib("DB");
 _lib("DBHandler");
-$dbh = new DBHandler(DB::getLink());
+$dbh = new DBHandler(DB::getLink(DB::DB_PTWG));
 if($dbh === false) _error(ERROR_DB_CONNECTION, null, $debug);
 /* ===================================================================================== */
-$playerInfo = $_page["playerInfo"];
-$hasClan = isset($playerInfo["clan"]);
-$clanLogoMedium = $hasClan ? $playerInfo["clan"]["emblems"]["medium"] : "images/icons/settings/conference_call-32.png";
+$wotUser = $_page["user"];
+$playerInfo = $wotUser["player"];
+$hasClan = $playerInfo->hasClan();
+$clanLogoMedium = $hasClan ? $playerInfo->getClanEmblemMedium() : PATH_ICON_MEMBERS;
 /* ===================================================================================== */
-$settings = $dbh->getUserSettings($playerInfo["id"]);
+$settings = $dbh->getUserSettings($playerInfo->getID());
 //Debug::v($settings);
 /* ===================================================================================== */
 ?>
@@ -57,7 +58,7 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 						"text"=>"Nicht anzeigen",
 						"value"=>0,
 						"data"=>[
-							"imagesrc"=>"images/icons/settings/lock-32.png",
+							"imagesrc"=>PATH_ICON_LOCK,//"images/icons/settings/lock-32.png",
 							"description"=>"Panzer verbergen",
 						],
 					],
@@ -65,7 +66,7 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 						"text"=>"Clan F&uuml;hrung",
 						"value"=>1,
 						"data"=>[
-							"imagesrc"=>"images/icons/settings/contacts-32.png",
+							"imagesrc"=>PATH_ICON_SINGLE,//"images/icons/settings/contacts-32.png",
 							"description"=>"nur für Clan-Führung sichtbar",
 						],
 					],
@@ -73,7 +74,7 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 						"text"=>"Offiziere",
 						"value"=>2,
 						"data"=>[
-							"imagesrc"=>"images/icons/settings/group-32.png",
+							"imagesrc"=>PATH_ICON_GROUP,//"images/icons/settings/group-32.png",
 							"description"=>"für Ränge ab Junior Offizier sichtbar",
 						],
 					],
@@ -81,7 +82,7 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 						"text"=>"Soldaten",
 						"value"=>3,
 						"data"=>[
-							"imagesrc"=>"images/icons/settings/conference_call-32.png",
+							"imagesrc"=>PATH_ICON_MEMBERS,
 							"description"=>"für Ränge ab Soldat sichtbar",
 						],
 					],
@@ -97,27 +98,10 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 			];
 			echo Html::createDataSelect("showTanks", $options, true);
 		?>
-			<!--<ul class='row row-table'>
-				<li class='col-md-6'>
-					<h5><?=TEXT_SETTINGS_TANKS;?></h5>
-					<small><?=TEXT_SETTINGS_TANKS_DESCR;?></small>
-				</li>
-				<li class='col-md-6'>
-					<select class='vertical-align' id='showTanks'>
-						<option value='0' selected='selected' data-imagesrc='images/icons/settings/lock-32.png'
-							data-description='Panzer verbergen'>Nicht anzeigen</option>
-						<option value='1' data-imagesrc='images/icons/settings/contacts-32.png'
-							data-description='nur der Clan Führung anzeigen'>Clan Führung</option>
-						<option value='2' data-imagesrc='images/icons/settings/group-32.png'
-							data-description='alle Rängen ab Junior Offizier zeigen'>Offizieren</option>
-						<option value='3' data-imagesrc='images/icons/settings/conference_call-32.png'
-							data-description='alle Rängen ab Soldat zeigen'>Soldaten</option>	
-						<option value='4' data-imagesrc='<?=$clanLogoMedium;?>'
-							data-description='für alle Mitglieder des Clans sichtbar'>Clan</option>
-					</select>
-				</li>
-			</ul>-->
 		</div>
+	</div>
+	<div class='button-bar bar-bottom'>
+		<button type='submit' class='btn btn-success btn-big pull-right'>Anwenden</button>
 	</div>
 	<!--<div class='bs-callout bs-callout-custom'>
 		<h4>Global</h4>
@@ -135,7 +119,6 @@ $settings = $dbh->getUserSettings($playerInfo["id"]);
 		<button type='submit' class='btn btn-success btn-big pull-right'>Anwenden</button>
 	</div>-->
 </form>
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
 <script src='js/jquery.ddslick.min.js'></script>
 <script src='js/settings.js'></script>
 

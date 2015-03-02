@@ -26,26 +26,18 @@ RewriteRule ^\.htaccess$ - [F]
 
 RewriteRule redirect/(.*) .index.php?g=$1&r=1 [QSA]
 #RewriteRule (.*)/set .index.php?g=set&b=$1 [QSA]
+#RewriteRule (.*)/get .index.php?g=get&b=$1 [QSA]
 RewriteRule index.htm .index.php
 
 RewriteRule ^([a-zA-Z^/]*)/set$ .index.php?g=set&b=$1 [L,QSA]
+RewriteRule ^([a-zA-Z^/]*)/get$ .index.php?g=get&b=$1 [L,QSA]
 RewriteRule ^([a-zA-Z]*)/$ .index.php?g=$1 [QSA]
 RewriteRule ^([a-zA-Z^/]*)$ .index.php?g=$1 [QSA]
 
 
 
-#RewriteRule login .index.php?g=login [QSA]
-#RewriteRule home .index.php?g=home [QSA]
-#RewriteRule events .index.php?g=events [QSA]
-#RewriteRule clan .index.php?g=clan [QSA]
-#RewriteRule clanwars .index.php?g=clanwars [QSA]
-#RewriteRule settings/(.*) .index.php?g=settings&b=$1
-#RewriteRule settings$ .index.php?g=settings [QSA]
-#RewriteRule imprint/$ .index.php?g=imprint [QSA]
-
 RewriteRule error/(.*) .index.php?e=$1 [QSA]
 
-#RewriteRule set/([a-zA-Z^/]) .index.php?g=set&b=$1 [L]
 
 RewriteRule images/(.*) img/$1 [L]
 RewriteRule (.*)/images/(.*) img/$2 [L]

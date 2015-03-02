@@ -2,7 +2,7 @@
 /**
 * Project Tank Webpage
 * 
-* @version 0.4.0
+* @version 0.4.5
 * @author Steffen Lange
 */
 error_log(E_ALL);
@@ -14,6 +14,7 @@ _def("settings");
 _lib("Debug");
 _lib("Router");
 _lib("WotSession");
+_lib("WotPlayer");
 /* ===================================================================================== */
 // get login state
 //_get("login", $loginData);
@@ -27,9 +28,10 @@ $_isLogin = isset($loginData) && $loginData !== false;
 $_user = isset($loginData) ? $loginData : false;
 $_isError =  isset($_GET["e"]);
 $_isMessage = isset($_GET["m"]);
+$_isClan = isset($_user["player"]) && $_user["player"] instanceof WotPlayer && $_user["player"]->hasClan();
 
 if(!$_isError)
-	$_route = isset($_GET["g"]) ? Router::getRoute($_GET["g"], $_isLogin) : Router::getDefault($_isLogin);
+	$_route = isset($_GET["g"]) ? Router::getRoute($_GET["g"], $_isLogin, $_isClan) : Router::getDefault($_isLogin);
 else
 	$_route = Router::getDefault();	
 

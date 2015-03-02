@@ -28,9 +28,12 @@ else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"])
 $redirect = URL_ROOT;
 $isError = false;
 /* ===================================================================================== */
-_lib("WotData");
 _lib("DB");
 _lib("DBHandler");
+_lib("WotData");
+_lib("WotHandler");
+_lib("WotPlayer");
+_def("db");
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -74,12 +77,40 @@ _lib("DBHandler");
 	</div>
 <?php
 flush();
+/* prepare session ===================================================================== */
+$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], null, $_GET["access_token"], $_GET["expires_at"]);
+$_page["user"] = WotSession::getLoginData();
+
+/* API get basic user info + clan info ================================================= */
+$wh = new WotHandler(new WotData());
+
+// get basic player info
+$player = $wh->getBasicPlayerInfo($_page["user"]);
+if($player === false)
+	redirect(_error(ERROR_API_GET_PLAYER_INFO, $player, $debug, true), $debug);
+
+// get clan members list
+if($player->hasClan()){
+	$members = $wh->getClanMemberStats($player->getClanID());
+	if($members === false)
+		redirect(_error(ERROR_API_GET_CLAN_MEMBERS_STATS, $members, $debug, true), $debug);
+	$player->setClanMembers($members);
+}
+
+/* store player in session ============================================================= */
+if(!WotSession::setData($player, WotSession::WOT_PLAYER))
+	redirect(_error(ERROR_SESSION_SET_DATA, $player, $debug, true), $debug);
+
 /* prepare handler ===================================================================== */
 $wotData = new WotData();
-$dbh = new DBHandler(DB::getLink());
-if(!$dbh->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, true), $debug);
+$dbhn = new DBHandler(DB::getLink(DB::DB_PTWG));
+$dbh = new DBHandler(DB::getLink(DB::DB_WOT));
+$dbhn->debug($debug);
+$dbh->debug($debug);
+if(!$dbh->isConnection() || !$dbhn->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, true), $debug);
+
 /* get account info / clan id ========================================================== */
-$playerInfo = $wotData->getPlayerInfo($_GET["account_id"]);
+$playerInfo = $wotData->getPlayerInfo($_GET["account_id"], $_GET["access_token"]);
 if($debug) Debug::r($playerInfo);
 if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") 
 	redirect(_error(ERROR_API_GET_PLAYER_INFO, $playerInfo, $debug, true), $debug);
@@ -89,24 +120,29 @@ if(!isset($playerData["clan_id"]) || empty($playerData["clan_id"])){
 	$playerData["clan_id"] = null;
 }
 /* store login data ==================================================================== */
-$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], $playerData["clan_id"], $_GET["access_token"], $_GET["expires_at"]);
-$_page["user"] = WotSession::getLoginData();
+//$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], $playerData["clan_id"], $_GET["access_token"], $_GET["expires_at"]);
+//$_page["user"] = WotSession::getLoginData();
 
-/* ===================================================================================== */	
-// get first login 
-$firstLogin = false;
+/* DB login and update ================================================================= */
 
 // update login database
-$result = $dbh->accountLogin($_GET["account_id"], $_GET["nickname"]);
-if($result === false) redirect(_error(ERROR_DB_LOGIN, null, $debug, true), $debug); // do smth else cause page is printed
+//$dbhn->debug();
+$result = $dbhn->accountLogin($_GET["account_id"], $_GET["nickname"], $playerData["clan_id"]);
+if($result === false) redirect(_error(ERROR_DB_LOGIN, null, $debug, true), $debug);
+//else if($dbhn->isDebug()) Debug::r($result);
+
+// update database
+
 
 // get user settings and store in session
-$result = $dbh->getUserSettings($_GET["account_id"]);
-if($result === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debug, true), $debug); // do smth else cause page is printed
+//$dbh->debug();
+$result = $dbhn->getUserSettings($_GET["account_id"]);
+//Debug::v($result); exit();
+if($result === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debug, true), $debug);
 $result = WotSession::setSettings($result);
-if($result === false) redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug); // do smth else cause page is printed
-
-/* ===================================================================================== */	
+if($result === false) redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug);
+	
+/* redirect to board =================================================================== */
 redirect($redirect, $debug);
 /* ===================================================================================== */
 /* ===================================================================================== */

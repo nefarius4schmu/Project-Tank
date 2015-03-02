@@ -13,37 +13,48 @@ _lib("WotHandler");
 _lib("Calc");
 _lib("BoardNav");
 _lib("Html");
+//_lib("WotPlayer");
 /* ===================================================================================== */
 $activePage = $_page["board"];
 $activePageClass = " class='active'";
 $wotUser = $_page["user"];
+$playerInfo = $wotUser["player"];
+//Debug::r($_page);
 $wh = new WotHandler(new WotData());
 /* ===================================================================================== */
-$playerInfo = $wh->getBasicPlayerInfo($wotUser);
-if($playerInfo === false) _error(ERROR_API_GET_PLAYER_INFO);
+//$playerInfo = $wotUser["player"];//$wh->getBasicPlayerInfo($wotUser);
+//if($playerInfo === false) _error(ERROR_API_GET_PLAYER_INFO);
 /* ===================================================================================== */
-$hasClan = isset($playerInfo["clan"]["id"]);
+//Debug::r($playerInfo); exit();
+/* ===================================================================================== */
+$hasClan = $playerInfo->hasClan();//isset($playerInfo["clan"]["id"]);
 $useTheme = isset($wotUser[WotSession::USER_SETTINGS], $wotUser[WotSession::USER_SETTINGS][SETTINGS_ID_THEME_CLAN_COLOR])
 			&& $wotUser[WotSession::USER_SETTINGS][SETTINGS_ID_THEME_CLAN_COLOR] == 1;
 /* ===================================================================================== */
-$userName 		= $playerInfo["name"];
-$userStyle 		= $hasClan && $useTheme ? getUserThemeStyle($playerInfo["clan"]["color"]): false;
-$clanTag	 	= $hasClan ? $playerInfo["clan"]["tag"] : CLAN_NONE_TAG;
-$clanName 		= $hasClan ? $playerInfo["clan"]["name"] : CLAN_NONE_NAME;
-$clanImageURL 	= $hasClan ? $playerInfo["clan"]["emblems"]["large"] : CLAN_NONE_IMAGE_URL;
-$clanRole 		= $hasClan ? $playerInfo["clan"]["role"] : CLAN_NONE_ROLE;
-$clanRole_i18n 	= $hasClan ? $playerInfo["clan"]["role_i18n"] : CLAN_NONE_ROLE_I18N;
+$userName 		= $playerInfo->getName();//["name"];
+$userStyle 		= $hasClan && $useTheme ? getUserThemeStyle($playerInfo->getClanColor()) : false;//["clan"]["color"]): false;
+//$clanTag	 	= $hasClan ? $playerInfo["clan"]["tag"] : CLAN_NONE_TAG;
+$clanTag	 	= $hasClan ? $playerInfo->getClanTag() : CLAN_NONE_TAG;
+//$clanName 		= $hasClan ? $playerInfo["clan"]["name"] : CLAN_NONE_NAME;
+$clanName 		= $hasClan ? $playerInfo->getClanName() : CLAN_NONE_NAME;
+//$clanImageURL 	= $hasClan ? $playerInfo["clan"]["emblems"]["large"] : CLAN_NONE_IMAGE_URL;
+$clanImageURL 	= $hasClan ? $playerInfo->getClanEmblemLarge() : CLAN_NONE_IMAGE_URL;
+//$clanRole 		= $hasClan ? $playerInfo["clan"]["role"] : CLAN_NONE_ROLE;
+$clanRole 		= $hasClan ? $playerInfo->getClanRole() : CLAN_NONE_ROLE;
+//$clanRole_i18n 	= $hasClan ? $playerInfo["clan"]["role_i18n"] : CLAN_NONE_ROLE_I18N;
+$clanRole_i18n 	= $hasClan ? $playerInfo->getClanRole_i18n() : CLAN_NONE_ROLE_I18N;
 $clanRoleImgURL = $hasClan ? PATH_IMG_RANK.$clanRole.PATH_IMG_RANK_EXT : null;
-$statsWins 		= $playerInfo["stats"]["wins"];
-$statsBattles 	= $playerInfo["stats"]["battles"];
-$statsWinRate 	= $playerInfo["stats"]["winRatePerBattle"];
+$statsWins 		= $playerInfo->getStatsWins();//["stats"]["wins"];
+$statsBattles 	= $playerInfo->getStatsBattles();//["stats"]["battles"];
+$statsWinRate 	= $playerInfo->getStatsWinRatePerBattle();//["stats"]["winRatePerBattle"];
 $statsWinRateClass = $wh->winRateToClass($statsWinRate);
-$statsHits 		= $playerInfo["stats"]["hits"];
-$statsShots 	= $playerInfo["stats"]["shots"];
-$statsHitAvg 	= $playerInfo["stats"]["avgHitRatePerBattle"];
-$statsDamage 	= $playerInfo["stats"]["damage"];
-$statsDamageAvg	= $playerInfo["stats"]["avgDamagePerBattle"];
-$ratingGlobal 	= isset($playerInfo["rating"]["global"]) ? number_format($playerInfo["rating"]["global"]*1,0,',','.') : "<i class='wot wot-norating'></i>";
+$statsHits 		= $playerInfo->getStatsHits();//["stats"]["hits"];
+$statsShots 	= $playerInfo->getStatsShots();//["stats"]["shots"];
+$statsHitAvg 	= $playerInfo->getStatsAvgHitRatePerBattle();//["stats"]["avgHitRatePerBattle"];
+$statsDamage 	= $playerInfo->getStatsDamage();//["stats"]["damage"];
+$statsDamageAvg	= $playerInfo->getStatsAvgDamagePerBattle();//["stats"]["avgDamagePerBattle"];
+//$ratingGlobal 	= isset($playerInfo["rating"]["global"]) ? number_format($playerInfo["rating"]["global"]*1,0,',','.') : "<i class='wot wot-norating'></i>";
+$ratingGlobal 	= $playerInfo->isRating() ? number_format($playerInfo->getRatingGlobal()*1,0,',','.') : "<i class='wot wot-norating'></i>";
 
 
 $clanImage = $clanImageURL != CLAN_NONE_IMAGE_URL ? "<i class='wot wot-emblem-large' style='background-image: url($clanImageURL)'></i>" : "<i class='wot wot-emblem-large wot-noclan'></i>";
@@ -61,6 +72,9 @@ $breadcrumbs = Router::getBreadcrumbs();
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/board.css">
 	<style><?=$userStyle;?></style>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
+	<script src='js/ajax.js'></script>
+	<script src='js/board.js?v=1'></script>
 </head><?php 
 flush(); 
 ?><body>
@@ -68,7 +82,10 @@ flush();
 		<div class='container'>
 			<div class='navbar-header'><a href='<?=URL_ROOT;?>' class='navbar-brand'><?=PAGE_BRAND;?></a></div>
 			<nav class='navbar-collapse'>
-				<ul class='nav navbar-nav navbar-right'>
+				<button class="navbar-toggle collapsed" data-toggle="dropdown" data-target="#accountNav">
+					<i class='fa fa-bars fa-2x'></i>
+				</button>
+				<ul id='accountNav' class='nav navbar-nav navbar-right'>
 					<li><p class='navbar-text'><i class='fa fa-fw fa-user'></i><?=$userName;?></p></li>
 					<li><a href='<?=URL_ROOT.ROUTE_SETTINGS;?>/'><i class='fa fa-wrench' title='Einstellungen'></i></a></li>
 					<li><a href='<?=URL_ROOT.ROUTE_LOGOUT;?>/'>Logout</a></li>
@@ -121,7 +138,7 @@ flush();
 				<h5><?=PAGE_HEADLINE_NAVIGATION;?></h5>
 				<ul class='nav nav-stacked'><?php
 					$navs = BoardNav::getNavigations(true);
-	//				Debug::r($locs);
+//					Debug::r($navs);
 					foreach($navs as $nav){
 						$reqClan = BoardNav::hasReqClan($nav);
 						$enabled = !$reqClan || ($reqClan && $hasClan);
@@ -157,7 +174,7 @@ flush();
 				?>
 			</div>
 			<div class='content'><?php
-				$_page["playerInfo"] = $playerInfo;
+//				$_page["playerInfo"] = $playerInfo;
 				_loadBoard($activePage, $_page);
 //				Debug::r($_page["user"]);
 //				Debug::r($playerInfo);
@@ -176,6 +193,7 @@ function getActivePageClass($target, $active){
 }
 
 function getUserThemeStyle($hexColor){
+	if(!isset($hexColor)) return null;
 	list($r, $g, $b) = Calc::hexToRgb($hexColor);
 	$grey = floor(($r+$g+$b)/3);
 	$cssRGBA = Calc::rgbaToCSS($r, $g, $b, .8);

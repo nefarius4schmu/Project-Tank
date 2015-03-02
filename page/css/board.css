@@ -3,7 +3,7 @@
 * @author Steffen Lange
 */
 body{
-	min-width: 960px;
+	min-width: 768px;
 	background-size: auto;
 	color: #373b3f;
 	font-family: Open Sans,"Helvetica CY",Helvetica,Arial,sans-serif;
@@ -101,6 +101,33 @@ pre{
 	margin: 0;
 }
 
+/* toggle nav button */
+
+.navbar-toggle{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.navbar-nav.dropdown {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 50px 0;
+	min-width: 200px;
+	background-color: rgba(0,0,0,.8);
+}
+
+@media (max-width: 768px){
+	
+	.navbar-nav{
+		display: none;
+	}
+
+}
+
+
+
 .topbar .container{
 	position: static;
 }
@@ -171,6 +198,11 @@ pre{
 /*	z-index: -1;*/
 }
 
+.center-wrapper{
+	display: block;
+	text-align: center;
+}
+
 .content {
 	padding: 50px 10px;
 }
@@ -205,6 +237,10 @@ pre{
 	vertical-align: middle;
 }
 
+.sidebar-info .col-md-6{
+	width: 50%;
+	float: left;
+}
 
 /* border header */
 
@@ -220,6 +256,15 @@ span.average{color: #ffcc00;}
 span.good	{color: limegreen;}
 span.elite	{color: #008fff;}
 span.legend	{color: #f300d6;}
+
+span.sc-bold	{font-weight:700}
+span.sc-warning	{color:#f0ad4e}
+span.sc-smooth	{color:#e7e7e7}
+span.sc-primary	{color:#428bca}
+span.sc-success	{color:#5cb85c}
+span.sc-danger	{color:#d9534f}
+span.sc-warning	{color:#f0ad4e}
+span.sc-info	{color:#5bc0de}
 
 /* custom boxes */
 
@@ -396,6 +441,15 @@ div.dd-container{
 
 }
 
+.loader {
+	display: inline-block;
+	text-align: center;
+}
+
+.loader.loader-fa i{
+	display: block;
+	margin: 0 auto;
+}
 
 /* bs-callout boxes by Chris Pratt 
  * http://cpratt.co/twitter-bootstrap-callout-css-styles/
@@ -420,12 +474,9 @@ div.dd-container{
 .bs-callout code {
     border-radius: 3px;
 }
-.bs-callout+.bs-callout {
-    margin-top: -5px;
-}
-
 
 .bs-callout-default h4	{color:#777}
+.bs-callout-smooth h4	{color:#9e9e9e}
 .bs-callout-primary h4	{color:#428bca}
 .bs-callout-success h4	{color:#5cb85c}
 .bs-callout-danger h4	{color:#d9534f}
@@ -433,13 +484,60 @@ div.dd-container{
 .bs-callout-info h4		{color:#5bc0de}
 
 .bs-callout-default	{border-left-color:#777}
+.bs-callout-smooth	{border-left-color:#e7e7e7}
 .bs-callout-primary	{border-left-color:#428bca}
 .bs-callout-success	{border-left-color:#5cb85c}
 .bs-callout-danger	{border-left-color:#d9534f}
 .bs-callout-warning	{border-left-color:#f0ad4e}
 .bs-callout-info	{border-left-color:#5bc0de}
 
+
+.bs-callout-default .bc-border	{border-color:#777}
+.bs-callout-smooth .bc-border	{border-color:#e7e7e7}
+.bs-callout-primary .bc-border	{border-color:#428bca}
+.bs-callout-success .bc-border	{border-color:#5cb85c}
+.bs-callout-danger .bc-border	{border-color:#d9534f}
+.bs-callout-warning .bc-border	{border-color:#f0ad4e}
+.bs-callout-info .bc-border		{border-color:#5bc0de}
+
+.bs-callout-default .bc-bg	{background-color:#777}
+.bs-callout-smooth .bc-bg	{background-color:#e7e7e7}
+.bs-callout-primary .bc-bg	{background-color:#428bca}
+.bs-callout-success .bc-bg	{background-color:#5cb85c}
+.bs-callout-danger .bc-bg	{background-color:#d9534f}
+.bs-callout-warning .bc-bg	{background-color:#f0ad4e}
+.bs-callout-info .bc-bg		{background-color:#5bc0de}
+
+.bs-callout-default .bc-color	{color:#777}
+.bs-callout-smooth .bc-color	{color:#e7e7e7}
+.bs-callout-primary .bc-color	{color:#428bca}
+.bs-callout-success .bc-color	{color:#5cb85c}
+.bs-callout-danger .bc-color	{color:#d9534f}
+.bs-callout-warning .bc-color	{color:#f0ad4e}
+.bs-callout-info .bc-color		{color:#5bc0de}
+
+
 /* custom callouts */
+
+.callout-buttons{
+	position: absolute;
+	top: 0;
+	right: 0;
+	text-align: right;
+	z-index: 100;
+}
+
+.callout-buttons .bt{
+	display: inline-block;
+	color: #d7d7d7;
+	margin: 0 3px;
+	cursor: pointer;
+}
+
+.callout-buttons .bt:focus,
+.callout-buttons .bt:hover{
+	color: #777;
+}
 
 .bs-callout-custom{
 	padding: 0;
@@ -452,7 +550,6 @@ div.dd-container{
 
 .bs-callout-custom h4{
 	margin: 0;
-	border-bottom: 1px solid #e2e2e2;
 }
 
 .bs-callout-custom h4,
@@ -461,12 +558,50 @@ div.dd-container{
 	padding: 10px;
 }
 
+.bs-callout-custom .callout-content {
+	border-top: 1px solid #e2e2e2;
+}
+
+.bs-callout-custom.collapsed .callout-content {
+/*	display: none;*/
+}
+
 .bs-callout-custom.bs-callout-default	{border-color:#777}
+.bs-callout-custom.bs-callout-smooth	{border-color:#e7e7e7}
 .bs-callout-custom.bs-callout-primary	{border-color:#428bca}
 .bs-callout-custom.bs-callout-success	{border-color:#5cb85c}
 .bs-callout-custom.bs-callout-danger	{border-color:#d9534f}
 .bs-callout-custom.bs-callout-warning	{border-color:#f0ad4e}
 .bs-callout-custom.bs-callout-info		{border-color:#5bc0de}
+
+.callout-content.cc-dark {
+	background-color: #333;
+	color: #838383;
+}
+
+.callout-content.cc-inset {
+	box-shadow: black 0px 3px 2px -1px inset,
+				black 0px -2px 2px -1px inset;
+}
+
+.cc-dark .progress {
+	background-color: #222;
+}
+
+.bc-dash{
+	
+}
+
+.bc-dash h4{
+	text-transform: uppercase;
+}
+
+.bc-dash h6{
+	margin: 0 0 3px;
+	color: #9e9e9e;
+	font-size: 12px;
+	text-transform: uppercase;
+}
 
 /* custom boxes */
 
@@ -490,6 +625,37 @@ div.dd-container{
 	display: table-cell;
 	color: #777;
 	vertical-align: middle;
+}
+
+/* board info panels */
+
+.board-info-1 ul{
+	display: inline-block;
+	min-width: 140px;
+}
+
+.board-info-1 span {
+	margin: 0 0 0 7px;
+}
+
+.board-info-1 i {
+	margin-right: 5px;
+}
+
+.board-info-1 li{
+	padding: 3px 0;
+}
+
+.board-info-1 li+li{
+	border-top: 1px solid #e2e2e2;
+}
+
+.board-info-1 li.disabled{
+	color: #b7b7b7;
+}
+
+.board-info-1 li.disabled i {
+	background-color: #d7d7d7;
 }
 
 /* ddslick fixes */
@@ -607,5 +773,32 @@ i.wot-noclan:after{
 }
 */
 
+/* custom fa img */
 
+i.fa-fb{
+	background-color: #777;
+	border-radius: 3px;
+	padding: 1px;
+	color: #fff;
+}
+
+i.fa-fb.disabled{background-color: #d7d7d7}
+
+i.fb-warning{background-color:#f0ad4e}
+i.fb-smooth	{background-color:#e7e7e7}
+i.fb-primary{background-color:#428bca}
+i.fb-success{background-color:#5cb85c}
+i.fb-danger	{background-color:#d9534f}
+i.fb-warning{background-color:#f0ad4e}
+i.fb-info	{background-color:#5bc0de}
+
+/* font image colors */
+
+i.fc-warning{color:#f0ad4e}
+i.fc-smooth	{color:#e7e7e7}
+i.fc-primary{color:#428bca}
+i.fc-success{color:#5cb85c}
+i.fc-danger	{color:#d9534f}
+i.fc-warning{color:#f0ad4e}
+i.fc-info	{color:#5bc0de}
 

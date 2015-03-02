@@ -47,7 +47,7 @@ _lib("WotSession");
 	<div class='b-row'>
 		<div class='box'>
 			<img src='images/loader/loader-bar.gif' alt='loader'/>
-			<p>Auf Wiedersehen, <?=$_GET["nickname"];?>!</p>
+			<p>Auf Wiedersehen, <?=$_page["user"]["userName"];?>!</p>
 			<small>Sie werden jeden Moment ausgeloggt..</small>
 		</div>
 	</div>

@@ -5,15 +5,24 @@ _def("db");
 * basic database connection handler
 * @author Steffen Lange
 */
+_def("db");
 class DB {
-    private static $link = null ;
+	const DB_WOT = PATH_DB_INI_WOT;
+	const DB_PTWG = PATH_DB_INI_PTWG;
+	
+//    private static $link = null ;
+    private static $links = [] ;
 
-    public static function getLink() {
-        if ( self :: $link ) {
-            return self :: $link ;
+	private static function is($db){return isset(self::$links[$db]) && self::$links[$db];}
+	private static function get($db){return self::$links[$db];}
+	private static function set($db, $link){self::$links[$db] = $link;}
+
+    public static function getLink($db=self::DB_WOT, $reconnect=false) {
+        if (!$reconnect && self::is($db)) {
+            return self::get($db);
         }
 
-        $parse = parse_ini_file ( PATH_DB_INI_WOT , true ) ;
+        $parse = parse_ini_file ( $db , true ) ;
 		if($parse === false) return false;
 		
         $driver = $parse [ "db_driver" ] ;
@@ -28,17 +37,18 @@ class DB {
         }
 		
 		try{
-			self :: $link = new PDO ( $dsn, $user, $password, $options ) ;
+			$link = new PDO ( $dsn, $user, $password, $options ) ;
 		}catch(PDOException $e){
 			echo "<pre class='error'>".$e->getMessage()."</pre>";
 			return false;
 		}
         
         foreach ( $attributes as $k => $v ) {
-            self :: $link -> setAttribute ( constant ( "PDO::{$k}" )
+            $link -> setAttribute ( constant ( "PDO::{$k}" )
                 , constant ( "PDO::{$v}" ) ) ;
         }
 
-        return self :: $link ;
+		self::set($db, $link);
+        return $link ;
     }
 }

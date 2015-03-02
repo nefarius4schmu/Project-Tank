@@ -15,12 +15,12 @@ class BoardNav{
 		],
 		ROUTE_EVENTS=>[
 			"title"=>"Events",
-			"order"=>1,
+			"order"=>10,
 			"faimg"=>"fa-star",
 		],
 		ROUTE_CLAN=>[
 			"title"=>"Clan",
-			"order"=>2,
+			"order"=>20,
 			"faimg"=>"fa-users",
 			"req"=>[
 				"clan"=>true,
@@ -28,11 +28,16 @@ class BoardNav{
 		],
 		ROUTE_CLANWARS=>[
 			"title"=>"Clanwars",
-			"order"=>3,
+			"order"=>30,
 			"faimg"=>"fa-trophy",
 			"req"=>[
 				"clan"=>true,
 			],
+		],
+		ROUTE_NEWS=>[
+			"title"=>"Neuigkeiten",
+			"order"=>5,
+			"faimg"=>"fa-info-circle",
 		],
 	];
 	
@@ -61,13 +66,14 @@ class BoardNav{
 	/* ===================================================================================== */
 	
 	public static function getNavigations($ordered=false){
-		if(!$ordered) return array_keys(self::$navs);
-		$ordered = [];
-		$unordered = [];
-		foreach(self::$navs as $key=>$nav)
-				if(self::hasOrder($key)) $ordered[$nav["order"]] = $key;
-				else $unordered[] = $key;
-		return array_merge($ordered, $unordered);
+		$out = array_keys(self::$navs);
+		if(!$ordered) return $out;
+		
+		usort($out, function($a, $b){
+			return self::$navs[$a]["order"] - self::$navs[$b	]["order"];
+		});
+		
+		return $out;
 	}
 	
 	public static function getTitle($nav){

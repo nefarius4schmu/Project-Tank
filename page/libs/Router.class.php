@@ -14,31 +14,47 @@ class Router{
 	private static $defaultType = ROUTETYPE_DEFAULT;
 	
 	private static $routes = [
-		ROUTE_START=>[
-			"login"=>false,
-		],
+		ROUTE_START=>[],
+		ROUTE_IMPRINT=>[],
 		ROUTE_HOME=>[
-			"login"=>true,
-			"type"=>ROUTETYPE_BOARD,	
+			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+			],
 		],
 		ROUTE_EVENTS=>[
-			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+			],
 		],
 		ROUTE_CLAN=>[
-			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+				"clan"=>true,
+			],
 		],
 		ROUTE_CLANWARS=>[
-			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+				"clan"=>true,
+			],
 		],
 		ROUTE_SETTINGS=>[
-			"login"=>true,
 			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+			],
+		],
+		ROUTE_NEWS=>[
+			"type"=>ROUTETYPE_BOARD,
+			"req"=>[
+				"login"=>true,
+			],
 		],
 		ROUTE_LOGIN=>[
-			"login"=>false,
 			"redirect"=>[
 				"delay"=>3,
 				"error"=>ERROR_LOGIN_GET_URL,
@@ -48,25 +64,40 @@ class Router{
 			],
 		],
 		ROUTE_LOGOUT=>[
-			"login"=>true,
+			"req"=>[
+				"login"=>true,
+			],
 		],
 		ROUTE_SET=>[
-			"login"=>true,
 			"loc"=>"jobs/set/",
+			"req"=>[
+				"login"=>true,
+			],
 		],
-		ROUTE_IMPRINT=>[
-			"login"=>false,
+		ROUTE_GET=>[
+			"loc"=>"jobs/get/",
+			"req"=>[
+				"login"=>true,
+			],
 		],
 	];
 	
 	/* ===================================================================================== */
 	
 	private static function reqLogin($id){
-		return isset(self::$routes[$id]["login"]) && self::$routes[$id]["login"];
+		return self::hasReq($id, "login") && self::$routes[$id]["req"]["login"];
+	}
+	
+	private static function reqClan($id){
+		return self::hasReq($id, "clan") && self::$routes[$id]["req"]["clan"];
 	}
 	
 	private static function isRoute($id){
 		return isset(self::$routes[$id]);
+	}
+	
+	private static function hasReq($id, $req){
+		return self::isRoute($id) && isset(self::$routes[$id]["req"],self::$routes[$id]["req"][$req]);
 	}
 	
 	private static function hasRedirect($id){
@@ -83,9 +114,14 @@ class Router{
 	
 	/* ===================================================================================== */
 	
-	public static function getRoute($id, $isLogin=false){
-		if(!isset($id) || !self::isRoute($id) || (!$isLogin && self::reqLogin($id))) return self::getDefault($isLogin);
-		return $id;
+	public static function getRoute($id, $isLogin=false, $isClan=false){
+		if(!isset($id) 
+			|| !self::isRoute($id) 
+			|| (!$isLogin && self::reqLogin($id) ) 
+			|| (!$isClan && self::reqClan($id)) 
+		) return self::getDefault($isLogin);
+		else 
+			return $id;
 	}
 	
 	public static function getLocation($id){
