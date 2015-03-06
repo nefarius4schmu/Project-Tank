@@ -11,9 +11,14 @@ h2+h3{
 }
 
 .stats-table{
+	display: inline-block;
 	color: #838383;
 	background-color: #484D57;
 	text-align: left;
+}
+
+.stats-table table{
+	
 }
 
 .stats-table tr{

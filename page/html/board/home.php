@@ -23,7 +23,7 @@ $hasClan = $playerInfo->hasClan();// isset($playerInfo["clan"]);
 	</div>
 	<div class='callout-content row'><?php
 		$options=[
-			"title"=>"11 Neue Ereignisse",
+			"title"=>"11 Neue Ereignisse (Beispiel)",
 			"type"=>1,
 			"class"=>"col-md-3",
 			"elements"=>[
@@ -51,6 +51,8 @@ $hasClan = $playerInfo->hasClan();// isset($playerInfo["clan"]);
 	</div>
 </div>
 <?php
+/* ===================================================================================== */
+Debug::v($playerInfo);
 /* ===================================================================================== */
 /* functions =========================================================================== */
 

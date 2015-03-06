@@ -14,10 +14,10 @@
 */
 if(!isset($_page)) exit();
 /* ===================================================================================== */
-_lib("WotData");
-_lib("WotHandler");
-_lib("Calc");
-_lib("Html");
+//_lib("WotData");
+//_lib("WotHandler");
+//_lib("Calc");
+//_lib("Html");
 $wotUser = $_page["user"];
 $playerInfo = $wotUser["player"];
 //$wh = new WotHandler(new WotData());
@@ -36,19 +36,8 @@ $playerInfo = $wotUser["player"];
 //	Debug::v($members);
 ?>
 	<div id='membersTable' class='stats-table hidden' data-loader='#loader_membersTable'><table>
-		<colgroup>
-			<!--<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>
-			<col class='sortable'/>-->
-		</colgroup>
+		<colgroup></colgroup>
+		<colgroup></colgroup>
 		<colgroup></colgroup>
 		<colgroup></colgroup>
 		<colgroup></colgroup>
@@ -107,6 +96,7 @@ $playerInfo = $wotUser["player"];
 			<i class='fa fa-cog fa-2x fa-fw fa-spin'></i>
 			<small>Statistiken werden geladen..</small>
 		</div>
+		<div id='message_membersTable' class='message error hidden'>Fehler beim Laden!</div>
 	</div>
 </div>
 <script src='js/jquery.tablesorter.min.js?v=1'></script>

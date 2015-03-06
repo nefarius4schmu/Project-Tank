@@ -89,6 +89,8 @@
 	
 	function failLoadMembersStats(response){
 		console.log("failed to load members stats", response);
+		toggleHidden(getjqLoader(_jqMembersTable), true);
+		toggleHidden($("#message_membersTable"), false);
 	}
 	
 	/* getter */

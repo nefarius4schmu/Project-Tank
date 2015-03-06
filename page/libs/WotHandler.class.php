@@ -69,22 +69,12 @@ class WotHandler{
 		$emblems->xlarge = $xlarge;
 		$emblems->xxlarge = $xxlarge;
 		return $emblems;
-//		return [
-//			"small"=>$small,
-//			"medium"=>$medium,
-//			"large"=>$large,
-//			"x-large"=>$xlarge,
-//			"xx-large"=>$xxlarge,
-//		];
 	}
 	
-	private function parsePlayerRating($ratingGlobal){
+	public function parsePlayerRating($ratingGlobal){
 		$rating = new RatingObject();
 		$rating->global = $ratingGlobal;
 		return $rating;
-//		return [
-//				"global"=>$ratingGlobal,
-//			];
 	}
 	
 	private function parseClanEmblems($clanEmblems, $clanLastUpdate){
@@ -98,17 +88,6 @@ class WotHandler{
 			}
 		}
 
-//		$out = $this->returnClanEmblems();
-
-//		$emblems = new ClanEmblemsObject();
-//		$emblems->small = $small;
-//		$emblems->medium = $medium;
-//		$emblems->large = $large;
-//		$emblems->xlarge = $xlarge;
-//		$emblems->xxlarge = $xxlarge;
-//		return $emblems;
-
-//		$emblems = [];
 		$emblems = new ClanEmblemsObject();
 		if(!isset($clanEmblems)) return $emblems;
 		foreach($clanEmblems as $emblem){
@@ -117,17 +96,8 @@ class WotHandler{
 			$key = array_key_exists($type,  $this->clanEmblemsTypeTable) ? $this->clanEmblemsTypeTable[$type] : $type;
 			$url = $emblem["url"];
 			$appendix = isset($clanLastUpdate) ? "?".$clanLastUpdate : null;
-//			$emblems[$key] = $url.$appendix;
 			addToClanEmblemsObject($emblems, $key, $url.$appendix);
-			
-//Debug::v($emblems);
-//			call_user_method($key, $emblems, $url.$appendix);
 		}
-//		$out = new ClanEmblemsObject();
-//		$out->small = isset($emblems["small"]) ? $emblems["small"] : null;
-//		$out->medium = isset($emblems["medium"]) ? $emblems["medium"] : null;
-//		$out->xlarge = isset($emblems["x-large"]) ? $emblems["x-large"] : null;
-//		$out->xxlarge = isset($emblems["xx-large"]) ? $emblems["xx-large"] : null;
 		return $emblems;
 	}
 	
@@ -159,16 +129,36 @@ class WotHandler{
 		$stats->avgHitRatePerBattle = $hitRate;
 
 		return $stats;
-//		return [
-//			"battles"=>$battles,
-//			"wins"=>$wins,
-//			"shots"=>$shots,
-//			"hits"=>$hits,
-//			"damage"=>$damage,
-//			"winRatePerBattle"=>$winRate,
-//			"avgHitRatePerBattle"=>$hitRate,
-//			"avgDamagePerBattle"=>$avgDamage,
-//		];
+	}
+	
+	public function parseInternalPlayerStats($statsAll){
+		$battles = $wins = $shots = $hits = $damage = 0;
+		$winRate = $hitRate = $avgDamage = 0;
+		
+		if(is_array($statsAll)){
+			$battles= $this->getKey("battlesAll", $statsAll, $battles);
+			$wins 	= $this->getKey("winsAll", $statsAll, $wins);
+			$shots 	= $this->getKey("shotsAll", $statsAll, $shots);
+			$hits 	= $this->getKey("hitsAll", $statsAll, $hits);
+			$damage = $this->getKey("damageAll", $statsAll, $damage);
+			
+			$winRate 	= $this->getWinRate($battles, $wins);
+			$hitRate 	= $this->getHitRate($shots, $hits);
+			$avgDamage	= $this->getAvgDamge($battles, $damage);
+		}
+
+		$stats = new StatisticObject();
+		$stats->battles = $battles;
+		$stats->wins = $wins;
+		$stats->shots = $shots;
+		$stats->hits = $hits;
+		$stats->damage = $damage;
+		$stats->winRatePerBattle = $winRate;
+		$stats->winRateClass = $this->winRateToClass($winRate);
+		$stats->avgDamagePerBattle = $avgDamage;
+		$stats->avgHitRatePerBattle = $hitRate;
+
+		return $stats;
 	}
 	
 	private function returnPlayerInfo($id=null, $name=null, $lang=null, $ratingGlobal=null, $updated,
@@ -186,27 +176,6 @@ class WotHandler{
 			$player->setClanEmblemsObject($this->parseClanEmblems($clanEmblems, $clanLastUpdate));
 		}
 		return $player;
-		
-//		return [
-//			"id"=>$id,
-//			"name"=>$name,
-//			"lang"=>$lang,
-//			"updated"=>$updated,
-//			"rating"=>$this->parsePlayerRating($ratingGlobal),
-//			"stats"=>$this->parsePlayerStats($statsAll),
-//			"clan"=>[
-//				"id"=>$clanID,
-//				"name"=>$clanName,
-//				"disbanned"=>$clanDisbanned,
-//				"updated"=>$clanLastUpdate,
-//				"tag"=>$clanTag,
-//				"role"=>$clanRole,
-//				"role_i18n"=>$clanRole_i18n,
-//				"color"=>$clanColor,
-//				"membersCount"=>$clanMembersCount,
-//				"emblems"=>$this->parseClanEmblems($clanEmblems, $clanLastUpdate),
-//			],
-//		];
 	}
 	
 	/* ================================================================================= */
@@ -265,15 +234,6 @@ class WotHandler{
 			$obj->statistic = $this->parsePlayerStats($statsAll);
 			
 			$out[$id] = $obj;
-//			
-//			$out[$id] = [
-//				"name"=>$member["nickname"],
-//				"role"=>$clanMembers[$id]["role"],
-//				"role_i18n"=>$clanMembers[$id]["role_i18n"],
-//				"joined"=>$clanMembers[$id]["joined_at"],
-//				"rating"=>$this->parsePlayerRating($member["global_rating"]),
-//				"stats"=>$this->parsePlayerStats($statsAll),
-//			];
 		}
 		return $out;
 	}
