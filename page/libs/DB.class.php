@@ -1,5 +1,4 @@
 <?php 
-_def("db");
 /**
 * Project Tank Webpage
 * basic database connection handler
@@ -7,7 +6,7 @@ _def("db");
 */
 _def("db");
 class DB {
-	const DB_WOT = PATH_DB_INI_WOT;
+//	const DB_WOT = PATH_DB_INI_WOT;
 	const DB_PTWG = PATH_DB_INI_PTWG;
 	
 //    private static $link = null ;
@@ -17,7 +16,7 @@ class DB {
 	private static function get($db){return self::$links[$db];}
 	private static function set($db, $link){self::$links[$db] = $link;}
 
-    public static function getLink($db=self::DB_WOT, $reconnect=false) {
+    public static function getLink($db=self::DB_PTWG, $reconnect=false) {
         if (!$reconnect && self::is($db)) {
             return self::get($db);
         }

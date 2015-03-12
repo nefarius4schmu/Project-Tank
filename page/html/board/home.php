@@ -9,10 +9,13 @@ if(!isset($_page)) exit();
 //Debug::v($_SESSION);
 //Debug::r($_page);
 /* ===================================================================================== */
-//$wh = new WotHandler(new WotData());
-$wotUser = $_page["user"];
-$playerInfo = $wotUser["player"];
-$hasClan = $playerInfo->hasClan();// isset($playerInfo["clan"]);
+//$wd = new WotData();
+//$wh = new WotHandler($wd);
+//$wotUser = $_page["user"];
+//$player = $wotUser["player"];
+//$hasClan = $player->hasClan();// isset($player["clan"]);
+/* ===================================================================================== */
+//$clanBattles = $wh->getCWClanBattles($wotUser);
 /* ===================================================================================== */
 ?>
 <div class='bs-callout bs-callout-smooth bs-callout-custom bc-dash'>
@@ -50,9 +53,15 @@ $hasClan = $playerInfo->hasClan();// isset($playerInfo["clan"]);
 		<div class='col-md-6'></div>
 	</div>
 </div>
+<div>
+<?php
+//	Debug::v($player);
+//	Debug::v($clanBattles);
+?>
+</div>
 <?php
 /* ===================================================================================== */
-Debug::v($playerInfo);
+//Debug::v($player);
 /* ===================================================================================== */
 /* functions =========================================================================== */
 

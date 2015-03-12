@@ -45,23 +45,23 @@ if(!defined("ERROR_GET_MISSING_TYPE"))  define("ERROR_GET_MISSING_TYPE", 8501);
 /* ===================================================================================== */
 
 function _load($name, $_page=[]){
-	include_once("html/$name/.index.php");
+	include_once(ROOT."/html/$name/.index.php");
 }
 
 function _loadBoard($name, $_page=[]){
-	include_once("html/board/$name.php");
+	include_once(ROOT."/html/board/$name.php");
 }
 
 function _lib($name){
-	include_once("libs/$name.class.php");
+	include_once(ROOT."/libs/$name.class.php");
 }
 
 function _get($name, &$out, $_page=[]){
-	include_once("get/$name.php");
+	include_once(ROOT."/get/$name.php");
 }
 
 function _def($name){
-	include_once("vars/$name.php");
+	include_once(ROOT."/vars/$name.php");
 }
 
 function _error($errorCode, $data=null, $debug=false, $getLink=false){
@@ -88,7 +88,7 @@ function _redirect($name, $_page){
 	else if(!isset($redirect["url"])) $redirect["url"] = getRedirectByType($redirect["type"], $error);//, $error
 	
 	if($error > 0) _error($error);
-	include_once("html/redirect.php");
+	include_once(ROOT."/html/redirect.php");
 }
 
 function getRedirectByType($type, &$error){//, &$error

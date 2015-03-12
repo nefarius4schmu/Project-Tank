@@ -45,6 +45,8 @@ RewriteRule (.*)/css/(.*) css/$2 [L]
 RewriteRule (.*)/js/(.*) js/$2 [L]
 
 
+RewriteRule db/(.*) .index.php?g=$1
+
 #RewriteRule ^(.*)\.htm$ $1.php
 #RewriteRule ^(.*)/(.*)\.htm$ index.php?main=$1&sub=$2 [QSA]
 #RewriteRule ^(.*)/^(.*)/(.*)\.htm$ [L,R=404]

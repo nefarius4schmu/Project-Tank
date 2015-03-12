@@ -122,6 +122,7 @@ if(!$dbhn->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, tr
 //	$playerData["clan_id"] = null;
 //}
 
+//Debug::v($player); exit();
 /* DB login and update ================================================================= */
 
 // update login database
@@ -143,18 +144,22 @@ if(!$player->hasClan()){
 	if($result === false) redirect(_error(ERROR_DB_SET_USER_INFO, null, $debug, true), $debug);
 
 	// update database user rating
-	$result = $dbhn->setUserRatings($player->getID(), $player->getRatingGlobal());
-	if($result === false) redirect(_error(ERROR_DB_SET_USER_RATING, null, $debug, true), $debug);
-
-	$data = [
-		73=>$player->getStatsBattles(),
-		80=>$player->getStatsHits(),
-		82=>$player->getStatsWins(),
-		84=>$player->getStatsDamage(),
-		86=>$player->getStatsShots(),		
-	];
-	$result = $dbhn->setWotUserStats($player->getID(), $data);
-	if($result === false) redirect(_error(ERROR_DB_SET_WOT_USER_STATS, null, $debug, true), $debug);
+	if($player->isRating()){
+		$result = $dbhn->setUserRatings($player->getID(), $player->getRatingGlobal());
+		if($result === false) redirect(_error(ERROR_DB_SET_USER_RATING, null, $debug, true), $debug);
+	}
+	if($player->isStatistic()){
+		$data = [
+			73=>$player->getStatsBattles(),
+			80=>$player->getStatsHits(),
+			82=>$player->getStatsWins(),
+			84=>$player->getStatsDamage(),
+			86=>$player->getStatsShots(),		
+		];
+		$result = $dbhn->setWotUserStats($player->getID(), $data);
+		if($result === false) redirect(_error(ERROR_DB_SET_WOT_USER_STATS, null, $debug, true), $debug);
+		
+	}
 }
 
 /**

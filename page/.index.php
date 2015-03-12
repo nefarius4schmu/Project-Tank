@@ -2,19 +2,25 @@
 /**
 * Project Tank Webpage
 * 
-* @version 0.5.0
+* @version 0.5.1
 * @author Steffen Lange
 */
 error_log(E_ALL);
+//ini_set('display_errors',1);
+define("ROOT", $_SERVER["DOCUMENT_ROOT"].dirname($_SERVER["PHP_SELF"]));
+//echo "<pre>".print_r(ROOT, true)."</pre>";
+//echo "<pre>".print_r($_SERVER, true)."</pre>";
 //$debug = true;
 /* ===================================================================================== */
 include_once("vars/globals.php");
+
 _def("lang");
 _def("settings");
 _lib("Debug");
 _lib("Router");
 _lib("WotSession");
 _lib("WotPlayer");
+
 /* ===================================================================================== */
 // get login state
 //_get("login", $loginData);
@@ -48,6 +54,7 @@ $_page = [
 ];
 
 //Debug::v($_page);
+//Debug::v($_route);
 //Debug::r($_GET);
 //	exit();
 

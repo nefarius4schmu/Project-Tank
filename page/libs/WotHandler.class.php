@@ -4,6 +4,7 @@
 * handle and pre calc WGP API calls
 * @author Steffen Lange
 */
+require_once("WotData.class.php");
 require_once("WotPlayer.class.php");
 require_once("objects/PlayerObject.class.php");
 require_once("objects/PlayerClanObject.class.php");
@@ -72,6 +73,7 @@ class WotHandler{
 	}
 	
 	public function parsePlayerRating($ratingGlobal){
+		if(empty($ratingGlobal)) return null;
 		$rating = new RatingObject();
 		$rating->global = $ratingGlobal;
 		return $rating;
@@ -161,7 +163,7 @@ class WotHandler{
 		return $stats;
 	}
 	
-	private function returnPlayerInfo($id=null, $name=null, $lang=null, $ratingGlobal=null, $updated,
+	private function returnPlayerInfo($id=null, $name=null, $lang=null, $ratingGlobal=null, $updated=null,
 									$statsAll=null,
 									$clanID=null, $clanName=null, $clanTag=null, $clanRole=null,
 									$clanMembersCount=null, $clanRole_i18n=null, $clanColor=null, 
@@ -306,4 +308,12 @@ class WotHandler{
 								$clanJoined, $clanEmblems);
 	}
 	
+	public function getCWClanBattles($wotUser){
+		$player = $wotUser["player"];
+		if(!$player->hasClan()) return false;
+		$response = $this->wotData->getCWClanBattles($wotUser["token"], WotData::MAP_ID_GLOBALMAP, $player->getClanID(), null, $player->getLang());
+//		Debug::r($response);
+		if(!$this->success($response)) return false;
+		return $response;
+	}
 }

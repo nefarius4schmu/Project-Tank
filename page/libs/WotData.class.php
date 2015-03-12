@@ -5,6 +5,8 @@
 * @author Steffen Lange
 */
 class WotData{
+	const MAP_ID_GLOBALMAP = "globalmap";
+	
 	// login
 	private $applicationID = '751e3d9076d6833b0e2ebd5e16edecb8';
 	private $urlLogin = 'http://api.worldoftanks.eu/wot/auth/login/';
@@ -17,6 +19,8 @@ class WotData{
 	private $urlPlayerInfo = 'https://api.worldoftanks.eu/wot/account/info/';
 	private $urlPlayerTank = 'http://api.worldoftanks.eu/wot/tanks/stats/';
 	
+	// wot api clan wars
+	private $urlClanWarsClanBattles = 'https://api.worldoftanks.com/wot/globalwar/battles/';
 	
 	// required params names
 	private $_paramApplicationID = "application_id";
@@ -27,6 +31,7 @@ class WotData{
 	private $_paramClanID 		= "clan_id";
 	private $_paramMemberID 	= "member_id"; // deprecated
 	private $_paramInGarage 	= "in_garage";
+	private $_paramMapID 		= "map_id";
 	
 	// optional param names
 	private $_paramFields	 	= "fields";
@@ -43,6 +48,7 @@ class WotData{
 	private function paramExpiresAt($v)	 {return $this->_paramExpiresAt."=$v";}
 	private function paramRedirectURI($v){return $this->_paramRedirectURI."=$v";}
 	private function paramClanID($v)	 {return $this->_paramClanID."=$v";}
+	private function paramMapID($v)	 	 {return $this->_paramMapID."=$v";}
 	private function paramAccountID($v)	 {return $this->_paramAccountID."=$v";}
 	private function paramMemberID($v)	 {return $this->_paramMemberID."=$v";}
 	private function paramInGarage($v)	 {return $this->_paramInGarage."=$v";}
@@ -130,6 +136,19 @@ class WotData{
 		$d = $this->paramInGarage($inGarage);
 		$e = !isset($fields) ? "" : "&".$this->paramFields($fields);
 		$url = $this->urlPlayerTank."?$a&$b&$c&$d".$e;
+		$content = $this->getContents($url);
+		return $content;
+	}
+	
+	public function getCWClanBattles($accessToken, $mapID, $clanID, $fields=null, $language=null){
+		if(!isset($mapID, $clanID)) return false;
+		$a = $this->paramApplicationID();
+		$b = $this->paramMapID($mapID);
+		$c = $this->paramClanID($clanID);
+		$d = $this->paramAccessToken($accessToken);
+		$e = !isset($language) ? "" : "&".$this->paramLanguage($language);
+		$f = !isset($fields) ? "" : "&".$this->paramFields($fields);
+		$url = $this->urlClanWarsClanBattles."?$a&$b&$c&$d".$e.$f;
 		$content = $this->getContents($url);
 		return $content;
 	}

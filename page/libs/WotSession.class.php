@@ -4,7 +4,7 @@
 * extendes Session class to handle user session
 * @author Steffen Lange
 */
-include_once(dirname(__FILE__)."\\Session.class.php");
+include_once(ROOT."/libs/Session.class.php");
 class WotSession extends Session{
 	
 	const SESSION_KEY = "wotSession";

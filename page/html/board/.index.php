@@ -20,40 +20,32 @@ $activePageClass = " class='active'";
 $wotUser = $_page["user"];
 $playerInfo = $wotUser["player"];
 //Debug::r($_page);
-$wh = new WotHandler(new WotData());
-/* ===================================================================================== */
-//$playerInfo = $wotUser["player"];//$wh->getBasicPlayerInfo($wotUser);
-//if($playerInfo === false) _error(ERROR_API_GET_PLAYER_INFO);
+$wd = new WotData();
+$wh = new WotHandler($wd);
 /* ===================================================================================== */
 //Debug::r($playerInfo); exit();
 /* ===================================================================================== */
-$hasClan = $playerInfo->hasClan();//isset($playerInfo["clan"]["id"]);
+$hasClan = $playerInfo->hasClan();
 $useTheme = isset($wotUser[WotSession::USER_SETTINGS], $wotUser[WotSession::USER_SETTINGS][SETTINGS_ID_THEME_CLAN_COLOR])
 			&& $wotUser[WotSession::USER_SETTINGS][SETTINGS_ID_THEME_CLAN_COLOR] == 1;
 /* ===================================================================================== */
-$userName 		= $playerInfo->getName();//["name"];
-$userStyle 		= $hasClan && $useTheme ? getUserThemeStyle($playerInfo->getClanColor()) : false;//["clan"]["color"]): false;
-//$clanTag	 	= $hasClan ? $playerInfo["clan"]["tag"] : CLAN_NONE_TAG;
+$userName 		= $playerInfo->getName();
+$userStyle 		= $hasClan && $useTheme ? getUserThemeStyle($playerInfo->getClanColor()) : false;
 $clanTag	 	= $hasClan ? $playerInfo->getClanTag() : CLAN_NONE_TAG;
-//$clanName 		= $hasClan ? $playerInfo["clan"]["name"] : CLAN_NONE_NAME;
 $clanName 		= $hasClan ? $playerInfo->getClanName() : CLAN_NONE_NAME;
-//$clanImageURL 	= $hasClan ? $playerInfo["clan"]["emblems"]["large"] : CLAN_NONE_IMAGE_URL;
 $clanImageURL 	= $hasClan ? $playerInfo->getClanEmblemLarge() : CLAN_NONE_IMAGE_URL;
-//$clanRole 		= $hasClan ? $playerInfo["clan"]["role"] : CLAN_NONE_ROLE;
 $clanRole 		= $hasClan ? $playerInfo->getClanRole() : CLAN_NONE_ROLE;
-//$clanRole_i18n 	= $hasClan ? $playerInfo["clan"]["role_i18n"] : CLAN_NONE_ROLE_I18N;
 $clanRole_i18n 	= $hasClan ? $playerInfo->getClanRole_i18n() : CLAN_NONE_ROLE_I18N;
 $clanRoleImgURL = $hasClan ? PATH_IMG_RANK.$clanRole.PATH_IMG_RANK_EXT : null;
-$statsWins 		= $playerInfo->getStatsWins();//["stats"]["wins"];
-$statsBattles 	= $playerInfo->getStatsBattles();//["stats"]["battles"];
-$statsWinRate 	= $playerInfo->getStatsWinRatePerBattle();//["stats"]["winRatePerBattle"];
+$statsWins 		= $playerInfo->getStatsWins();
+$statsBattles 	= $playerInfo->getStatsBattles();
+$statsWinRate 	= $playerInfo->getStatsWinRatePerBattle();
 $statsWinRateClass = $wh->winRateToClass($statsWinRate);
-$statsHits 		= $playerInfo->getStatsHits();//["stats"]["hits"];
-$statsShots 	= $playerInfo->getStatsShots();//["stats"]["shots"];
-$statsHitAvg 	= $playerInfo->getStatsAvgHitRatePerBattle();//["stats"]["avgHitRatePerBattle"];
-$statsDamage 	= $playerInfo->getStatsDamage();//["stats"]["damage"];
-$statsDamageAvg	= $playerInfo->getStatsAvgDamagePerBattle();//["stats"]["avgDamagePerBattle"];
-//$ratingGlobal 	= isset($playerInfo["rating"]["global"]) ? number_format($playerInfo["rating"]["global"]*1,0,',','.') : "<i class='wot wot-norating'></i>";
+$statsHits 		= $playerInfo->getStatsHits();
+$statsShots 	= $playerInfo->getStatsShots();
+$statsHitAvg 	= $playerInfo->getStatsAvgHitRatePerBattle();
+$statsDamage 	= $playerInfo->getStatsDamage();
+$statsDamageAvg	= $playerInfo->getStatsAvgDamagePerBattle();
 $ratingGlobal 	= $playerInfo->isRating() ? number_format($playerInfo->getRatingGlobal()*1,0,',','.') : "<i class='wot wot-norating'></i>";
 
 
@@ -169,16 +161,9 @@ flush();
 						}
 					?></ul>
 				</div>
-				<?php
-//					Debug::r($breadcrumbs);
-				?>
 			</div>
 			<div class='content'><?php
-//				$_page["playerInfo"] = $playerInfo;
 				_loadBoard($activePage, $_page);
-//				Debug::r($_page["user"]);
-//				Debug::r($playerInfo);
-//					Debug::r($_SERVER);
 			
 			?></div>
 		</div>
