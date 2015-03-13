@@ -58,7 +58,7 @@ class DBHandler{
 	}
 	
 	public function getClanMembers($clanID){
-		$query = "SELECT * FROM ".self::DB_CLAN_MEMBERS." WHERE clanID='$clanID';";
+		$query = "SELECT * FROM ".self::DB_CLAN_MEMBERS." WHERE clanID='$clanID' AND deleted='0';";
 		return $this->queryIndexedArray($query, "userID");
 	}
 	
@@ -66,7 +66,7 @@ class DBHandler{
 		$query = "SELECT * FROM ".self::DB_CLAN_MEMBERS." m
 		LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=m.userID
 		LEFT JOIN ".self::DB_USER_RATINGS." r ON r.userID=m.userID
-		WHERE clanID='$clanID';";
+		WHERE m.clanID='$clanID' AND m.deleted='0';";
 		return $this->queryIndexedArray($query, "userID");
 	}
 	
