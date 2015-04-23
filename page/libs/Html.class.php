@@ -7,7 +7,19 @@
 class Html{
 
 	/* ===================================================================================== */
-	
+
+    public static function css($urls){
+        $tmp = "<link rel='stylesheet' type='text/css' href='{{url}}'/>\n";
+        return !empty($urls) ? self::templateList($tmp, 'url', $urls) : null;
+    }
+
+    public static function js($urls){
+        $tmp = "<script src='{{url}}'></script>\n";
+        return !empty($urls) ? self::templateList($tmp, 'url', $urls) : null;
+    }
+
+	/* ===================================================================================== */
+
 	public static function toDataString($data){
 		if(!is_array($data)) return null;
 		$out = "";
@@ -24,11 +36,33 @@ class Html{
 		$content = isset($options["content"]) ? $options["content"] : null;
 		return "<i class='fa".$type.$class."'>".$content."</i>";
 	}
-	
-	
-	/* ===================================================================================== */
 
-	public static function createSwitch($id, $options, $inRow=false){
+    public static function template($tmp, $data, $options=[]){
+        $out = $tmp;
+        $empty = isset($options["empty"]) && $options["empty"];
+        $path = isset($options["path"]) ? trim($options["path"], ".") : null;
+        foreach($data as $key=>$value){
+            if(is_string($value)) $out = preg_replace('({{'.$key.'}})',$value,$out);
+            else if(is_array($value)) $out = self::template($out, $value, ["path"=>$path.".".$key]);
+        }
+        if($empty) $out = self::template($out, ['[^}}]+'=>'']);
+        return $out;
+    }
+
+    public static function templateList($tmp, $key, $list){
+        if(is_string($list)) return self::template($tmp, [$key=>$list]);
+        else{
+            $out = "";
+            foreach($list as $item){
+                $out .= self::template($tmp, [$key=>$item]);
+            }
+            return $out;
+        }
+    }
+
+    /* ===================================================================================== */
+
+	public static function createSwitchButton($id, $options, $inRow=false){
 		$title = isset($options["title"]) ? $options["title"] : null;
 		$descr = isset($options["descr"]) ? $options["descr"] : null;
 		$class = isset($options["class"]) ? $options["class"] : null;
@@ -36,7 +70,7 @@ class Html{
 		$hasElements = isset($options["elements"]) && !empty($options["elements"]);
 		$activeValue = isset($options["active"]) ? $options["active"] : null;
 		
-		$html = "<div class='switch' id='".$id."'>";
+		$html = "<div class='btn-switch' id='".$id."'>";
 		if($hasElements){
 			$count = 0;
 			foreach($options["elements"] as $txt=>$value){

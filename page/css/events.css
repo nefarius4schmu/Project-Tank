@@ -2,6 +2,14 @@
 * Project Tank Webpage
 * @author Steffen Lange
 */
+.page-wrapper{
+    text-align: center;
+}
+
+.row{
+    margin: 10px 0 0;
+}
+
 .event-type {
 	margin: 10px 0;
 /*	box-shadow: 0px -1px 3px -1px rgba(0, 0, 0, 0.26) inset;*/

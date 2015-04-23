@@ -64,6 +64,10 @@ function _def($name){
 	include_once(ROOT."/vars/$name.php");
 }
 
+function _data($name, $_page=[]){
+	return include ROOT."/get/$name.php";
+}
+
 function _error($errorCode, $data=null, $debug=false, $getLink=false){
 	if($debug && !$getLink){
 		Debug::e("ERROR: $errorCode");
@@ -89,6 +93,29 @@ function _redirect($name, $_page){
 	
 	if($error > 0) _error($error);
 	include_once(ROOT."/html/redirect.php");
+}
+
+/**
+ * function to fill in string based templates
+ * html: $temp = "<span class='{{class}}'>{{content}}</span>";
+ * call: fn_template($temp, ["class"=>"bla", "content"=>"hallo world"]);
+ * options:
+ *      escape - escape special html characters
+ *      clear - remove all data leftovers
+ * @param string $temp
+ * @param array $data
+ * @param array $options
+ * @return string
+ */
+function fn_template($temp, $data, $options=[]){
+    $escape = isset($options["escape"]) && $options["escape"];
+    $clear = isset($options["clear"]) && $options["clear"];
+
+    foreach($data as $key=>$item){
+        if($escape) $key = htmlentities($key);
+        $temp = preg_replace('/({{'.$key.'}})/', $item, $temp);
+    }
+    return !$clear ? $temp : preg_replace('/({{[^}}]+}})/', "", $temp);
 }
 
 function getRedirectByType($type, &$error){//, &$error

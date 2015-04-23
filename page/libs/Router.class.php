@@ -27,6 +27,9 @@ class Router{
 			"req"=>[
 				"login"=>true,
 			],
+            "css"=>[
+                'css/events.css?001',
+            ]
 		],
 		ROUTE_CLAN=>[
 			"type"=>ROUTETYPE_BOARD,
@@ -34,6 +37,13 @@ class Router{
 				"login"=>true,
 				"clan"=>true,
 			],
+            "css"=>[
+                "css/clan.css?002",
+            ],
+            "js"=>[
+                "js/jquery.tablesorter.min.js?100",
+                "js/clan.js?001",
+            ]
 		],
 		ROUTE_CLANWARS=>[
 			"type"=>ROUTETYPE_BOARD,
@@ -47,6 +57,10 @@ class Router{
 			"req"=>[
 				"login"=>true,
 			],
+            "js"=>[
+                'js/jquery.ddslick.min.js?100',
+                'js/settings.js?001',
+            ],
 		],
 		ROUTE_NEWS=>[
 			"type"=>ROUTETYPE_BOARD,
@@ -81,6 +95,23 @@ class Router{
 			],
 		],
 	];
+
+    // TODO: needed?
+//    private $routeTypeDefaults = [
+//        ROUTETYPE_DEFAULT=>[],
+//        ROUTETYPE_BOARD=>[
+//            "css"=>[
+//                'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332',
+//                '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430',
+//                'css/board.css?002',
+//            ],
+//            "js"=>[
+//                'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112',
+//                'js/ajax.js?100',
+//                'js/board.js?001',
+//            ],
+//        ],
+//    ];
 	
 	/* ===================================================================================== */
 	
@@ -111,8 +142,16 @@ class Router{
 	private static function hasLocation($id){
 		return self::isRoute($id) && isset(self::$routes[$id]["loc"]);
 	}
-	
-	/* ===================================================================================== */
+
+    private static function hasCSS($id){
+        return self::isRoute($id) && isset(self::$routes[$id]["css"]);
+    }
+
+    private static function hasJS($id){
+        return self::isRoute($id) && isset(self::$routes[$id]["js"]);
+    }
+
+    /* ===================================================================================== */
 	
 	public static function getRoute($id, $isLogin=false, $isClan=false){
 		if(!isset($id) 
@@ -161,4 +200,17 @@ class Router{
 		}
 		return $out;
 	}
+
+    public static function getCSS($id){
+        return self::hasCSS($id)
+            ? self::$routes[$id]["css"]
+            : [];
+    }
+
+    public static function getJS($id){
+        return self::hasJS($id)
+            ? self::$routes[$id]["js"]
+            : [];
+    }
+
 }

@@ -41,7 +41,7 @@ $settings = $dbh->getUserSettings($playerInfo->getID());
 				"active"=>$settings[SETTINGS_ID_THEME_CLAN_COLOR],
 				"input"=>"settings[".SETTINGS_ID_THEME_CLAN_COLOR."]",
 			];
-			echo Html::createSwitch("useTheme", $options, true);
+			echo Html::createSwitchButton("useTheme", $options, true);
 		?></div>
 	</div>
 	<div class='bs-callout bs-callout-danger bs-callout-custom'>
@@ -119,6 +119,6 @@ $settings = $dbh->getUserSettings($playerInfo->getID());
 		<button type='submit' class='btn btn-success btn-big pull-right'>Anwenden</button>
 	</div>-->
 </form>
-<script src='js/jquery.ddslick.min.js'></script>
-<script src='js/settings.js'></script>
+<!--<script src='js/jquery.ddslick.min.js'></script>-->
+<!--<script src='js/settings.js'></script>-->
 
