@@ -25,6 +25,7 @@ class BoardNav{
 			"req"=>[
 				"clan"=>true,
 			],
+
 		],
 		ROUTE_CLANWARS=>[
 			"title"=>"Clanwars",
@@ -35,7 +36,7 @@ class BoardNav{
 			],
 		],
 		ROUTE_NEWS=>[
-			"title"=>"Neuigkeiten",
+			"title"=>"News",
 			"order"=>5,
 			"faimg"=>"fa-info-circle",
 		],
@@ -62,7 +63,7 @@ class BoardNav{
 	private static function hasReq($nav){
 		return self::isNav($nav) && isset(self::$navs[$nav]["req"]);
 	}
-	
+
 	/* ===================================================================================== */
 	
 	public static function getNavigations($ordered=false){
@@ -93,10 +94,10 @@ class BoardNav{
 			? self::$navs[$nav]["order"] 
 			: null;
 	}
-	
+
 	public static function hasReqClan($nav){
 		return self::hasReq($nav) && isset(self::$navs[$nav]["req"]["clan"]) && self::$navs[$nav]["req"]["clan"];
 	}
-	
+
 	
 }

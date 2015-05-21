@@ -18,7 +18,7 @@ h2+h3{
 }
 
 .stats-table table{
-	
+	table-layout: fixed;
 }
 
 .stats-table tr{
@@ -29,6 +29,15 @@ h2+h3{
 .stats-table tr:nth-child(even){
 /*	background-color: #3C4049;*/
 	background-color: rgba(0,0,0,.1);
+}
+
+.stats-table tbody tr:hover{
+    background-color: #4A789E;
+    color: #fff;
+}
+
+.stats-table tbody tr:hover td{
+    color: #fff;
 }
 
 .stats-table th,
@@ -48,7 +57,7 @@ h2+h3{
 /*	background-color: #484D57;*/
 	border: 1px solid #838383;
 	color: #a0a0a0;
-	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .stats-table td:nth-child(even){
@@ -57,23 +66,26 @@ h2+h3{
 .stats-table.fixed-top {
 	position: fixed;
 	top: 88px;
-	box-shadow: 0px 2px 2px -1px black;
+	box-shadow: 0 2px 2px -1px black;
 }
 
 /* tablesorter */
 
 .stats-table th.header:hover {
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: #3a5f7d;
+	/*background-color: rgba(0, 0, 0, 0.1);*/
 	cursor: pointer;
 }
 
 .stats-table th.header.headerSortUp,
 .stats-table th.header.headerSortDown {
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: #3a5f7d;
+	/*background-color: rgba(0, 0, 0, 0.1);*/
 }
 
 .stats-table colgroup.sorted{
-	background-color: rgba(0,0,0,.6);
+	background-color: #3A5F7D;
+	/*background-color: rgba(0,0,0,.6);*/
 }
 
 /* custom box */

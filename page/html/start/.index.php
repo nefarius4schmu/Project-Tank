@@ -42,7 +42,7 @@ $redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
 function printRedirectError($errorCode){
 	switch($errorCode){
 		case 1: 
-			Debug::e("Für vollen Funktionsumfang loggen Sie sich mit Ihrem Wargaming.net Account ein.($errorCode)");
+			Debug::e("F&uuml;r vollen Funktionsumfang loggen Sie sich mit Ihrem Wargaming.net Account ein.($errorCode)");
 			break;
 		case 3:
 			Debug::e("Die Datenbank ist derzeit nicht erreichbar.<br>Bitte versuchen Sie es zu einem sp&auml;teren Zeitpunkt erneut.($errorCode)");

@@ -5,9 +5,22 @@
 * @author Steffen Lange
 */
 class Html{
-
+    const TEXT_ELLEPSIS = '...';
+    const NEWS_LG_SUMMARY_MAX_LEN = 250;
 	/* ===================================================================================== */
-	
+
+    public static function css($urls){
+        $tmp = "<link rel='stylesheet' type='text/css' href='{{url}}'/>\n";
+        return !empty($urls) ? self::templateList($tmp, 'url', $urls) : null;
+    }
+
+    public static function js($urls){
+        $tmp = "<script src='{{url}}'></script>\n";
+        return !empty($urls) ? self::templateList($tmp, 'url', $urls) : null;
+    }
+
+	/* helper functions ==================================================================== */
+
 	public static function toDataString($data){
 		if(!is_array($data)) return null;
 		$out = "";
@@ -16,19 +29,97 @@ class Html{
 		}
 		return $out;
 	}
-	
-	public static function createFaImg($options=[]){
-		if(is_string($options)) return "<i class='fa fa-".$options."'></i>";
-		$type = isset($options["type"]) ? " fa-".$options["type"] : null;
-		$class = isset($options["class"]) ? " ".$options["class"] : null;
-		$content = isset($options["content"]) ? $options["content"] : null;
-		return "<i class='fa".$type.$class."'>".$content."</i>";
-	}
-	
-	
-	/* ===================================================================================== */
 
-	public static function createSwitch($id, $options, $inRow=false){
+    public static function truncate($text, $maxlen, $options=[]){
+        $removeLineBreak = isset($options["removeLineBreak"]) && $options["removeLineBreak"];
+        $removeHtml = isset($options["removeHtml"]) && $options["removeHtml"];
+        $ellipsis = !isset($options["ellipsis"]) ? ''
+            : (is_string($options["ellipsis"]) ? $options["ellipsis"]
+                : (is_bool($options["ellipsis"]) && $options["ellipsis"]) ? self::TEXT_ELLEPSIS
+                    : '');
+
+        if($removeLineBreak) $text = str_replace(["\n", "\r"], "", $text);
+        if($removeHtml){
+            $text = preg_replace("/(<\/[^>]+>)/", " ", $text);
+            $text = preg_replace("/(<[^>]+>)/", "", $text);
+        }
+        $len = strlen($text);
+        $eLen = strlen($ellipsis);
+        $text = $len+$eLen > $maxlen ? trim(substr($text, 0, $maxlen)).$ellipsis : $text;
+        return $text;
+    }
+
+    public static function clean($text, $options=[]){
+        $useHyphens = isset($options["useHyphens"]) && $options["useHyphens"];
+        $allowMultiHyphens = isset($options["allowMultiHyphens"]) && $options["allowMultiHyphens"];
+
+        if($useHyphens) $text = str_replace(" ", "-", $text);
+        $text = preg_replace("/[^A-Za-z0-9\-]/", "", $text);
+        if(!$allowMultiHyphens) $text = preg_replace("/-+/", "-", $text);
+        return $text;
+    }
+
+    public static function template($tmp, $data, $options=[]){
+        $out = $tmp;
+        $empty = isset($options["empty"]) && $options["empty"];
+        $escape = isset($options["escape"]) && $options["escape"];
+        $debug = isset($options["debug"]) && $options["debug"];
+        $path = isset($options["path"]) ? trim($options["path"], ".") : null;
+        if($debug) Debug::r($options);
+        foreach($data as $key=>$value){
+            if($debug){ Debug::s($key); Debug::e($value);}
+            if(is_string($value)){
+                $itemkey = isset($path) ? $path.".".$key : $key;
+                if($escape) $value = htmlentities($value);
+                if($debug) Debug::i("set string: ".$itemkey."=>".$value);
+                $out = preg_replace('({{'.$itemkey.'}})',$value,$out);
+            }
+            else if(is_array($value)){
+                if($debug) Debug::i("refactor array");
+                $itempath = isset($path) ? $path.".".$key : $key;
+                $out = self::template($out, $value, ["path"=>$itempath, "debug"=>$debug]);
+//                $path = null;
+            }
+        }
+        if($empty) $out = self::template($out, ['[^}}]+'=>'']);
+        return $out;
+    }
+
+    public static function templateList($tmp, $key, $list){
+        if(is_string($list)) return self::template($tmp, [$key=>$list]);
+        else{
+            $out = "";
+            foreach($list as $item){
+                $out .= self::template($tmp, [$key=>$item]);
+            }
+            return $out;
+        }
+    }
+
+    public static function isget($v1, $v2, $true=" active", $false=null){
+        return $v1 == $v2 ? $true : $false;
+    }
+
+    public static function getNewsCatLang($name){
+        switch($name){
+            case "wot": return "WoT";
+            case "clan": return "Clan";
+            case "others": return "Andere";
+        }
+        return "Unbekannt";
+    }
+
+    /* ===================================================================================== */
+
+    public static function createFaImg($options=[]){
+        if(is_string($options)) return "<i class='fa fa-".$options."'></i>";
+        $type = isset($options["type"]) ? " fa-".$options["type"] : null;
+        $class = isset($options["class"]) ? " ".$options["class"] : null;
+        $content = isset($options["content"]) ? $options["content"] : null;
+        return "<i class='fa".$type.$class."'>".$content."</i>";
+    }
+
+    public static function createSwitchButton($id, $options, $inRow=false){
 		$title = isset($options["title"]) ? $options["title"] : null;
 		$descr = isset($options["descr"]) ? $options["descr"] : null;
 		$class = isset($options["class"]) ? $options["class"] : null;
@@ -36,7 +127,7 @@ class Html{
 		$hasElements = isset($options["elements"]) && !empty($options["elements"]);
 		$activeValue = isset($options["active"]) ? $options["active"] : null;
 		
-		$html = "<div class='switch' id='".$id."'>";
+		$html = "<div class='btn-switch' id='".$id."'>";
 		if($hasElements){
 			$count = 0;
 			foreach($options["elements"] as $txt=>$value){
@@ -49,7 +140,29 @@ class Html{
 		if($inRow) return self::createSettingsRow(null, $class, $title, $descr, $html);
 		else return $html;
 	}
-	
+
+    public static function createNavList($items){
+		$title = isset($options["title"]) ? $options["title"] : null;
+		$descr = isset($options["descr"]) ? $options["descr"] : null;
+		$class = isset($options["class"]) ? $options["class"] : null;
+		$inputName = isset($options["input"]) ? " name='".$options["input"]."'" : null;
+		$hasElements = isset($options["elements"]) && !empty($options["elements"]);
+		$activeValue = isset($options["active"]) ? $options["active"] : null;
+
+		$html = "<div class='btn-switch' id='".$id."'>";
+		if($hasElements){
+			$count = 0;
+			foreach($options["elements"] as $txt=>$value){
+				$active = $activeValue != $value ? "" : " checked";
+				$html .= "<input id='".$id."_switch_".$count."' type='radio' value='".$value."'".$inputName.$active."/><label for='".$id."_switch_".$count."'>".$txt."</label>";
+				$count++;
+			}
+		}
+		$html .= "</div>";
+		if($inRow) return self::createSettingsRow(null, $class, $title, $descr, $html);
+		else return $html;
+	}
+
 	public static function createDataSelect($id, $options, $inRow=false){
 		$title = isset($options["title"]) ? $options["title"] : null;
 		$descr = isset($options["descr"]) ? $options["descr"] : null;
@@ -106,4 +219,148 @@ class Html{
 			<ul>".$rows."</ul>
 		</div>";
 	}
+
+    /**
+     * @param WotPlayer $player
+     * @param array $news
+     * @param array $options
+     * @return string
+     */
+	public static function createNewsLg($player, $news, $options=[]){
+		if(isset($options["id"])) $options["id"] = ' id="'.$options["id"].'"';
+		if(isset($options["class"])) $options["class"] =  ' '.$options["class"];
+
+        $news["url"] = isset($news["uid"]) ? URL_ROOT.ROUTE_SHOW_NEWS.'/'.$news["uid"] : "#";
+		if(isset($news["clantag"])) $news["clantag"] =  '['.$news["clantag"].']';
+        if(!isset($news["summary"])) $news["summary"] = self::truncate($news["text"], self::NEWS_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
+        if(isset($news["coverimage"]))
+            $news["image"] = '<img src="'.$news["coverimage"].'" alt="news_cover"/>';
+
+        $news["created"] = isset($news["created"]) ? date('d.m.y', strtotime($news["created"])) : "Unbekannt";
+
+        // check if user can edit post
+        if(isset($news["canEdit"]) && $news["canEdit"]){
+            $menu = ["url"=>URL_ROOT.ROUTE_CREATOR_NEWS.'/'.$news["uid"]];
+            $menu = array_merge(self::$tmpDefaults, $menu);
+            $news["menu"] = self::template(self::TMP_NEWS_MENU_EDIT, $menu, ["empty"=>true]);
+        }
+
+        $data = array_merge(self::$tmpDefaults, $news, $options);
+//        Debug::r($data);
+		return self::template(self::TMP_NEWS_LG, $data, ["empty"=>true]);
+	}
+
+    /**
+     * @param WotPlayer $player
+     * @param array $news
+     * @param array $options
+     * @return string
+     */
+	public static function createNewsFeatured($player, $news, $options = []){
+		if(isset($options["id"])) $options["id"] = ' id="'.$options["id"].'"';
+		if(isset($options["class"])) $options["class"] =  ' '.$options["class"];
+
+        $news["url"] = isset($news["uid"]) ? URL_ROOT.ROUTE_SHOW_NEWS.'/'.$news["uid"] : "#";
+//		if(isset($news["clantag"])) $news["clantag"] =  '['.$news["clantag"].']';
+        if(!isset($news["summary"]) && isset($news["text"])) $news["summary"] = self::truncate($news["text"], self::NEWS_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
+        if(isset($news["coverimage"]))
+            $news["attributes"] = " background-image: url(".$news["coverimage"].")";//'<img src="'.$news["imageurl"].'" alt="news_cover"/>';
+
+//        $news["created"] = isset($news["created"]) ? date('d.m.y', strtotime($news["created"])) : "Unbekannt";
+
+        $data = array_merge(self::$tmpDefaults, $news, $options);
+//        Debug::r($data);
+		return self::template(self::TMP_NEWS_FEATURED, $data, ["empty"=>true]);
+	}
+
+    /**
+     * @param WotPlayer $player
+     * @param array $news
+     * @param array $options
+     * @return string
+     */
+	public static function createNewsFull($player, $news, $options=[]){
+		if(isset($options["id"])) $options["id"] = ' id="'.$options["id"].'"';
+		if(isset($options["class"])) $options["class"] =  ' '.$options["class"];
+
+//        $news["url"] = isset($news["uid"]) ? URL_ROOT.ROUTE_SHOW_NEWS.'/'.$news["uid"] : "#";
+		if(isset($news["clantag"])) $news["clantag"] =  '['.$news["clantag"].']';
+//        if(!isset($news["summary"])) $news["summary"] = self::truncate($news["text"], self::NEWS_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
+//        if(isset($news["imageurl"]))
+//            $news["image"] = '<img src="'.$news["imageurl"].'" alt="news_cover"/>';
+
+        $news["created"] = isset($news["created"]) ? date('d.m.y', strtotime($news["created"])) : "Unbekannt";
+
+        // check if user can edit post
+        if($news["userID"] == $player->getID()){
+            $menu = ["url"=>URL_ROOT.ROUTE_CREATOR_NEWS.'/'.$news["uid"]];
+            $menu = array_merge(self::$tmpDefaults, $menu);
+            $news["menu"] = self::template(self::TMP_NEWS_MENU_EDIT, $menu, ["empty"=>true]);
+        }
+
+        $data = array_merge(self::$tmpDefaults, $options, $news);
+//        Debug::r($data);
+        $options = ["empty"=>true];
+		return self::template(self::TMP_NEWS_FULL, $data, $options);
+	}
+
+    /* templates =========================================================================== */
+
+    private static $tmpDefaults = [
+        "url"=>"#",
+        "lang"=>[
+            "edit"=>"Bearbeiten",
+//            "more"=>"weiter",
+//            "from"=>"@",
+        ]
+    ];
+
+    //<a class="more" href="{{url}}"><i class="fa fa-fw fa-long-arrow-right"></i>{{post.more}}</a>
+    const TMP_NEWS_MENU_EDIT = '<a class="news-edit{{class}}" href="{{url}}">{{lang.edit}}</a>';
+    const TMP_NEWS_LG = '<div class="news news-lg c-default{{class}}">
+            <div class="news-wrapper">
+                <a href="{{url}}">
+                    <h2>{{title}}</h2>
+                    <div class="text-wrapper">
+                        <div class="cover">{{image}}</div>
+                        <h3 class="summary">{{summary}}</h3>
+                    </div>
+                </a>
+                <div class="meta">
+                    <span class="date">{{lang.from}}{{created}}</span>
+                    <span class="user">{{user}}</span>
+                    <span class="clan">{{clantag}}</span>
+                </div>
+                <div class="info">
+                    <span class="viewed"><i class="fa fa-fw fa-eye"></i>{{views}}</span>
+                    <span class="menu pull-left">{{menu}}</span>
+                </div>
+            </div>
+        </div>';
+
+    const TMP_NEWS_FULL = '<div class="news news-full c-default{{class}}">
+            <div class="news-wrapper">
+                <h2>{{title}}</h2>
+                <h3 class="summary">{{summary}}</h3>
+                <div class="text">{{text}}</div>
+                <div class="meta">
+                    <span class="date">{{lang.from}}{{created}}</span>
+                    <span class="user">{{user}}</span>
+                    <span class="clan">{{clantag}}</span>
+                </div>
+                <div class="info">
+                    <span class="menu pull-left">{{menu}}</span>
+                </div>
+            </div>
+        </div>';
+
+    const TMP_NEWS_FEATURED = '<div class="news news-featured">
+            <div class="featured-wrapper"{{attributes}}>
+                <a class="summary" href="{{url}}">
+                    <h3>{{title}}</h3>
+                    <span>{{summary}}</span>
+                </a>
+            </div>
+        </div>';
+
 }
