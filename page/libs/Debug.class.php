@@ -6,6 +6,7 @@
 */
 class Debug{
 	
+	const STYLE_DEFAULT = "background-color:#f9f9f9;border:1px solid #d1d1d1;";
 	const STYLE_ERROR = "background-color:#ffe7e7;border:1px solid #FC8787;";
 	const STYLE_INFO = "background-color:#e7f3ff;border:1px solid #87BAFC;";
 	const STYLE_SUCCESS = "background-color:#dfffdf;border:1px solid #68CF68;";
@@ -14,7 +15,8 @@ class Debug{
 	const CLASS_INFO = "info";
 	const CLASS_SUCCESS = "success";
 	
-	private static function print_r($v, $class, $style){
+	private static function print_r($v, $class=null, $style=null){
+        $style = isset($style) ? $style : self::STYLE_DEFAULT;
 		$data = print_r($v, true);
 		$style = "style='$style'";
 		return "<pre class='$class' $style>$data</pre>";
@@ -50,7 +52,13 @@ class Debug{
 		if($return) return $msg;
 		else echo $msg;
 	}
-	
+
+	public static function h($v, $return=false){
+		$msg = self::print_r(htmlentities($v));
+		if($return) return $msg;
+		else echo $msg;
+	}
+
 	public function exitOnError($errorCode, $appendix=null){
 		$msg = "ERROR: ";
 		switch($errorCode){

@@ -16,7 +16,12 @@ if(!defined("ROUTE_IMPRINT"))  define("ROUTE_IMPRINT", "imprint");
 if(!defined("ROUTE_BOARD"))  define("ROUTE_BOARD", "board");
 if(!defined("ROUTE_SET"))  define("ROUTE_SET", "set");
 if(!defined("ROUTE_GET"))  define("ROUTE_GET", "get");
+if(!defined("ROUTE_POST"))  define("ROUTE_POST", "post");
 if(!defined("ROUTE_NEWS"))  define("ROUTE_NEWS", "news");
+if(!defined("ROUTE_SHOW_NEWS"))  define("ROUTE_SHOW_NEWS", "news/show");
+if(!defined("ROUTE_CREATOR_NEWS"))  define("ROUTE_CREATOR_NEWS", "creator/news");
+//if(!defined("ROUTE_CREATOR_NEWS"))  define("ROUTE_CREATOR_NEWS", "news/post");
+//if(!defined("ROUTE_CREATOR_POST"))  define("ROUTE_CREATOR_POST", "creator/post/");
 
 if(!defined("ROUTETYPE_DEFAULT"))  define("ROUTETYPE_DEFAULT", 0);
 if(!defined("ROUTETYPE_BOARD"))  define("ROUTETYPE_BOARD", 1);

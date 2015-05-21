@@ -18,6 +18,7 @@ _lib("Html");
 $activePage = $_page["board"];
 $activePageClass = " class='active'";
 $wotUser = $_page["user"];
+/** @var WotPlayer $playerInfo */
 $playerInfo = $wotUser["player"];
 //Debug::r($_page);
 $wd = new WotData();
@@ -53,6 +54,18 @@ $clanImage = $clanImageURL != CLAN_NONE_IMAGE_URL ? "<i class='wot wot-emblem-la
 $clanRoleImage = $clanRoleImgURL !== null ? "<i class='wot wot-rank' style='background-image:url($clanRoleImgURL)'></i>" : null;
 /* ===================================================================================== */
 $breadcrumbs = Router::getBreadcrumbs();
+
+/* prepare page requirements =========================================================== */
+//$css_defaults = [
+//    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332',
+//    '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430',
+//    'css/board.css?003',
+//];
+//$js_defaults = [
+//    'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112',
+//    'js/ajax.js?100',
+//    'js/board.js?001',
+//];
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -60,13 +73,8 @@ $breadcrumbs = Router::getBreadcrumbs();
 <head>
 	<title><?=PAGE_BRAND;?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="css/board.css">
+    <?=Html::css(array_merge(Router::getDefaultCSS(ROUTETYPE_BOARD), Router::getCSS($activePage)))?>
 	<style><?=$userStyle;?></style>
-	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
-	<script src='js/ajax.js'></script>
-	<script src='js/board.js?v=1'></script>
 </head><?php 
 flush(); 
 ?><body>
@@ -168,6 +176,7 @@ flush();
 			?></div>
 		</div>
 	</div>
+<?=Html::js(array_merge(Router::getDefaultJS(ROUTETYPE_BOARD), Router::getJS($activePage)))?>
 </body>
 </html>
 <?php

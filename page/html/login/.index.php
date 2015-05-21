@@ -43,8 +43,8 @@ _lib("WotPlayer");
 <head>
 	<title>Willkommen!</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/base.css"> 
+	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css?320">
+	<link rel="stylesheet" type="text/css" href="css/base.css?001">
 	<style>
 		html, body{
 			height: 100%;
@@ -181,12 +181,13 @@ if($player->hasClan()){
 	$result = $dbhn->removeClanMembersByClanID($player->getClanID());
 	if($result === false) redirect(_error(ERROR_DB_DEL_CLAN_MEMBERS, null, $debug, true), $debug);
 	// store members info
-	if(!empty($player->getClanMembers())){
+    $clanMembers = $player->getClanMembers();
+	if(!empty($clanMembers)){
 		$userData = [];
 		$membersData = [];
 		$ratingData = [];
 		$statsData = [];
-		foreach($player->getClanMembers() as $clanMember){
+		foreach($clanMembers as $clanMember){
 			$userData[$clanMember->id] = [
 				"name"=>$clanMember->name,
 				"lang"=>$player->getLang(),

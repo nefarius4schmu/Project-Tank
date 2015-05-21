@@ -1,0 +1,30 @@
+small{
+    display: block;
+}
+
+.page-wrapper{
+    text-align: left;
+}
+
+.creator{
+    text-align: left;
+}
+
+.creator input,
+.creator textarea{
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.button-bar {
+    margin-top: 20px;
+}
+
+.button-bar button{
+    min-width: 130px;
+}
+
+ul.thumbnails.image_picker_selector li .thumbnail img{
+    height: 150px;
+}
