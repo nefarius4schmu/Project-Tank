@@ -23,14 +23,4 @@ class Calc{
 	public static function rgbaToCSS($r, $g, $b, $alpha=1){
 		return "rgba($r,$g,$b,$alpha)";
 	}
-
-    public static function getWeeks($weeks, $asTimestamp=false){
-        $t = $weeks*self::getDays(7);
-        return $asTimestamp ? time() + $t : $t;
-    }
-
-    public static function getDays($days, $asTimestamp=false){
-        $t = $days*24*60*60;
-        return $asTimestamp ? time() + $t : $t;
-    }
 }

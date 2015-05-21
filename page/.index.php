@@ -33,22 +33,14 @@ $loginData = WotSession::getLoginData();
 $_isLogin = isset($loginData) && $loginData !== false;
 $_user = isset($loginData) ? $loginData : false;
 $_isError =  isset($_GET["e"]);
-$_isWarning =  isset($_GET["w"]);
 $_isMessage = isset($_GET["m"]);
-/** @var WotPlayer $_player */
-$_player = $_user !== false && isset($_user["player"]) && $_user["player"] instanceof WotPlayer ? $_user["player"] : false;
-$_isClan = $_player !== false && $_player->hasClan();
-$_settings = $_user !== false ? $_user["settings"] : false;
+$_isClan = isset($_user["player"]) && $_user["player"] instanceof WotPlayer && $_user["player"]->hasClan();
 
-if(!$_isError) {
-    $options = ["login"=>$_isLogin, "clan"=>$_isClan, "settings"=>$_settings];
-    $_route = isset($_GET["g"]) ? Router::getRoute2($_GET["g"], $options) : Router::getDefault($_isLogin);
-//    $_route = isset($_GET["g"]) ? Router::getRoute($_GET["g"], $_isLogin, $_isClan) : Router::getDefault($_isLogin);
-}else {
-    // on error: send user to start page and logout
-    $_route = Router::getDefault();
-//    WotSession::logout();
-}
+if(!$_isError)
+	$_route = isset($_GET["g"]) ? Router::getRoute($_GET["g"], $_isLogin, $_isClan) : Router::getDefault($_isLogin);
+else
+	$_route = Router::getDefault();	
+
 $_routeType = Router::getType($_route);
 $_isRedirect = isset($_GET["r"]) && $_GET["r"] == "1";
 
@@ -58,7 +50,6 @@ $_page = [
 	"login"=>$_isLogin,
 	"user"=>$_user,
 	"error"=>$_isError ? $_GET["e"] : null,
-    "warning"=>$_isWarning ? $_GET["w"] : null,
 	"message"=>$_isMessage ? $_GET["m"] : null,
 ];
 

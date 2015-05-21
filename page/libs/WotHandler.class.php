@@ -23,7 +23,7 @@ class WotHandler{
 		"195x195"=>"xlarge",
 		"256x256"=>"xxlarge"
 	];
-	private $clanEmblemAcceptedGames = ["portal","wot","wowp"];
+	private $clanEmblemAcceptedGames = ["","wowp"];
 	
 	function __construct($wotData){
 		$this->wotData = $wotData;
@@ -78,48 +78,28 @@ class WotHandler{
 		$rating->global = $ratingGlobal;
 		return $rating;
 	}
-
-    private function addToClanEmblemsObject(&$obj, $key, $value){
-        switch($key){
-            case ClanEmblemsObject::KEY_SMALL: $obj->small = $value; break;
-            case ClanEmblemsObject::KEY_MEDIUM: $obj->medium = $value; break;
-            case ClanEmblemsObject::KEY_LARGE_TANK:
-                if(strpos(basename($value), ClanEmblemsObject::INDICATOR_TANK) !== false)
-                    $obj->tank = $value;
-                else
-                    $obj->large = $value;
-                break;
-            case ClanEmblemsObject::KEY_XLARGE: $obj->xlarge = $value; break;
-            case ClanEmblemsObject::KEY_XXLARGE: $obj->xxlarge = $value; break;
-        }
-    }
-
+	
 	private function parseClanEmblems($clanEmblems, $clanLastUpdate){
-        Debug::r($clanEmblems);
+		function addToClanEmblemsObject(&$obj, $key, $value){
+			switch($key){
+				case "small": $obj->small = $value; break;
+				case "medium": $obj->medium = $value; break;
+				case "large": $obj->large = $value; break;
+				case "xlarge": $obj->xlarge = $value; break;
+				case "xxlarge": $obj->xxlarge = $value; break;
+			}
+		}
 
-        $emblems = new ClanEmblemsObject();
-        if(!isset($clanEmblems)) return $emblems;
-
-
-        $appendix = isset($clanLastUpdate) ? "?".$clanLastUpdate : null;
-        foreach($clanEmblems as $key => $urls){
-            if(is_array($urls))
-                foreach($urls as $game => $url)
-                    if(in_array($game, $this->clanEmblemAcceptedGames))
-                        $this->addToClanEmblemsObject($emblems, $key, $url.$appendix);
-                    else continue; // todo: send warning?
-        }
-
-//		foreach($clanEmblems as $key => $urls){
-//            if(is_array($urls))
-//
-//			if(!in_array($emblem["game"], $this->clanEmblemAcceptedGames)) continue;
-//			$type = $emblem["type"];
-//			$key = array_key_exists($type,  $this->clanEmblemsTypeTable) ? $this->clanEmblemsTypeTable[$type] : $type;
-//			$url = $emblem["url"];
-//			$appendix = isset($clanLastUpdate) ? "?".$clanLastUpdate : null;
-//			$this->addToClanEmblemsObject($emblems, $key, $url.$appendix);
-//		}
+		$emblems = new ClanEmblemsObject();
+		if(!isset($clanEmblems)) return $emblems;
+		foreach($clanEmblems as $emblem){
+			if(!in_array($emblem["game"], $this->clanEmblemAcceptedGames)) continue;
+			$type = $emblem["type"];
+			$key = array_key_exists($type,  $this->clanEmblemsTypeTable) ? $this->clanEmblemsTypeTable[$type] : $type;
+			$url = $emblem["url"];
+			$appendix = isset($clanLastUpdate) ? "?".$clanLastUpdate : null;
+			addToClanEmblemsObject($emblems, $key, $url.$appendix);
+		}
 		return $emblems;
 	}
 	

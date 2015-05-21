@@ -31,17 +31,12 @@ RewriteRule index.htm .index.php
 
 RewriteRule ^([a-zA-Z^/]*)/set$ .index.php?g=set&b=$1 [L,QSA]
 RewriteRule ^([a-zA-Z^/]*)/get$ .index.php?g=get&b=$1 [L,QSA]
-RewriteRule ^([a-zA-Z^/]*)/post$ .index.php?g=post&b=$1 [L,QSA]
 RewriteRule ^([a-zA-Z]*)/$ .index.php?g=$1 [QSA]
 RewriteRule ^([a-zA-Z^/]*)$ .index.php?g=$1 [QSA]
 
 
 
-#RewriteRule ([a-zA-Z^/]/[a-zA-Z^/])/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule (news/show)/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule (creator/news)/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
 RewriteRule error/(.*) .index.php?e=$1 [QSA]
-RewriteRule warning/(.*) .index.php?w=$1 [QSA]
 
 
 RewriteRule images/(.*) img/$1 [L]

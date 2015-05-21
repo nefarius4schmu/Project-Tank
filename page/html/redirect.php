@@ -5,10 +5,8 @@
 * @author Steffen Lange
 */
 /* ===================================================================================== */
-$debug = false;
-/* ===================================================================================== */
 if(!isset($_page)) exit();
-if(!isset($redirect)) _error(ERROR_REDIRECT_NOT_SET, null, $debug);
+if(!isset($redirect)) _error(ERROR_REDIRECT_NOT_SET);
 /* ===================================================================================== */
 //Debug::r($redirect);
 ?>
@@ -17,7 +15,7 @@ if(!isset($redirect)) _error(ERROR_REDIRECT_NOT_SET, null, $debug);
 <head>
 	<title>Bitte warten..</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<?=(!$debug? '<meta http-equiv="refresh" content="'.$redirect["delay"].'; url='.$redirect["url"].'" />' : null)?>
+	<meta http-equiv="refresh" content="<?=$redirect["delay"];?>; url=<?=$redirect["url"];?>" />
 	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css">
 	<style>
 		html, body{

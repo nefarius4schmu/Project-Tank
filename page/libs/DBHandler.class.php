@@ -18,15 +18,10 @@ class DBHandler{
 	const DB_USER_HAS_TANKS = "hasTanks";
 	const DB_WOT_USER_STATS = "wot_user_stats";
 	const DB_WOT_USER_STATS_TYPES = "wot_user_stats_types";
-	const DB_NEWS = "news";
-	const DB_NEWS_EDITS = "news_edits";
-	const DB_NEWS_DESCRIPTION = "news_description";
-	const DB_NEWS_CATS = "news_cats";
 	const DB_TANKS = "tanks";
 	const DB_EVENTS = "events";
 	const DB_EVENT_HAS_PRICE = "eventHasPrice";
-
-    /** @var PDO $db  */
+	
 	private $db = null;
 	private $d = false;
 	
@@ -47,20 +42,7 @@ class DBHandler{
 	private function toFieldList($array){
 		return implode(",", $array);
 	}
-
-    /**
-     * helper
-     */
-
-    public function parse($result, $default=null, $debugOnError=true){
-        if($this->isDebug()) Debug::i($result);
-        return $result !== false && !$this->isDebug() ? $result : $default;
-    }
-
-    public function parseArray($result, $debugOnError=true){
-        return $this->parse($result, [], $debugOnError);
-    }
-
+	
 	/**
 	* data getter
 	*/
@@ -126,16 +108,7 @@ class DBHandler{
 				) u ON u.settingsID=s.settingsID".$qs.";";
 		return $this->queryKeyValuePair($query);
 	}
-
-//	public function getUserSettingsByName($userID, $settingsIDs=null){
-//		$qs = !isset($settingsIDs) ? null : " WHERE settingsID IN (".implode(",", $settingsIDs).")";
-//		$query = "SELECT s.name, ifnull(u.value, s.defaultValue) as value FROM ".self::DB_USER_SETTINGS_TYPES." s
-//				LEFT JOIN (
-//					SELECT * FROM ".self::DB_USER_SETTINGS." WHERE userID='$userID'
-//				) u ON u.settingsID=s.settingsID".$qs.";";
-//		return $this->queryKeyValuePair($query);
-//	}
-
+	
 	public function getUserStats($userID){
 		$query = "SELECT t.name, ifnull(s.value,t.defaultValue) as value FROM ".self::DB_USER_STATS_TYPES." t
 			LEFT JOIN (SELECT statsID,value FROM ".self::DB_USER_STATS." WHERE userID='$user') s ON s.statsID=t.statsID;";
@@ -175,65 +148,8 @@ class DBHandler{
 		$query = "SELECT * FROM ".self::DB_USER_STATS_TYPES." WHERE userID IN ($idStr);";
 		return $this->queryFirstRow($query);
 	}
-
-    public function getNewsCategories(){
-        $query = "SELECT * FROM ".self::DB_NEWS_CATS.";";
-        return $this->queryAssoc($query);
-    }
-
-    public function getNewsCategoryByID($catID, $options=[]){
-        $query = "SELECT * FROM ".self::DB_NEWS_CATS." WHERE catID='".$catID."';";
-        return $this->queryFirstRow($query);
-    }
-
-    public function getNewsCategoryByName($name, $options=[]){
-        $query = "SELECT * FROM ".self::DB_NEWS_CATS." WHERE name='".$name."';";
-        return $this->queryFirstRow($query);
-    }
-
-	public function getLatestNews($timestamp_from, $options=[]){
-        $offset = isset($options["offset"]) ? $options["offset"] : 0;
-        $limit = isset($options["limit"]) ? " LIMIT ".$offset.",".$options["limit"] : null;
-        $category = isset($options["catID"]) ? " AND n.catID='".$options["catID"]."'" : null;
-        $clanID = isset($options["clanID"]) ? " AND (n.clanID IS NULL OR n.clanID='".$options["clanID"]."')" : " AND n.clanID IS NULL";
-
-        $query = "SELECT n.*,d.*,u.name as user,c.tag as clantag FROM ".self::DB_NEWS." n
-        LEFT JOIN ".self::DB_NEWS_DESCRIPTION." d ON d.newsID=n.newsID
-        LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_MEMBERS." m ON m.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
-        WHERE n.created > FROM_UNIXTIME($timestamp_from) AND m.deleted=0".$category.$clanID.$limit.";";
-        return $this->queryAssoc($query);
-    }
-
-	public function getLatestFeaturedNews($options=[]){
-        $category = isset($options["catID"]) ? " AND n.catID='".$options["catID"]."'" : null;
-        $clanID = isset($options["clanID"]) ? " AND (n.clanID IS NULL OR n.clanID='".$options["clanID"]."')" : " AND n.clanID IS NULL";
-
-        $query = "SELECT n.*,d.*,u.name as user,c.tag as clantag FROM ".self::DB_NEWS." n
-        LEFT JOIN ".self::DB_NEWS_DESCRIPTION." d ON d.newsID=n.newsID
-        LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_MEMBERS." m ON m.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
-        WHERE n.created = (
-			SELECT MAX(created) FROM news WHERE featured=1
-        ) AND n.featured=1 AND m.deleted=0".$category.$clanID.";";
-        return $this->queryAssoc($query);
-    }
-
-	public function getNewsByUid($uid, $options=[]){
-//        $offset = isset($options["offset"]) ? $options["offset"] : 0;
-
-        $query = "SELECT n.*,d.*,u.name as user,c.tag as clantag FROM ".self::DB_NEWS." n
-        LEFT JOIN ".self::DB_NEWS_DESCRIPTION." d ON d.newsID=n.newsID
-        LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_MEMBERS." m ON m.userID=n.userID
-        LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
-        WHERE d.uid='$uid' AND m.deleted=0;";
-        return $this->queryFirstRow($query);
-    }
-
-
+	
+	
 	/**
 	* data setter
 	*/
@@ -456,64 +372,8 @@ class DBHandler{
 		}
 		return $this->queryInsert($query);
 	}
-
-//    public function postNews($userID, $title, $text, $summary, $uid, $catID){
-    public function postNews($data){
-        $userID = isset($data["userID"]) ? $data["userID"] : null;
-        $title = isset($data["title"]) ? $data["title"] : null;
-        $text = isset($data["text"]) ? $data["text"] : null;
-        $summary = isset($data["summary"]) ? $data["summary"] : null;
-        $uid = isset($data["uid"]) ? $data["uid"] : null;
-        $catID = isset($data["catID"]) ? $data["catID"] : null;
-        $coverimage = isset($data["coverimage"]) ? $data["coverimage"] : null;
-
-        if(empty($userID) || empty($title) || empty($text)) return false;
-        $qTitle = $this->quote($title);
-        $qText = $this->quote($text);
-        $qSummary = isset($summary) ? $this->quote($summary) : "null";
-        $qUid = isset($uid) ? $this->quote($uid) : "null";
-        $qCover = isset($qCover) ? $this->quote($qCover) : "null";
-
-        $query = "BEGIN;
-        INSERT INTO ".self::DB_NEWS."(userID,catID) VALUES('$userID','$catID');
-        INSERT INTO ".self::DB_NEWS_DESCRIPTION."(newsID,title,text,summary,uid,coverimage)
-            VALUES(LAST_INSERT_ID(),$qTitle,$qText,$qSummary,$qUid,$qCover);
-        COMMIT;";
-        return $this->queryInsert($query);
-    }
-
-//    public function updateNews($userID, $newsID, $title, $text, $summary, $uid, $catID){
-    public function updateNews($data){
-        $userID = isset($data["userID"]) ? $data["userID"] : null;
-        $newsID = isset($data["newsID"]) ? $data["newsID"] : null;
-        $title = isset($data["title"]) ? $data["title"] : null;
-        $text = isset($data["text"]) ? $data["text"] : null;
-        $summary = isset($data["summary"]) ? $data["summary"] : null;
-        $uid = isset($data["uid"]) ? $data["uid"] : null;
-        $catID = isset($data["catID"]) ? $data["catID"] : null;
-        $coverimage = isset($data["coverimage"]) ? $data["coverimage"] : null;
-
-        if(empty($userID) || empty($newsID) || empty($title) || empty($text)) return false;
-        $qTitle = $this->quote($title);
-        $qText = $this->quote($text);
-        $qSummary = isset($summary) ? $this->quote($summary) : "null";
-        $qUid = isset($uid) ? $this->quote($uid) : "null";
-        $qCover = isset($coverimage) ? $this->quote($coverimage) : "null";
-
-        $query = "BEGIN;
-        INSERT INTO ".self::DB_NEWS_EDITS."(newsID,userID) VALUES('$newsID', '$userID');
-        UPDATE ".self::DB_NEWS." SET catID='$catID' WHERE newsID='$newsID';
-        UPDATE ".self::DB_NEWS_DESCRIPTION." SET title=$qTitle,text=$qText,summary=$qSummary,uid=$qUid,coverimage=$qCover WHERE newsID='$newsID';
-        COMMIT;";
-        return $this->queryInsert($query);
-    }
-
-    public function incNewsViewCount($id, $options=[]){
-        $query = "UPDATE ".self::DB_NEWS." SET views=views+1 WHERE newsID='$id';";
-        return $this->queryInsert($query);
-    }
-
-    /**
+	
+	/**
 	* data remover
 	*/
 	
@@ -601,8 +461,6 @@ class DBHandler{
 	private function queryInsert($query){
 		if($this->isDebug()) return $query;
 		$sql = $this->query($query);
-//        Debug::e("queryInsert");
-//        Debug::v($sql);
 		if($sql === false) return false;
 		return true;
 	}
@@ -620,7 +478,7 @@ class DBHandler{
 	/**
 	* pdo functions
 	*/
-
+	
 	private function quote($text){
 		if(!$this->isConnection()) return false;
 		else return $this->db->quote($text);		
@@ -630,10 +488,7 @@ class DBHandler{
 		if(!$this->isConnection() || empty($query)) return false;
 		try{
 			$sql = $this->db->query($query);
-//            Debug::e("pdo query");
-//            Debug::v($sql);
 		}catch(Exception $e){
-            Debug::e("error");
 			$this->echoError($e->getMessage());
 			return false;
 		}

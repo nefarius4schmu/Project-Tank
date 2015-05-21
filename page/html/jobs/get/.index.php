@@ -29,7 +29,6 @@ $clanID = $playerInfo->getClanID();
 $data = null;
 switch($_GET["t"]){
 	case "membersStats": $data = getMembersStats($dbh, $wh, $clanID); break;
-//    case "events": $data = _get('events');
 }
 
 /* ===================================================================================== */
