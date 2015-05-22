@@ -202,8 +202,8 @@ class DBHandler{
         LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=n.userID
         LEFT JOIN ".self::DB_CLAN_MEMBERS." m ON m.userID=n.userID
         LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
-        WHERE n.created > FROM_UNIXTIME($timestamp_from) AND m.deleted=0".$category.$clanID.$limit.";";
-        return $this->queryAssoc($query);
+        WHERE n.deleted=0".$category.$clanID." ORDER BY n.created DESC".$limit.";";
+        return $this->queryAssoc($query);//WHERE n.created > FROM_UNIXTIME($timestamp_from) AND m.deleted=0
     }
 
 	public function getLatestFeaturedNews($options=[]){
@@ -217,20 +217,21 @@ class DBHandler{
         LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
         WHERE n.created = (
 			SELECT MAX(created) FROM news WHERE featured=1
-        ) AND n.featured=1 AND m.deleted=0".$category.$clanID.";";
-        return $this->queryAssoc($query);
+        ) AND n.featured=1 AND n.deleted=0".$category.$clanID." ORDER BY n.created DESC;";
+        return $this->queryAssoc($query);// AND m.deleted=0
     }
 
 	public function getNewsByUid($uid, $options=[]){
 //        $offset = isset($options["offset"]) ? $options["offset"] : 0;
+        $fields = isset($options["fields"]) ? $options["fields"] : "n.*,d.*,u.name as user,c.tag as clantag";
 
-        $query = "SELECT n.*,d.*,u.name as user,c.tag as clantag FROM ".self::DB_NEWS." n
+        $query = "SELECT ".$fields." FROM ".self::DB_NEWS." n
         LEFT JOIN ".self::DB_NEWS_DESCRIPTION." d ON d.newsID=n.newsID
         LEFT JOIN ".self::DB_USER_INFO." u ON u.userID=n.userID
         LEFT JOIN ".self::DB_CLAN_MEMBERS." m ON m.userID=n.userID
         LEFT JOIN ".self::DB_CLAN_INFO." c ON c.clanID=m.clanID
-        WHERE d.uid='$uid' AND m.deleted=0;";
-        return $this->queryFirstRow($query);
+        WHERE d.uid='$uid' AND n.deleted=0;";
+        return $this->queryFirstRow($query);//m.deleted
     }
 
 
@@ -526,7 +527,12 @@ class DBHandler{
 		$query = "UPDATE ".self::DB_CLAN_MEMBERS." SET deleted='1' WHERE clanID='$clanID';";
 		return $this->queryInsert($query);
 	}
-	
+
+	public function removeNews($newsID){
+		$query = "UPDATE ".self::DB_NEWS." SET deleted='1' WHERE newsID='$newsID';";
+		return $this->queryInsert($query);
+	}
+
 	/**
 	* data fetch handler
 	*/

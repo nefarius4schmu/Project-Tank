@@ -33,7 +33,7 @@ $clanID = $player->hasClan() ? $player->getClanID() : null;// $isNewsCat && $cla
 /* ===================================================================================== */
 //$dbh->debug(true);
 $timeLatest = Calc::getWeeks(1);
-$options = ["limit"=>10, "catID"=>$catID, "clanID"=>$clanID];
+$options = ["limit"=>20, "catID"=>$catID, "clanID"=>$clanID];
 $result = $dbh->getLatestNews($timeLatest, $options);
 $newsLatest = $dbh->parseArray($result);
 /* ===================================================================================== */
@@ -73,6 +73,6 @@ $newsFeatured = $dbh->parseArray($result);
         }else{
             echo "Keine Beitr&auml;ge gefunden.";
         }
-            ?>
+        ?>
     </div>
 </div>

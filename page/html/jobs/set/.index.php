@@ -72,7 +72,7 @@ flush();
 $dbh = new DBHandler(DB::getLink(DB::DB_PTWG));
 if($debug) $dbh->debug();
 if(!$dbh->isConnection()) $redirect = "error/".ERROR_DB_CONNECTION;
-else{
+else if(!empty($settings)){
 	// update user settings
 	$result = $dbh->setUserSettings($accountID, $settings);
 	if(!$result) $redirect = "error/".ERROR_DB_SET_SETTINGS;

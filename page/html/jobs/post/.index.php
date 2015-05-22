@@ -30,6 +30,9 @@ if(!isset($news["title"]) || empty($news["title"])) _warning(WARNING_POST_MISSIN
 if(!isset($news["text"]) || empty($news["text"])) _warning(WARNING_POST_MISSING_TEXT, $_route);
 $isEdit = isset($news["id"]);
 /* ===================================================================================== */
+$action = $isEdit ? "edit" : "create";
+$langActionText = Html::getNewsActionLang($action);
+/* ===================================================================================== */
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,7 +70,7 @@ $isEdit = isset($news["id"]);
 		<div class='box'>
 			<img src='images/loader/loader-bar.gif' alt='loader'/>
 			<p>Bitte warten Sie einen Moment.</p>
-			<small>Ihr Beitrag wird erstellt...</small>
+			<small><?=$langActionText?></small>
 		</div>
 	</div>
 <?php
@@ -91,15 +94,22 @@ $dbh->debug($debug);
 if($dbh->isConnection()){
     $sqlData = [
         "userID"=>$_player->getID(),
-        "newsID"=>$news["id"],
+        "newsID"=>isset($news["id"]) ? $news["id"]: null,
         "title"=>htmlentities($news["title"]),
         "text"=>$news["text"],
         "summary"=>$news["summary"],
         "uid"=>$newsLink,
-        "catID"=>$news["cat"],
-        "coverimage"=>$news["cover"],
+        "catID"=>isset($news["cat"]) ? $news["cat"]: null,
+        "coverimage"=>isset($news["cover"]) ? $news["cover"]: null,
     ];
-//    Debug::v($sqlData);
+
+//    $result = false;
+//    switch($action){
+//        case "create": $result = $dbh->postNews($sqlData); break;
+//        case "edit": $result = $dbh->updateNews($sqlData); break;
+//        case "delete": $result = $dbh->removeNews($sqlData["newsID"]); break;
+//    }
+
 	$result = $isEdit
         ? $dbh->updateNews($sqlData)
 //        ? $dbh->updateNews($_player->getID(), $news["id"], htmlentities($news["title"]), $news["text"], $news["summary"], $newsLink, $news["cat"])
@@ -113,8 +123,6 @@ if($dbh->isConnection()){
 /* ===================================================================================== */	
 if($debug) exit();
 finish(URL_ROOT.$_route);
-?>
-<?php
 /* ===================================================================================== */
 /* ===================================================================================== */
 function finish($route){

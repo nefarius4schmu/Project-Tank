@@ -21,7 +21,7 @@ $uid = isset($_GET["uid"]) ? $_GET["uid"] : null;
 if(empty($uid)) $error = ERROR_DB_GET_NEWS_UID;
 /* ===================================================================================== */
 $news = !$error ? $dbh->getNewsByUid($uid) : null;
-$error = $news === false || !is_array($news);
+$error = $news === false || !is_array($news) || empty($news);
 if(!$error){
     $result = $dbh->incNewsViewCount($news["newsID"]);
     if($result) $news["views"] = $news["views"]*1+1;

@@ -20,6 +20,7 @@ if(!defined("ROUTE_POST"))  define("ROUTE_POST", "post");
 if(!defined("ROUTE_NEWS"))  define("ROUTE_NEWS", "news");
 if(!defined("ROUTE_SHOW_NEWS"))  define("ROUTE_SHOW_NEWS", "news/show");
 if(!defined("ROUTE_CREATOR_NEWS"))  define("ROUTE_CREATOR_NEWS", "creator/news");
+if(!defined("ROUTE_DELETE_NEWS"))  define("ROUTE_DELETE_NEWS", "delete/news");
 //if(!defined("ROUTE_CREATOR_NEWS"))  define("ROUTE_CREATOR_NEWS", "news/post");
 //if(!defined("ROUTE_CREATOR_POST"))  define("ROUTE_CREATOR_POST", "creator/post/");
 

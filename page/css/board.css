@@ -418,6 +418,10 @@ span.sc-info	{color:#5bc0de}
     /*color: #6e6e6e;*/
 }
 
+.news .menu > a+a{
+    margin-left: 10px;
+}
+
 .news.news-lg{
     padding: 10px;
     text-align: left;
@@ -468,6 +472,10 @@ span.sc-info	{color:#5bc0de}
 
 .news.news-full .text{
     margin: 1.5em 0 0;
+}
+
+.news.news-full .summary{
+    display: none;
 }
 
 /* news text resetter */

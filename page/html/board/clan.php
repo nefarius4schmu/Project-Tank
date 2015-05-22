@@ -20,7 +20,7 @@ if(!isset($_page)) exit();
 //_lib("Html");
 $wotUser = $_page["user"];
 /** @var WotPlayer $player */
-$player = $wotUser["player"];
+$_player = $wotUser["player"];
 //$wh = new WotHandler(new WotData());
 //$clan = $playerInfo->getClan();
 /* get clan member data ================================================================ */
@@ -30,8 +30,8 @@ $player = $wotUser["player"];
 ?>
 <!--<link rel="stylesheet" type="text/css" href="css/clan.css"/>-->
 <div class='page-wrapper'>
-    <h2><?=$player->getClanTag();?></h2>
-    <h3><?=$player->getClanName();?></h3>
+    <h2><?=$_player->getClanTag();?></h2>
+    <h3><?=$_player->getClanName();?></h3>
     <div class='board-wrapper'>
     <?php
     //	Debug::v($clan);

@@ -131,6 +131,12 @@ class Router{
                 "settings"=>["3"=>"1"],
 			],
 		],
+        ROUTE_DELETE_NEWS=>[
+			"loc"=>"jobs/delete/",
+			"req"=>[
+				"login"=>true,
+			],
+		],
 	];
 
     private static $default_css = [
