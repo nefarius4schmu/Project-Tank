@@ -109,6 +109,15 @@ class Html{
         return "Unbekannt";
     }
 
+    public static function getNewsActionLang($action){
+        switch($action){
+            case "create": return "Ihr Beitrag wird erstellt...";
+            case "edit": return "Ihre &Auml;nderungen werden &uuml;bernommen...";
+            case "delete": return "Ihr Beitrag wird entfernt...";
+        }
+        return "Aktion wird ausgef&uml;hrt...";
+    }
+
     /* ===================================================================================== */
 
     public static function createFaImg($options=[]){
@@ -232,7 +241,7 @@ class Html{
 
         $news["url"] = isset($news["uid"]) ? URL_ROOT.ROUTE_SHOW_NEWS.'/'.$news["uid"] : "#";
 		if(isset($news["clantag"])) $news["clantag"] =  '['.$news["clantag"].']';
-        if(!isset($news["summary"])) $news["summary"] = self::truncate($news["text"], self::NEWS_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
+        if(!isset($news["summary"]) || empty($news["summary"])) $news["summary"] = self::truncate($news["text"], self::NEWS_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
         if(isset($news["coverimage"]))
             $news["image"] = '<img src="'.$news["coverimage"].'" alt="news_cover"/>';
 
@@ -240,9 +249,14 @@ class Html{
 
         // check if user can edit post
         if(isset($news["canEdit"]) && $news["canEdit"]){
+            // edit news
             $menu = ["url"=>URL_ROOT.ROUTE_CREATOR_NEWS.'/'.$news["uid"]];
             $menu = array_merge(self::$tmpDefaults, $menu);
             $news["menu"] = self::template(self::TMP_NEWS_MENU_EDIT, $menu, ["empty"=>true]);
+
+            // delete news
+            $menu["url"] = URL_ROOT.ROUTE_DELETE_NEWS.'/'.$news["uid"];
+            $news["menu"] .= self::template(self::TMP_NEWS_MENU_DELETE, $menu, ["empty"=>true]);
         }
 
         $data = array_merge(self::$tmpDefaults, $news, $options);
@@ -293,9 +307,14 @@ class Html{
 
         // check if user can edit post
         if($news["userID"] == $player->getID()){
+            // edit news
             $menu = ["url"=>URL_ROOT.ROUTE_CREATOR_NEWS.'/'.$news["uid"]];
             $menu = array_merge(self::$tmpDefaults, $menu);
             $news["menu"] = self::template(self::TMP_NEWS_MENU_EDIT, $menu, ["empty"=>true]);
+
+            // delete news
+            $menu["url"] = URL_ROOT.ROUTE_DELETE_NEWS.'/'.$news["uid"];
+            $news["menu"] .= self::template(self::TMP_NEWS_MENU_DELETE, $menu, ["empty"=>true]);
         }
 
         $data = array_merge(self::$tmpDefaults, $options, $news);
@@ -310,6 +329,7 @@ class Html{
         "url"=>"#",
         "lang"=>[
             "edit"=>"Bearbeiten",
+            "delete"=>"L&oumlschen",
 //            "more"=>"weiter",
 //            "from"=>"@",
         ]
@@ -317,6 +337,7 @@ class Html{
 
     //<a class="more" href="{{url}}"><i class="fa fa-fw fa-long-arrow-right"></i>{{post.more}}</a>
     const TMP_NEWS_MENU_EDIT = '<a class="news-edit{{class}}" href="{{url}}">{{lang.edit}}</a>';
+    const TMP_NEWS_MENU_DELETE = '<a class="news-delete{{class}}" href="{{url}}">{{lang.delete}}</a>';
     const TMP_NEWS_LG = '<div class="news news-lg c-default{{class}}">
             <div class="news-wrapper">
                 <a href="{{url}}">

@@ -25,7 +25,8 @@ $settings = $dbh->getUserSettings($playerInfo->getID());
 /* ===================================================================================== */
 ?>
 <div class='page-wrapper'>
-    <form action='<?=URL_ROOT.ROUTE_SETTINGS."/".ROUTE_SET;?>' method='POST'>
+    <form action='<?=URL_ROOT.ROUTE_SET_SETTINGS;?>' method='POST'>
+<!--    <form action='--><?//=URL_ROOT.ROUTE_SETTINGS."/".ROUTE_SET;?><!--' method='POST'>-->
         <h2><?=PAGE_TITLE_SETTINGS;?></h2>
         <div class='button-bar bar-top'>
             <button type='submit' class='btn btn-success btn-big pull-right'>Anwenden</button>

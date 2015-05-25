@@ -73,6 +73,7 @@ class Router{
 		],
         ROUTE_SHOW_NEWS=>[
             "type"=>ROUTETYPE_BOARD,
+            "loc"=>"news/show.php",
             "req"=>[
                 "login"=>true,
             ],
@@ -82,20 +83,21 @@ class Router{
         ],
         ROUTE_CREATOR_NEWS=>[
 			"type"=>ROUTETYPE_BOARD,
+            "loc"=>"news/edit.php",
 			"req"=>[
 				"login"=>true,
                 "settings"=>["3"=>"1"],
 			],
             "css"=>[
                 "css/image-picker.css?024",
-                "css/creator.css?001",
+                "css/creator.css?002",
 
             ],
             "js"=>[
                 "//cdn.ckeditor.com/4.4.7/standard/ckeditor.js?447",
                 "js/image-picker.min.js?024",
 //                "js/class/creator.basic.js?001",
-                "js/creator.news.js?002",
+                "js/creator.news.js?003",
             ],
 		],
 		ROUTE_LOGIN=>[
@@ -112,8 +114,8 @@ class Router{
 				"login"=>true,
 			],
 		],
-		ROUTE_SET=>[
-			"loc"=>"jobs/set/",
+		ROUTE_SET_SETTINGS=>[
+			"loc"=>"jobs/settings/set.php",
 			"req"=>[
 				"login"=>true,
 			],
@@ -124,15 +126,15 @@ class Router{
 				"login"=>true,
 			],
 		],
-        ROUTE_POST=>[
-			"loc"=>"jobs/post/",
+        ROUTE_POST_NEWS=>[
+			"loc"=>"jobs/news/post.php",
 			"req"=>[
 				"login"=>true,
                 "settings"=>["3"=>"1"],
 			],
 		],
         ROUTE_DELETE_NEWS=>[
-			"loc"=>"jobs/delete/",
+			"loc"=>"jobs/news/del.php",
 			"req"=>[
 				"login"=>true,
 			],
@@ -145,7 +147,7 @@ class Router{
             '//fonts.googleapis.com/css?family=Lora:400,400italic',
             'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332',
             '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430',
-            'css/board.css?004',
+            'css/board.css?005',
         ],
     ];
 

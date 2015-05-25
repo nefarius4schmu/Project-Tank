@@ -21,13 +21,8 @@
             { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
             { name: 'styles', items: [ 'Styles', 'Format' ] },
             { name: 'about', items: [ 'About' ] }
-        ],
+        ]
     });
-
-    //$edImageCover.imagepicker({
-    //    hide_select : false,
-    //    show_label  : true
-    //});
 
     $(document).ready(function(){
         edPostText = CKEDITOR.instances.edPostText;
@@ -77,7 +72,7 @@
             var label = "Bild "+(i+1);
             var $op = $("<option>", {
                 "data-img-src": src,
-                value: src,
+                value: src
             }).text(label);
             $edImageCover.append($op);
         }

@@ -2,6 +2,11 @@ small{
     display: block;
 }
 
+textarea{
+    min-height: 120px;
+    max-width: 100%;
+}
+
 .page-wrapper{
     text-align: left;
 }

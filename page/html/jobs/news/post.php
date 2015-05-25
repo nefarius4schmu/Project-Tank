@@ -97,7 +97,7 @@ if($dbh->isConnection()){
         "newsID"=>isset($news["id"]) ? $news["id"]: null,
         "title"=>htmlentities($news["title"]),
         "text"=>$news["text"],
-        "summary"=>$news["summary"],
+        "summary"=>htmlentities($news["summary"]),
         "uid"=>$newsLink,
         "catID"=>isset($news["cat"]) ? $news["cat"]: null,
         "coverimage"=>isset($news["cover"]) ? $news["cover"]: null,

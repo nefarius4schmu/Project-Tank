@@ -57,7 +57,10 @@ if(!defined("WARNING_POST_MISSING_TEXT"))  define("WARNING_POST_MISSING_TEXT", 1
  * @param array $_page
  */
 function _load($name, $_page=[]){
-	include_once(ROOT."/html/$name/.index.php");
+    if(strpos($name, '.php') === false)
+	    include_once(ROOT."/html/$name/.index.php");
+    else
+        include_once(ROOT."/html/$name");
 }
 
 /**
@@ -65,7 +68,10 @@ function _load($name, $_page=[]){
  * @param array $_page
  */
 function _loadBoard($name, $_page=[]){
-	include_once(ROOT."/html/board/$name.php");
+    if(strpos($name, '.php') === false)
+	    include_once(ROOT."/html/board/$name.php");
+    else
+        include_once(ROOT."/html/board/$name");
 }
 
 /**

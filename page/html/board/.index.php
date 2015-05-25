@@ -171,7 +171,8 @@ flush();
 				</div>
 			</div>
 			<div class='content'><?php
-				_loadBoard($activePage, $_page);
+                $loc = Router::getLocation($activePage);
+				_loadBoard($loc, $_page);
 			
 			?></div>
 		</div>
