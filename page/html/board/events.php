@@ -8,14 +8,18 @@ if(!isset($_page)) exit();
 /* ===================================================================================== */
 _lib("WotEvent");
 $wotUser = $_page["user"];
+/** @var WotPlayer $player */
 $player = $wotUser["player"];
+/* ===================================================================================== */
+$currentEventCat = isset($_GET["c"]) ? $_GET["c"] : null;
+$isEventCat = !empty($currentEventCat);
 //$clanLogoMedium = $hasClan ? $player->getClanEmblemMedium() : PATH_ICON_MEMBERS;
 /* ===================================================================================== */
 $eventOwner = new PlayerObject();
 $eventData[] = new WotEvent([
 	"id"=>123,
     "owner"=>new PlayerObject(["id"=>$player->getID(), "name"=>$player->getName()]),
-    "clan"=>$player->hasClan() ?  new ClanObject(["id"=>$player->getClanID(), "name"=>getClanName()]) : null,
+    "clan"=>$player->hasClan() ?  new ClanObject(["id"=>$player->getClanID(), "name"=>$player->getClanName()]) : null,
 	"type"=>"public",
 	"created"=>time(),
 	"updated"=>time(),
@@ -31,21 +35,33 @@ $eventData[] = new WotEvent([
 ]);
 /* ===================================================================================== */
 $clanSwitchClass = !$player->hasClan() ? " disabled" : null;
+$catAllActive = $currentEventCat == "all" || !$currentEventCat;
+/* ===================================================================================== */
+//Debug::v($currentEventCat);
+//Debug::v($catAllActive);
 /* ===================================================================================== */
 ?>
 <!--<link rel="stylesheet" type="text/css" href="css/events.css?v=001"/>-->
 <div class='page-wrapper'>
-    <h1>Events</h1>
-    <div class='row row-sep'>
-        <div class='js-switch js-template-list row' data-target='#eventList' data-template-list data-template-item='#tmpEventListRow'>
-            <div class='switch col-xs-3 hc-warning' data-url='get/?t=events&c=all'><a href='#' class='card'><i class='fa fa-3x fa-star'></i>Alle</a></div>
-            <div class='switch col-xs-3 hc-primary active' data-url='get/?t=events&c=public'><a href='#' class='card'><i class='fa fa-3x fa-globe'></i>Öffentlich</a></div>
-            <div class='switch col-xs-3 hc-danger' data-url='get/?t=events&c=private'><a href='#' class='card'><i class='fa fa-3x fa-lock'></i>Privat</a></div>
-            <div class='switch col-xs-3 hc-warning<?=$clanSwitchClass?>' data-url='get/?t=events&c=clan'><a href='#' class='card'><i class='fa fa-3x fa-trophy'></i>Clan</a></div>
-        </div>
+    <div class='row'>
+        <?php
+        echo Html::createNewsFeatured($player, []);
+        ?>
+        <ul class='nav nav-pills c-default js-switch'>
+            <li class='<?=Html::isget($catAllActive, true)?>'><a href='?c=all' class=''><i class='fa fa-fw fa-star'></i>Alle</a></li>
+            <li class='<?=Html::isget($currentEventCat, "public")?>'><a href='?c=public' class=''><i class='fa fa-fw fa-globe'></i>Öffentlich</a></li>
+            <li class='<?=Html::isget($currentEventCat, "private")?>'><a href='?c=private' class=''><i class='fa fa-fw fa-lock'></i>Privat</a></li>
+            <li class='<?=Html::isget($currentEventCat, "clan")?>'><a href='?c=clan' class='<?=$clanSwitchClass?>'><i class='fa fa-fw fa-trophy'></i>Clan</a></li>
+<!--            <li class='fc-warning--><?//=Html::isget($catAllActive, true)?><!--'><a href='?c=all' class='card'><i class='fa fa-2x fa-star'></i>Alle</a></li>-->
+<!--            <li class='fc-primary--><?//=Html::isget($currentEventCat, "public")?><!--'><a href='?c=public' class='card'><i class='fa fa-2x fa-globe'></i>Öffentlich</a></li>-->
+<!--            <li class='fc-danger--><?//=Html::isget($currentEventCat, "private")?><!--'><a href='?c=private' class='card'><i class='fa fa-2x fa-lock'></i>Privat</a></li>-->
+<!--            <li class='fc-warning--><?//=Html::isget($currentEventCat, "clan")?><!--'><a href='?c=clan' class='card--><?//=$clanSwitchClass?><!--'><i class='fa fa-2x fa-trophy'></i>Clan</a></li>-->
+<!--            <li class='pull-right np-warning'><a href="#">+ Neues Event</a></li>-->
+        </ul>
     </div>
-    <hr>
+
     <h2 class='year'>2015</h2>
+    <hr>
     <div id='eventList' class='row'>
         <div class='event event-card-lg event-briefing col-md-2 bs-callout bs-callout-primary bs-callout-custom'>
             <h4 class='clearfix'>

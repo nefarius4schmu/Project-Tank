@@ -28,7 +28,7 @@ class Router{
 				"login"=>true,
 			],
             "css"=>[
-                'css/events.css?001',
+                'css/events.css?002',
             ]
 		],
 		ROUTE_CLAN=>[

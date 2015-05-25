@@ -323,6 +323,20 @@ class Html{
 		return self::template(self::TMP_NEWS_FULL, $data, $options);
 	}
 
+    /**
+     * @param WotPlayer $player
+     * @param array $news
+     * @param array $options
+     * @return string
+     */
+    public static function createEventFeatured($player, $event, $options = []){
+        if(isset($options["id"])) $options["id"] = ' id="'.$options["id"].'"';
+        if(isset($options["class"])) $options["class"] =  ' '.$options["class"];
+
+        $data = array_merge(self::$tmpDefaults, $event, $options);
+        return self::template(self::TMP_NEWS_FEATURED, $data, ["empty"=>true]);
+    }
+
     /* templates =========================================================================== */
 
     private static $tmpDefaults = [
