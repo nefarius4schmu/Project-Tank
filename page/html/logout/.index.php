@@ -7,9 +7,12 @@
 if(!isset($_page)) exit();
 /* ===================================================================================== */
 if($_page["login"] === false) _error(ERROR_IS_LOGOUT);
+$_route = URL_ROOT;
 /* ===================================================================================== */
 _lib("WotData");
 _lib("WotSession");
+/* clear session ======================================================================= */
+WotSession::logout();
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -53,12 +56,10 @@ _lib("WotSession");
 	</div>
 <?php
 flush();
-/* clear session ======================================================================= */
-WotSession::logout();
 /* logout at wargamin ================================================================== */
 $wotData = new WotData();
 $data = $wotData->getLogoutData($_page["user"]["token"]);
-if($data === false) _error(ERROR_LOGOUT_FAILED);
+if($data === false) $_route = _error(ERROR_LOGOUT_FAILED, null, false, true);
 $options = array(
     'http' => array(
         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -68,15 +69,15 @@ $options = array(
 );
 $context  = stream_context_create($options);
 $result = file_get_contents($data["url"], false, $context);
-if($result === false) _error(ERROR_LOGOUT_SEND_FAILED);
+if($result === false) $_route = _error(ERROR_LOGOUT_SEND_FAILED, null, false, true);
 $response = json_decode($result, true);
-if(!isset($response) || $response["status"] != "ok") _error(ERROR_API_LOGOUT);
+if(!isset($response) || $response["status"] != "ok") $_route = _error(ERROR_API_LOGOUT, null, false, true);
 
 /* store login data ==================================================================== */
 $_page["login"] = false;
 $_page["user"] = null;
 /* ===================================================================================== */
 ?>
-<script>window.location.href = "<?=URL_ROOT;?>"</script>
+<script>window.location.href = "<?=$_route;?>"</script>
 </body>
 </html>
