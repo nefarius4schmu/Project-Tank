@@ -7,6 +7,7 @@
 _def("router");
 class Router{
     const OFFLINE = false;
+    const CONSTRUCTIONS = false;
 
     const CSS_FONT_OPENSANS = "//fonts.googleapis.com/css?family=Open+Sans:400,300,700";
     const CSS_FONT_LORA = "//fonts.googleapis.com/css?family=Lora:400,400italic";
@@ -90,6 +91,9 @@ class Router{
 				"type"=>"wotLogin",
 				"name"=>"worldoftanks.eu",
 			],
+		],
+        ROUTE_CONSTRUCTIONS=>[
+            "loc"=>"construction.php",
 		],
 		ROUTE_LOGOUT=>[
 			"req"=>[
@@ -298,11 +302,11 @@ class Router{
     /* ===================================================================================== */
 	
 	public static function getRoute2($id, $options=[]){
-//        Debug::v($options);
         $isLogin = isset($options["login"]) && is_bool($options["login"]) && $options["login"];
         $isClan = isset($options["clan"]) && is_bool($options["clan"]) && $options["clan"];
         $settings = isset($options["settings"]) && is_array($options["settings"]) ? $options["settings"] : false;
-
+        if(self::CONSTRUCTIONS)
+            return ROUTE_CONSTRUCTIONS;
 		if(!isset($id)
 			|| !self::isRoute($id) 
 			|| (!$isLogin && self::reqLogin($id) ) 
@@ -319,7 +323,10 @@ class Router{
 	}
 
 	public static function getRoute($id, $isLogin=false, $isClan=false){
-        return self::getRoute2($id, ["login"=>$isLogin, "clan"=>$isClan]);
+        if(!self::CONSTRUCTIONS)
+            return self::getRoute2($id, ["login"=>$isLogin, "clan"=>$isClan]);
+        else
+            return ROUTE_CONSTRUCTIONS;
 //		if(!isset($id)
 //			|| !self::isRoute($id)
 //			|| (!$isLogin && self::reqLogin($id) )
@@ -334,7 +341,10 @@ class Router{
 	}
 	
 	public static function getDefault($isLogin=false){
-		return $isLogin ? self::$defaultLogged : self::$default;
+        if(!self::CONSTRUCTIONS)
+            return $isLogin ? self::$defaultLogged : self::$default;
+        else
+            return ROUTE_CONSTRUCTIONS;
 	}
 	
 	public static function getType($id){

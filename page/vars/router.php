@@ -13,6 +13,7 @@ if(!defined("ROUTE_LOGIN"))  define("ROUTE_LOGIN", "login");
 if(!defined("ROUTE_LOGOUT"))  define("ROUTE_LOGOUT", "logout");
 if(!defined("ROUTE_IMPRINT"))  define("ROUTE_IMPRINT", "imprint");
 if(!defined("ROUTE_BOARD"))  define("ROUTE_BOARD", "board");
+if(!defined("ROUTE_CONSTRUCTIONS"))  define("ROUTE_CONSTRUCTIONS", "constructions");
 
 if(!defined("ROUTE_SET_SETTINGS"))  define("ROUTE_SET_SETTINGS", "set/settings");
 if(!defined("ROUTE_GET"))  define("ROUTE_GET", "get");
