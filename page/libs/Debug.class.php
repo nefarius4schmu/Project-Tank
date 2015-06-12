@@ -59,7 +59,7 @@ class Debug{
 		else echo $msg;
 	}
 
-	public function exitOnError($errorCode, $appendix=null){
+	public static function exitOnError($errorCode, $appendix=null){
 		$msg = "ERROR: ";
 		switch($errorCode){
 			case 100: $msg .= "login check failed"; break;
@@ -71,5 +71,9 @@ class Debug{
 		if(isset($appendix)) $msg .= "\n$appendix";
 		echo $msg;
 		exit();
+	}
+
+	public static function eoe($errorCode, $appendix=null){
+		self::exitOnError($errorCode, $appendix);
 	}
 }

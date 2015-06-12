@@ -24,28 +24,31 @@ RewriteRule ^\.htaccess$ - [F]
 #RewriteRule login/index\.php [L,R=404]
 
 
-RewriteRule redirect/(.*) .index.php?g=$1&r=1 [QSA]
-#RewriteRule (.*)/set .index.php?g=set&b=$1 [QSA]
-#RewriteRule (.*)/get .index.php?g=get&b=$1 [QSA]
-RewriteRule index.htm .index.php
+RewriteRule redirect/(.*) index.php?g=$1&r=1 [QSA]
+#RewriteRule (.*)/set index.php?g=set&b=$1 [QSA]
+#RewriteRule (.*)/get index.php?g=get&b=$1 [QSA]
+RewriteRule index.htm index.php
 
-RewriteRule ^(post/([a-zA-Z^/]*))$ .index.php?g=$1&b=$2 [L,QSA]
-RewriteRule ^(set/([a-zA-Z^/]*))$ .index.php?g=$1&b=$2 [L,QSA]
-#RewriteRule ^([a-zA-Z^/]*)/set$ .index.php?g=set&b=$1 [L,QSA]
-RewriteRule ^([a-zA-Z^/]*)/get$ .index.php?g=get&b=$1 [L,QSA]
-#RewriteRule ^([a-zA-Z^/]*)/post$ .index.php?g=post&b=$1 [L,QSA]
-RewriteRule ^([a-zA-Z]*)/$ .index.php?g=$1 [QSA]
-RewriteRule ^([a-zA-Z^/]*)$ .index.php?g=$1 [QSA]
+RewriteRule ^(post/([a-zA-Z^/]*))$ index.php?g=$1&b=$2 [L,QSA]
+RewriteRule ^(set/([a-zA-Z^/]*))$ index.php?g=$1&b=$2 [L,QSA]
+#RewriteRule ^([a-zA-Z^/]*)/set$ index.php?g=set&b=$1 [L,QSA]
+RewriteRule ^([a-zA-Z^/]*)/get$ index.php?g=get&b=$1 [L,QSA]
+#RewriteRule ^([a-zA-Z^/]*)/post$ index.php?g=post&b=$1 [L,QSA]
+RewriteRule ^([a-zA-Z]*)/$ index.php?g=$1 [QSA]
+RewriteRule ^([a-zA-Z^/]*)$ index.php?g=$1 [QSA]
 
 
 
-#RewriteRule ([a-zA-Z^/]/[a-zA-Z^/])/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule (show/news)/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule (edit/news)/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule (delete/news)/([0-9a-zA-Z-^/]*)$ .index.php?g=$1&uid=$2 [L,QSA]
-RewriteRule error/(.*) .index.php?e=$1 [QSA]
-RewriteRule warning/(.*) .index.php?w=$1 [QSA]
+RewriteRule (new/[a-zA-Z^/]*)$ index.php?g=$1 [L,QSA]
+#RewriteRule ([a-zA-Z^/]/[a-zA-Z^/])/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
+RewriteRule (show/[a-zA-Z^/]*)/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
+RewriteRule (edit/[a-zA-Z^/]*)/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
+RewriteRule (delete/[a-zA-Z^/]*)/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
+RewriteRule (join/[a-zA-Z^/]*)/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
+RewriteRule (leave/[a-zA-Z^/]*)/([0-9a-zA-Z-^/]*)$ index.php?g=$1&uid=$2 [L,QSA]
 
+RewriteRule error/(.*) index.php?e=$1 [QSA]
+RewriteRule warning/(.*) index.php?w=$1 [QSA]
 
 RewriteRule images/(.*) img/$1 [L]
 RewriteRule (.*)/images/(.*) img/$2 [L]
@@ -53,7 +56,7 @@ RewriteRule (.*)/css/(.*) css/$2 [L]
 RewriteRule (.*)/js/(.*) js/$2 [L]
 
 
-RewriteRule db/(.*) .index.php?g=$1
+RewriteRule db/(.*) index.php?g=$1
 
 #RewriteRule ^(.*)\.htm$ $1.php
 #RewriteRule ^(.*)/(.*)\.htm$ index.php?main=$1&sub=$2 [QSA]

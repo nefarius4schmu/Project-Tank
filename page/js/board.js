@@ -1,5 +1,11 @@
 (function(_this, $){
- 	
+
+
+    // init local dates
+    $(".moment-date").each(function(){
+        $(this).html(moment($(this).text()).format("hh:mm dddd, Do MMMM YYYY"));
+    });
+
  	$(document).ready(function(){
  		// init callout buttons
 		var jqBt = $(".bs-callout .callout-buttons .bt");
@@ -9,16 +15,20 @@
 		// init navbar toggle
 		$(".navbar-toggle").click(onNavbarToggleClick);
 		$(".navbar-nav a").click(onNavbarLinkClick);
+
+        $(".news-delete,.event-delete").click(onDeletePostClick);
  	});
 	
-	
+	function onDeletePostClick(event){
+        if(!confirm("Wollen Sie diesen Beitrag wirklich löschen?")) event.preventDefault();
+    }
 	
 	function onCalloutCollapse(event){
 		var jqBox = $(this).closest(".bs-callout");
 		var isCollapsed = jqBox.hasClass("collapsed");
 		jqBox.toggleClass("collapsed", !isCollapsed);
-		if(isCollapsed) jqBox.find(".callout-content").show("slow")
-		else jqBox.find(".callout-content").hide("slow")
+		if(isCollapsed) jqBox.find(".callout-content").show("slow");
+		else jqBox.find(".callout-content").hide("slow");
 		$(this).find("i").toggleClass("fa-chevron-down", !isCollapsed).toggleClass("fa-chevron-up", isCollapsed);
 	}
 	

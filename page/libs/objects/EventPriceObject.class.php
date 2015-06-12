@@ -1,20 +1,24 @@
 <?php
 /**
 * basic event price object
-* @param int eventID
-* @param int priceID
-* @param int rank_from
-* @param int rank_to
-* @param int gold
-* @param string description
+* @param int $eventID
+* @param int $priceID
+* @param int $rank_from
+* @param int $rank_to
+* @param int $gold
+* @param string $description
 */
 class EventPriceObject{
+    private $priceID = null;
 	private $eventID = null;
-	private $priceID = null;
 	private $rank_from = null;
 	private $rank_to = null;
 	private $gold = null;
-	private $description = null;
+	private $others = null;
+
+    function __construct($data=null){
+        if(is_array($data)) $this->generate($data);
+    }
 
     // public functions ========================================================
 
@@ -22,12 +26,12 @@ class EventPriceObject{
      * @param array $data
      */
     public function generate($data){
-        if(isset($data["eventID"])) $this->eventID = $data["eventID"];
         if(isset($data["priceID"])) $this->priceID = $data["priceID"];
+        if(isset($data["eventID"])) $this->eventID = $data["eventID"];
         if(isset($data["rank_from"])) $this->rank_from = $data["rank_from"];
         if(isset($data["rank_to"])) $this->rank_to = $data["rank_to"];
         if(isset($data["gold"])) $this->gold = $data["gold"];
-        if(isset($data["description"])) $this->description = $data["description"];
+        if(isset($data["others"])) $this->others = $data["others"];
     }
 
     // getters and setters =====================================================
@@ -115,16 +119,16 @@ class EventPriceObject{
     /**
      * @return null
      */
-    public function getDescription()
+    public function getOthers()
     {
-        return $this->description;
+        return $this->others;
     }
 
     /**
-     * @param null $description
+     * @param null $others
      */
-    public function setDescription($description)
+    public function setOthers($others)
     {
-        $this->description = $description;
+        $this->others = $others;
     }
 }

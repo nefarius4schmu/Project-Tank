@@ -10,15 +10,41 @@
 */
 if(!isset($_page)) exit();
 /* ===================================================================================== */
+_lib("objects/LoginUserObject");
+_lib("DB");
+_lib("DBHandler");
+_lib("WotData");
+_lib("WotHandler");
+_lib("WotPlayer");
+/* ===================================================================================== */
 $debug = false;
+$isOffline = Router::OFFLINE && isset($_GET["offline"]) && $_GET["offline"] == 1;
 $isLogin = $_page["login"] !== false;
+//Debug::r($_GET);
+//Debug::r($_page);
+//Debug::v($isOffline);
+//exit();
+/* ===================================================================================== */
+$redirect = URL_ROOT;
+$doApiUpdate = !$isOffline;
 /* ===================================================================================== */
 //if() _error(ERROR_LOGIN_EXISTS);
-if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH, null, $debug);
-if(!isset($_GET["status"],$_GET["access_token"],$_GET["nickname"],$_GET["account_id"],$_GET["expires_at"])) _error(ERROR_LOGIN_AUTH, null, $debug);
-else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"]) ? $_GET["code"] : null, $debug);
+$login = new LoginUserObject($_GET);
+if(!$isOffline) {
+    if ($login->isError()) _error(ERROR_LOGIN_AUTH, null, $debug);
+    else if(!$login->isLogin()) _error(ERROR_LOGIN_FAILED, $login->getCode(), $debug);
+//    if (!isset($_GET["status"], $_GET["access_token"], $_GET["nickname"], $_GET["account_id"], $_GET["expires_at"])) _error(ERROR_LOGIN_AUTH, null, $debug);
+//    else if ($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"]) ? $_GET["code"] : null, $debug);
+}else{
+    if(!$login->isUser()) Debug::eoe(99);
+    $login->setNickname("Offline User");
+//    $_GET["access_token"] = 0;
+//    $_GET["expires_at"] = 0;
+}
 //Debug::r($_GET);
-
+if($debug){
+    Debug::r($login);
+}
 /**
 * TODO
 * 
@@ -27,15 +53,6 @@ else if($_GET["status"] != "ok") _error(ERROR_LOGIN_FAILED, isset($_GET["code"])
 * 
 * check session login failed
 */
-/* ===================================================================================== */
-$redirect = URL_ROOT;
-$isError = false;
-/* ===================================================================================== */
-_lib("DB");
-_lib("DBHandler");
-_lib("WotData");
-_lib("WotHandler");
-_lib("WotPlayer");
 /* ===================================================================================== */
 ?>
 <!DOCTYPE html>
@@ -73,45 +90,41 @@ _lib("WotPlayer");
 	<div class='b-row'>
 		<div class='box'>
 			<img src='images/loader/loader-bar.gif' alt='loader'/>
-			<p>Willkommen, <?=$_GET["nickname"];?>!</p>
+			<p>Willkommen, <?=$login->getNickname()?>!</p>
 			<small>Dein Erlebnis wird vorbereitet..</small>
 		</div>
 	</div>
 <?php
 flush();
-/* prepare session ===================================================================== */
-$_page["login"] = WotSession::setLoginData($_GET["account_id"], $_GET["nickname"], null, $_GET["access_token"], $_GET["expires_at"]);
-$_page["user"] = WotSession::getLoginData();
+/* prepare handler ===================================================================== */
 
+$dbh = new DBHandler(DB::getLink(DB::DB_PTWG));
+if(!$dbh->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, true), $debug);//!$dbh->isConnection() ||
 /* API get basic user info + clan info ================================================= */
+//$wotData = new WotData();
 $wh = new WotHandler(new WotData());
 
+/* prepare session ===================================================================== */
+$_page["login"] = WotSession::setLoginData($login->getAccountID(), $login->getNickname(), null, $login->getAccessToken(), $login->getExpiresAt());
+$_page["user"] = WotSession::getLoginData();
+/* ===================================================================================== */
+if($doApiUpdate) {
+    $dbh->debug($debug);
+
 // get basic player info
-$player = $wh->getBasicPlayerInfo($_page["user"]);
-if($player === false)
-	redirect(_error(ERROR_API_GET_PLAYER_INFO, $player, $debug, true), $debug);
+    $player = $wh->getBasicPlayerInfo($_page["user"]);
+    if ($player === false)
+        redirect(_error(ERROR_API_GET_PLAYER_INFO, $player, $debug, true), $debug);
 
 // get clan members list
-if($player->hasClan()){
-	$members = $wh->getClanMemberStats($player->getClanID());
-	if($members === false)
-		redirect(_error(ERROR_API_GET_CLAN_MEMBERS_STATS, $members, $debug, true), $debug);
-	$player->setClanMembers($members);
-}
+    if ($player->hasClan()) {
+        $members = $wh->getClanMemberStats($player->getClanID());
+        if ($members === false)
+            redirect(_error(ERROR_API_GET_CLAN_MEMBERS_STATS, $members, $debug, true), $debug);
+        $player->setClanMembers($members);
+    }
 
-/* store player in session ============================================================= */
-if(!WotSession::setData($player, WotSession::WOT_PLAYER))
-	redirect(_error(ERROR_SESSION_SET_DATA, $player, $debug, true), $debug);
-
-/* prepare handler ===================================================================== */
-$wotData = new WotData();
-$dbhn = new DBHandler(DB::getLink(DB::DB_PTWG));
-//$dbh = new DBHandler(DB::getLink(DB::DB_WOT));
-$dbhn->debug($debug);
-//$dbh->debug($debug);
-if(!$dbhn->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, true), $debug);//!$dbh->isConnection() || 
-
-/* get account info / clan id ========================================================== */
+    /* get account info / clan id ========================================================== */
 //$playerInfo = $wotData->getPlayerInfo($_GET["account_id"], $_GET["access_token"]);
 //if($debug) Debug::r($playerInfo);
 //if($playerInfo === false || empty($playerInfo) || $playerInfo["status"] != "ok") 
@@ -123,139 +136,166 @@ if(!$dbhn->isConnection()) redirect(_error(ERROR_DB_CONNECTION, null, $debug, tr
 //}
 
 //Debug::v($player); exit();
-/* DB login and update ================================================================= */
+    /* DB login and update ================================================================= */
 
 // update login database
-$result = $dbhn->accountLogin($player->getID(), $player->getName());
-if($result === false) redirect(_error(ERROR_DB_LOGIN, null, $debug, true), $debug);
+    $result = $dbh->accountLogin($player->getID(), $player->getName());
+    if ($result === false) redirect(_error(ERROR_DB_LOGIN, null, $debug, true), $debug);
 //else if($dbhn->isDebug()) Debug::r($result);
 
 // update database user stats
-/**
-* @todo
-* - do it dynamic
-* - change object StatisticObject.class to work with dynamic data from database
-* - array of stats, e.g. stats->name; stats->id; stats->value
-*/
-if(!$player->hasClan()){
-	
-	// update database user info
-	$result = $dbhn->setUserInfo($player->getID(), $player->getName(), $player->getLang());
-	if($result === false) redirect(_error(ERROR_DB_SET_USER_INFO, null, $debug, true), $debug);
+    /**
+     * @todo
+     * - do it dynamic
+     * - change object StatisticObject.class to work with dynamic data from database
+     * - array of stats, e.g. stats->name; stats->id; stats->value
+     */
+    if (!$player->hasClan()) {
 
-	// update database user rating
-	if($player->isRating()){
-		$result = $dbhn->setUserRatings($player->getID(), $player->getRatingGlobal());
-		if($result === false) redirect(_error(ERROR_DB_SET_USER_RATING, null, $debug, true), $debug);
-	}
-	if($player->isStatistic()){
-		$data = [
-			73=>$player->getStatsBattles(),
-			80=>$player->getStatsHits(),
-			82=>$player->getStatsWins(),
-			84=>$player->getStatsDamage(),
-			86=>$player->getStatsShots(),		
-		];
-		$result = $dbhn->setWotUserStats($player->getID(), $data);
-		if($result === false) redirect(_error(ERROR_DB_SET_WOT_USER_STATS, null, $debug, true), $debug);
-		
-	}
-}
+        // update database user info
+        $result = $dbh->setUserInfo($player->getID(), $player->getName(), $player->getLang());
+        if ($result === false) redirect(_error(ERROR_DB_SET_USER_INFO, null, $debug, true), $debug);
 
-/**
-* 
-* @todo
-* 	update user stats
-* 	update clan members stats
-* 	update user ranking
-* 	update clan members ranking
-* 
-*/
+        // update database user rating
+        if ($player->isRating()) {
+            $result = $dbh->setUserRatings($player->getID(), $player->getRatingGlobal());
+            if ($result === false) redirect(_error(ERROR_DB_SET_USER_RATING, null, $debug, true), $debug);
+        }
+        if ($player->isStatistic()) {
+            $data = [
+                73 => $player->getStatsBattles(),
+                80 => $player->getStatsHits(),
+                82 => $player->getStatsWins(),
+                84 => $player->getStatsDamage(),
+                86 => $player->getStatsShots(),
+            ];
+            $result = $dbh->setWotUserStats($player->getID(), $data);
+            if ($result === false) redirect(_error(ERROR_DB_SET_WOT_USER_STATS, null, $debug, true), $debug);
+
+        }
+    }
+
+    /**
+     *
+     * @todo
+     *    update user stats
+     *    update clan members stats
+     *    update user ranking
+     *    update clan members ranking
+     *
+     */
 
 // update database clan information
-if($player->hasClan()){
-	// store clan info
-	$result = $dbhn->setClanInfo($player->getClanID(), $player->getClanName(), $player->getClanTag(), $player->getClanColor(), $player->getClanIsDisbanned() ? 1 : 0);
-	if($result === false) redirect(_error(ERROR_DB_SET_CLAN_INFO, null, $debug, true), $debug);
-	// remove old members
-	$result = $dbhn->removeClanMembersByClanID($player->getClanID());
-	if($result === false) redirect(_error(ERROR_DB_DEL_CLAN_MEMBERS, null, $debug, true), $debug);
-	// store members info
-    $clanMembers = $player->getClanMembers();
-	if(!empty($clanMembers)){
-		$userData = [];
-		$membersData = [];
-		$ratingData = [];
-		$statsData = [];
-		foreach($clanMembers as $clanMember){
-			$userData[$clanMember->id] = [
-				"name"=>$clanMember->name,
-				"lang"=>$player->getLang(),
-			];
-			
-			$membersData[$clanMember->id] = [
-				"clanID"=>$player->getClanID(),
-				"role"=>$clanMember->role,
-				"role_i18n"=>$clanMember->role_i18n,
-				"joined"=>date(DBHandler::DB_TIMESTAMP_FORMAT, $clanMember->joined),
-			];
-			
-			$ratingData[$clanMember->id] = [
-				"global"=>$clanMember->rating->global,
-			];
-			
-			$statsData[$clanMember->id] = [
-				73=>$clanMember->statistic->battles,
-				80=>$clanMember->statistic->hits,
-				82=>$clanMember->statistic->wins,
-				84=>$clanMember->statistic->damage,
-				86=>$clanMember->statistic->shots,
-			];
-		}
-		
+    if ($player->hasClan()) {
+        // store clan info
+        $result = $dbh->setClanInfo($player->getClanID(), $player->getClanName(), $player->getClanTag(), $player->getClanColor(), $player->getClanIsDisbanned() ? 1 : 0);
+        if ($result === false) redirect(_error(ERROR_DB_SET_CLAN_INFO, null, $debug, true), $debug);
+        // remove old members
+        $result = $dbh->removeClanMembersByClanID($player->getClanID());
+        if ($result === false) redirect(_error(ERROR_DB_DEL_CLAN_MEMBERS, null, $debug, true), $debug);
+        // store members info
+        $clanMembers = $player->getClanMembers();
+        if (!empty($clanMembers)) {
+            $userData = [];
+            $membersData = [];
+            $ratingData = [];
+            $statsData = [];
+            foreach ($clanMembers as $clanMember) {
+                $userData[$clanMember->id] = [
+                    "name" => $clanMember->name,
+                    "lang" => $player->getLang(),
+                ];
+
+                $membersData[$clanMember->id] = [
+                    "clanID" => $player->getClanID(),
+                    "role" => $clanMember->role,
+                    "role_i18n" => $clanMember->role_i18n,
+                    "joined" => date(DBHandler::TIMESTAMP_FORMAT, $clanMember->joined),
+                ];
+
+                $ratingData[$clanMember->id] = [
+                    "global" => $clanMember->rating->global,
+                ];
+
+                $statsData[$clanMember->id] = [
+                    73 => $clanMember->statistic->battles,
+                    80 => $clanMember->statistic->hits,
+                    82 => $clanMember->statistic->wins,
+                    84 => $clanMember->statistic->damage,
+                    86 => $clanMember->statistic->shots,
+                ];
+            }
+
 //		Debug::r($statsData);
-		
-		// insert into database
+
+            // insert into database
 //		$dbhn->debug();
-		$result = $dbhn->setUserGroupInfo($userData);
-		if($result === false) redirect(_error(ERROR_DB_SET_USER_GROUP, null, $debug, true), $debug);
+            $result = $dbh->setUserGroupInfo($userData);
+            if ($result === false) redirect(_error(ERROR_DB_SET_USER_GROUP, null, $debug, true), $debug);
 //		Debug::r($result);
 //		$dbhn->debug();
-		$result = $dbhn->setUserGroupRatings($ratingData);
-		if($result === false) redirect(_error(ERROR_DB_SET_USER_GROUP_RATING, null, $debug, true), $debug);
+            $result = $dbh->setUserGroupRatings($ratingData);
+            if ($result === false) redirect(_error(ERROR_DB_SET_USER_GROUP_RATING, null, $debug, true), $debug);
 //		Debug::r($result);
 //		$dbhn->debug();
-		$result = $dbhn->setClanMembers($membersData);
-		if($result === false) redirect(_error(ERROR_DB_SET_CLAN_MEMBERS, null, $debug, true), $debug);
+            $result = $dbh->setClanMembers($membersData);
+            if ($result === false) redirect(_error(ERROR_DB_SET_CLAN_MEMBERS, null, $debug, true), $debug);
 //		Debug::r($result);
 //		$dbhn->debug();
-		$result = $dbhn->setWotUserGroupStats($statsData);
-		if($result === false) redirect(_error(ERROR_DB_SET_CLAN_WOT_USER_STATS, null, $debug, true), $debug);
+            $result = $dbh->setWotUserGroupStats($statsData);
+            if ($result === false) redirect(_error(ERROR_DB_SET_CLAN_WOT_USER_STATS, null, $debug, true), $debug);
 //		Debug::r($result);
-	}
+        }
 //	exit();
-}else{
-	// check if user was in clan - needed for history ??
+    } else {
+        // check if user was in clan - needed for history ??
 //	$result = $dbhn->getClanMemberByUserID($player->getID());
 //	if($result === false) redirect(_error(ERROR_DB_GET_CLAN_MEMBER, null, $debug, true), $debug);
 //	else if(!empty($result)){
-		// remove user from clan members list
+        // remove user from clan members list
 //		$result = $dbhn->removeClanMemberByUserID($)
 //	}
 
-	$result = $dbhn->removeClanMemberByUserID($player->getID());
-	if($result === false) redirect(_error(ERROR_DB_DEL_CLAN_MEMBER, null, $debug, true), $debug);
+        $result = $dbh->removeClanMemberByUserID($player->getID());
+        if ($result === false) redirect(_error(ERROR_DB_DEL_CLAN_MEMBER, null, $debug, true), $debug);
+    }
+    // end of api update block
+}else{
+    // get session data from database
+    $playerData = $dbh->parseArray($dbh->getPlayerLoginData($login->getAccountID()));
+    $player = $wh->parsePlayerInfo($playerData);
+    if($player->getID() === null) redirect(_error(ERROR_DB_GET_LOGIN_DATA, null, $debug, true), $debug);
+
+    // statsAll
+    $statsAll = $dbh->parseArray($dbh->getUserStatsInternal($player->getID()));
+    $player->setStatistic($wh->parseInternalPlayerStats($statsAll));
+
+    if($player->hasClan()){
+        // clanEmblems
+//        $clanEmblems = $dbh->parseArray($dbh->getClanEmblems($player->getClanID()));
+//        $player->setClanEmblemsObject($wh->pa);
+
+        // clanMembersCount
+    }
 }
 
 /* get user settings from database and store in session ================================= */
 //$dbh->debug();
-$result = $dbhn->getUserSettings($_GET["account_id"]);
+$userSettings = $dbh->getUserSettings($login->getAccountID());
 //Debug::v($result); exit();
-if($result === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debug, true), $debug);
+if($userSettings === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debug, true), $debug);
 
-$result = WotSession::setSettings($result);
-if($result === false) redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug);
-	
+/* store player data in session ============================================================= */
+if (!WotSession::setData($player, WotSession::WOT_PLAYER))
+    redirect(_error(ERROR_SESSION_SET_DATA, $player, $debug, true), $debug);
+
+if(!WotSession::setSettings($userSettings))
+    redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug);
+
+if($debug){
+    Debug::r(WotSession::getLoginData());
+}
+
 /* redirect to board =================================================================== */
 redirect($redirect, $debug);
 /* ===================================================================================== */

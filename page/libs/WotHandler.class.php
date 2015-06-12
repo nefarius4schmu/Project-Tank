@@ -123,16 +123,22 @@ class WotHandler{
 		return $emblems;
 	}
 	
-	private function parsePlayerStats($statsAll){
+	private function parsePlayerStats($statsAll, $keys=[]){
 		$battles = $wins = $shots = $hits = $damage = 0;
 		$winRate = $hitRate = $avgDamage = 0;
-		
+
+        $keyBattles = isset($keys["battles"]) ? $keys["battles"] : "battles";
+        $keyWins = isset($keys["wins"]) ? $keys["wins"] : "wins";
+        $keyShots = isset($keys["shots"]) ? $keys["shots"] : "shots";
+        $keyHits = isset($keys["hits"]) ? $keys["hits"] : "hits";
+        $keyDamage = isset($keys["damage_dealt"]) ? $keys["damage_dealt"] : "damage_dealt";
+
 		if(is_array($statsAll)){
-			$battles= $this->getKey("battles", $statsAll, $battles);
-			$wins 	= $this->getKey("wins", $statsAll, $wins);
-			$shots 	= $this->getKey("shots", $statsAll, $shots);
-			$hits 	= $this->getKey("hits", $statsAll, $hits);
-			$damage = $this->getKey("damage_dealt", $statsAll, $damage);
+			$battles= $this->getKey($keyBattles, $statsAll, $battles);
+			$wins 	= $this->getKey($keyWins, $statsAll, $wins);
+			$shots 	= $this->getKey($keyShots, $statsAll, $shots);
+			$hits 	= $this->getKey($keyHits, $statsAll, $hits);
+			$damage = $this->getKey($keyDamage, $statsAll, $damage);
 			
 			$winRate 	= $this->getWinRate($battles, $wins);
 			$hitRate 	= $this->getHitRate($shots, $hits);
@@ -154,33 +160,41 @@ class WotHandler{
 	}
 	
 	public function parseInternalPlayerStats($statsAll){
-		$battles = $wins = $shots = $hits = $damage = 0;
-		$winRate = $hitRate = $avgDamage = 0;
-		
-		if(is_array($statsAll)){
-			$battles= $this->getKey("battlesAll", $statsAll, $battles);
-			$wins 	= $this->getKey("winsAll", $statsAll, $wins);
-			$shots 	= $this->getKey("shotsAll", $statsAll, $shots);
-			$hits 	= $this->getKey("hitsAll", $statsAll, $hits);
-			$damage = $this->getKey("damageAll", $statsAll, $damage);
-			
-			$winRate 	= $this->getWinRate($battles, $wins);
-			$hitRate 	= $this->getHitRate($shots, $hits);
-			$avgDamage	= $this->getAvgDamge($battles, $damage);
-		}
-
-		$stats = new StatisticObject();
-		$stats->battles = $battles;
-		$stats->wins = $wins;
-		$stats->shots = $shots;
-		$stats->hits = $hits;
-		$stats->damage = $damage;
-		$stats->winRatePerBattle = $winRate;
-		$stats->winRateClass = $this->winRateToClass($winRate);
-		$stats->avgDamagePerBattle = $avgDamage;
-		$stats->avgHitRatePerBattle = $hitRate;
-
-		return $stats;
+        $keys = [
+            "battles"=>"battlesAll",
+            "wins"=>"winsAll",
+            "shots"=>"shotsAll",
+            "hits"=>"hitsAll",
+            "damage_dealt"=>"damageAll"
+        ];
+        return $this->parsePlayerStats($statsAll, $keys);
+//		$battles = $wins = $shots = $hits = $damage = 0;
+//		$winRate = $hitRate = $avgDamage = 0;
+//
+//		if(is_array($statsAll)){
+//			$battles= $this->getKey("battlesAll", $statsAll, $battles);
+//			$wins 	= $this->getKey("winsAll", $statsAll, $wins);
+//			$shots 	= $this->getKey("shotsAll", $statsAll, $shots);
+//			$hits 	= $this->getKey("hitsAll", $statsAll, $hits);
+//			$damage = $this->getKey("damageAll", $statsAll, $damage);
+//
+//			$winRate 	= $this->getWinRate($battles, $wins);
+//			$hitRate 	= $this->getHitRate($shots, $hits);
+//			$avgDamage	= $this->getAvgDamge($battles, $damage);
+//		}
+//
+//		$stats = new StatisticObject();
+//		$stats->battles = $battles;
+//		$stats->wins = $wins;
+//		$stats->shots = $shots;
+//		$stats->hits = $hits;
+//		$stats->damage = $damage;
+//		$stats->winRatePerBattle = $winRate;
+//		$stats->winRateClass = $this->winRateToClass($winRate);
+//		$stats->avgDamagePerBattle = $avgDamage;
+//		$stats->avgHitRatePerBattle = $hitRate;
+//
+//		return $stats;
 	}
 	
 	private function returnPlayerInfo($id=null, $name=null, $lang=null, $ratingGlobal=null, $updated=null,
@@ -199,7 +213,33 @@ class WotHandler{
 		}
 		return $player;
 	}
-	
+
+    public function parsePlayerInfo($data){
+        $id = isset($data["id"])  ? $data["id"] : null;
+        $name = isset($data["name"])  ? $data["name"] : null;
+        $lang = isset($data["lang"])  ? $data["lang"] : null;
+        $ratingGlobal = isset($data["ratingGlobal"])  ? $data["ratingGlobal"] : null;
+        $updated = isset($data["updated"])  ? $data["updated"] : null;
+		$statsAll = isset($data["statsAll"])  ? $data["statsAll"] : [];
+		$clanID = isset($data["clanID"])  ? $data["clanID"] : null;
+        $clanName = isset($data["clanName"])  ? $data["clanName"] : null;
+        $clanTag = isset($data["clanTag"])  ? $data["clanTag"] : null;
+        $clanRole = isset($data["clanRole"])  ? $data["clanRole"] : null;
+		$clanMembersCount = isset($data["clanMembersCount"])  ? $data["clanMembersCount"] : 0;
+        $clanRole_i18n = isset($data["clanRole_i18n"])  ? $data["clanRole_i18n"] : null;
+        $clanColor = isset($data["clanColor"])  ? $data["clanColor"] : null;
+        $clanDisbanned  = isset($data["clanDisbanned"])  ? $data["clanDisbanned"] : false;
+        $clanLastUpdate = isset($data["clanLastUpdate"])  ? $data["clanLastUpdate"] : null;
+        $clanJoined = isset($data["clanJoined"])  ? $data["clanJoined"] : null;
+        $clanEmblems = isset($data["clanEmblems"])  ? $data["clanEmblems"] : [];
+
+        return $this->returnPlayerInfo($id, $name, $lang, $ratingGlobal, $updated,
+            $statsAll,
+            $clanID, $clanName, $clanTag, $clanRole,
+            $clanMembersCount, $clanRole_i18n, $clanColor,
+            $clanDisbanned, $clanLastUpdate, $clanJoined, $clanEmblems);
+    }
+
 	/* ================================================================================= */
 	
 	public function winRateToClass($winRate){

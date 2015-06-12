@@ -24,7 +24,7 @@ $playerInfo = $wotUser["player"];
 $wd = new WotData();
 $wh = new WotHandler($wd);
 /* ===================================================================================== */
-//Debug::r($playerInfo); exit();
+//Debug::r($_page); exit();
 /* ===================================================================================== */
 $hasClan = $playerInfo->hasClan();
 $useTheme = isset($wotUser[WotSession::USER_SETTINGS], $wotUser[WotSession::USER_SETTINGS][SETTINGS_ID_THEME_CLAN_COLOR])
@@ -53,7 +53,7 @@ $ratingGlobal 	= $playerInfo->isRating() ? number_format($playerInfo->getRatingG
 $clanImage = $clanImageURL != CLAN_NONE_IMAGE_URL ? "<i class='wot wot-emblem-large' style='background-image: url($clanImageURL)'></i>" : "<i class='wot wot-emblem-large wot-noclan'></i>";
 $clanRoleImage = $clanRoleImgURL !== null ? "<i class='wot wot-rank' style='background-image:url($clanRoleImgURL)'></i>" : null;
 /* ===================================================================================== */
-$breadcrumbs = Router::getBreadcrumbs();
+$breadcrumbs = Router::getBreadcrumbs($activePage);
 
 /* prepare page requirements =========================================================== */
 //$css_defaults = [

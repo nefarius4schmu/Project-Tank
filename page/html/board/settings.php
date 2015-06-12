@@ -93,6 +93,7 @@ $settings = $dbh->getUserSettings($playerInfo->getID());
                             "text"=>"Clan",
                             "value"=>4,
                             "data"=>[
+                                "fa"=>"fa-users",
                                 "imagesrc"=>$clanLogoMedium,
                                 "description"=>"für alle Mitglieder des Clans sichtbar",
                             ],

@@ -7,6 +7,10 @@ textarea{
     max-width: 100%;
 }
 
+input{
+    min-width: 75px;
+}
+
 .page-wrapper{
     text-align: left;
 }
@@ -19,7 +23,6 @@ textarea{
 .creator textarea{
     display: block;
     width: 100%;
-    margin: 5px 0;
 }
 
 .button-bar {
@@ -33,3 +36,34 @@ textarea{
 ul.thumbnails.image_picker_selector li .thumbnail img{
     height: 150px;
 }
+
+.callout-content .col-xs-6:last-child {
+    /*text-align: right;*/
+}
+.callout-content .col-xs-6:last-child input{
+    width: 100%;
+}
+
+.dd-container label{
+    margin-bottom: 0!important;
+}
+
+.dd-options,
+.dd-container{
+    width: 100%!important;
+}
+
+.dd-options{
+    max-height: 300px;
+}
+
+.dd-select{
+    width: auto!important;
+}
+
+.dd-select,
+.dd-selected{
+    height: 100%!important;
+}
+
+

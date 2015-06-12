@@ -2,46 +2,59 @@
 /**
 * basic event object
 * @param int $id
-* @param EventUserObject $owner
-* @param timestamp $created
-* @param timestamp $updated
-* @param timestamp $start
-* @param timestamp $end
+* @param int $userID
+* @param string $created
+* @param string $updated
+* @param string $start
+* @param string $end
+* @param int $views
+* @param int $maxUsers
 * @param string $type
-* @param int $briefingID
+* @param string $briefingID
+* @param string $uid
 * @param int $clanID
 * @param bool $password
 * @param bool $hidden
 * @param bool $public
+* @param bool $deleted
 * @param EventMapObject[] $maps
 * @param EventPriceObject[] $prices
 * @param PlayerObject[] $users
 * @param string $lang
 * @param string $title
 * @param string $description
+* @param string $summary
 */
 class EventObject{
     private $id = null;
-    private $owner = null;
+    private $userID = null;
 
     private $created = 0;
     private $updated = 0;
     private $start = 0;
     private $end = 0;
 
-    private $type = null;
+    private $views = 0;
+    private $maxUsers = 0;
+
+    private $typeID = null;
+    private $uid = null;
     private $briefingID = null;
     private $clanID = null;
     private $password = false;
     private $hidden = false;
     private $public = false;
+    private $deleted = false;
+
     private $prices = [];
     private $maps = [];
     private $users = [];
+    private $usersCount = 0;
 
     private $lang = null;
     private $title = null;
-    private $description = null;
+    private $summary = null;
+    private $text = null;
 
     // public functions ========================================================
 
@@ -49,24 +62,37 @@ class EventObject{
      * @param array $data
      */
     public function generate($data){
-        if(isset($data["id"])) $this->id = $data["id"];
-        if(isset($data["owner"])) $this->owner = $data["owner"];
+        if(empty($data)) return;
+        if(isset($data["eventID"])) $this->id = $data["eventID"];
+        if(isset($data["userID"])) $this->userID = $data["userID"];
+        if(isset($data["typeID"])) $this->typeID = $data["typeID"];
         if(isset($data["created"])) $this->created = $data["created"];
         if(isset($data["updated"])) $this->updated = $data["updated"];
         if(isset($data["start"])) $this->start = $data["start"];
         if(isset($data["end"])) $this->end = $data["end"];
-        if(isset($data["type"])) $this->type = $data["type"];
         if(isset($data["briefingID"])) $this->briefingID = $data["briefingID"];
         if(isset($data["clanID"])) $this->clanID = $data["clanID"];
-        if(isset($data["password"])) $this->password = $data["password"];
-        if(isset($data["hidden"])) $this->hidden = $data["hidden"];
-        if(isset($data["public"])) $this->public = $data["public"];
+        if(isset($data["password"])) $this->password = $data["password"] == "1";
+        if(isset($data["hidden"])) $this->hidden = $data["hidden"] == "1";
+        if(isset($data["public"])) $this->public = $data["public"] == "1";
+        if(isset($data["lang"])) $this->lang = $data["lang"];
+        if(isset($data["title"])) $this->title = $data["title"];
+        if(isset($data["text"])) $this->text = $data["text"];
+        if(isset($data["views"])) $this->views = $data["views"];
+        if(isset($data["maxUsers"])) $this->maxUsers = $data["maxUsers"];
+        if(isset($data["summary"])) $this->summary = $data["summary"];
+        if(isset($data["uid"])) $this->uid = $data["uid"];
+
         if(isset($data["prices"])) $this->prices = $data["prices"];
         if(isset($data["maps"])) $this->maps = $data["maps"];
         if(isset($data["users"])) $this->users = $data["users"];
-        if(isset($data["lang"])) $this->lang = $data["lang"];
-        if(isset($data["title"])) $this->title = $data["title"];
-        if(isset($data["description"])) $this->description = $data["description"];
+
+        $this->updateUsersCount();
+    }
+
+    private function updateUsersCount(){
+        $users = $this->getUsers();
+        if(!empty($users)) $this->usersCount = count($users);
     }
 
     // getters and setters =====================================================
@@ -74,7 +100,7 @@ class EventObject{
     /**
      * @return int
      */
-    public function getId()
+    public function getID()
     {
         return $this->id;
     }
@@ -90,17 +116,17 @@ class EventObject{
     /**
      * @return PlayerObject
      */
-    public function getOwner()
+    public function getUserID()
     {
-        return $this->owner;
+        return $this->userID;
     }
 
     /**
      * @param PlayerObject $userID
      */
-    public function setOwner($owner)
+    public function setUserID($userID)
     {
-        $this->owner = $owner;
+        $this->userID = $userID;
     }
     /**
      * @return int
@@ -169,17 +195,17 @@ class EventObject{
     /**
      * @return string
      */
-    public function getType()
+    public function getTypeID()
     {
-        return $this->type;
+        return $this->typeID;
     }
 
     /**
-     * @param string $type
+     * @param string $typeID
      */
-    public function setType($type)
+    public function setTypeID($typeID)
     {
-        $this->type = $type;
+        $this->typeID = $typeID;
     }
 
     /**
@@ -279,6 +305,14 @@ class EventObject{
     }
 
     /**
+     * @param EventPriceObject $item
+     */
+    public function addPrice($item)
+    {
+        $this->prices[] = $item;
+    }
+
+    /**
      * @return EventMapObject[]
      */
     public function getMaps()
@@ -295,6 +329,14 @@ class EventObject{
     }
 
     /**
+     * @param EventMapObject $item
+     */
+    public function addMaps($item)
+    {
+        $this->maps[] = $item;
+    }
+
+    /**
      * @return PlayerObject[]
      */
     public function getUsers()
@@ -308,6 +350,16 @@ class EventObject{
     public function setUsers($users)
     {
         $this->users = $users;
+        $this->updateUsersCount();
+    }
+
+    /**
+     * @param EventUserObject $item
+     */
+    public function addUser($item)
+    {
+        $this->users[] = $item;
+        $this->updateUsersCount();
     }
 
     /**
@@ -345,17 +397,97 @@ class EventObject{
     /**
      * @return string
      */
-    public function getDescription()
+    public function getText()
     {
-        return $this->description;
+        return $this->text;
     }
 
     /**
-     * @param string $description
+     * @param string $text
      */
-    public function setDescription($description)
+    public function setText($text)
     {
-        $this->description = $description;
+        $this->text = $text;
+    }
+
+    /**
+     * @return int
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    /**
+     * @param int $views
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxUsers()
+    {
+        return $this->maxUsers;
+    }
+
+    /**
+     * @param int $maxUsers
+     */
+    public function setMaxUsers($maxUsers)
+    {
+        $this->maxUsers = $maxUsers;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param boolean $deleted
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    /**
+     * @return null
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * @param null $uid
+     */
+    public function setUid($uid)
+    {
+        $this->uid = $uid;
+    }
+
+    /**
+     * @return null
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    /**
+     * @param null $summary
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
     }
 
 }

@@ -32,9 +32,8 @@ $catID = $isNewsCat ? $currentNewsCat["catID"] : null;
 $clanID = $player->hasClan() ? $player->getClanID() : null;// $isNewsCat && $clanOnlyCat &&
 /* ===================================================================================== */
 //$dbh->debug(true);
-$timeLatest = Calc::getWeeks(1);
 $options = ["limit"=>20, "catID"=>$catID, "clanID"=>$clanID];
-$result = $dbh->getLatestNews($timeLatest, $options);
+$result = $dbh->getLatestNews($options);
 $newsLatest = $dbh->parseArray($result);
 /* ===================================================================================== */
 //$dbh->debug(true);

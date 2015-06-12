@@ -6,6 +6,37 @@
 */
 _def("router");
 class Router{
+    const OFFLINE = false;
+
+    const CSS_FONT_OPENSANS = "//fonts.googleapis.com/css?family=Open+Sans:400,300,700";
+    const CSS_FONT_LORA = "//fonts.googleapis.com/css?family=Lora:400,400italic";
+    const CSS_LIB_IMAGEPICKER = "js/imagepicker/image-picker.css?024";
+    const CSS_LIB_BOOTSTRAP = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332";
+    const CSS_LIB_FA = "//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430";
+    const CSS_LIB_DATETIMEPICKER = "js/datetimepicker/bootstrap-datetimepicker.min.css?400";
+    const CSS_CLAN = "css/clan.css?002";
+    const CSS_NEWS = "css/news.css?002";
+    const CSS_CREATOR = "css/creator.css?003";
+    const CSS_EVENTS = "css/events.css?002";
+    const CSS_BOARD = "css/board.css?009'";
+
+    const JS_LIB_JQUERY = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112";
+    const JS_LIB_TABLESORTER = "js/jquery.tablesorter.min.js?100";
+    const JS_LIB_DDSLICK = "js/jquery.ddslick.min.js?200";
+    const JS_LIB_CKEDITOR = "//cdn.ckeditor.com/4.4.7/standard/ckeditor.js?447";
+    const JS_LIB_IMAGEPICKER = "js/imagepicker/image-picker.min.js?024";
+    const JS_LIB_AJAX = "js/ajax.js?100";
+    const JS_LIB_JSTOOLS = "js/jsTools-1.0.2.js?103";
+    const JS_LIB_DATETIMEPICKER = "js/datetimepicker/bootstrap-datetimepicker.min.js?400";
+    const JS_LIB_MOMENT = "js/moment/moment.min.js?2103";
+    const JS_LIB_MOMENT_DE = "js/moment/de.js?2103";
+    const JS_LIB_BOOTSTRAP_TC = "js/bootstrap/bootstrap.tc.min.js?334";
+    const JS_BOARD = "js/board.js?004";
+    const JS_CLAN = "js/clan.js?001";
+    const JS_SETTINGS = "js/settings.js?001";
+    const JS_CREATOR_NEWS = "js/creator.news.js?004";
+    const JS_CREATOR_EVENTS = "js/creator.events.js?005";
+
 	private static $default = ROUTE_START;
 	private static $defaultLogged = ROUTE_HOME;
 	private static $loginRedirectURL = URL_REDIRECT_LOGIN;
@@ -18,35 +49,24 @@ class Router{
 		ROUTE_IMPRINT=>[],
 		ROUTE_HOME=>[
 			"type"=>ROUTETYPE_BOARD,
+            "title"=>"Home",
 			"req"=>[
 				"login"=>true,
 			],
-		],
-		ROUTE_EVENTS=>[
-			"type"=>ROUTETYPE_BOARD,
-			"req"=>[
-				"login"=>true,
-			],
-            "css"=>[
-                'css/events.css?002',
-            ]
 		],
 		ROUTE_CLAN=>[
 			"type"=>ROUTETYPE_BOARD,
+            "title"=>"Clan",
 			"req"=>[
 				"login"=>true,
 				"clan"=>true,
 			],
-            "css"=>[
-                "css/clan.css?002",
-            ],
-            "js"=>[
-                "js/jquery.tablesorter.min.js?100",
-                "js/clan.js?001",
-            ]
+            "css"=>[self::CSS_CLAN],
+            "js"=>[self::JS_LIB_TABLESORTER,self::JS_CLAN]
 		],
 		ROUTE_CLANWARS=>[
 			"type"=>ROUTETYPE_BOARD,
+            "title"=>"Clanwars",
 			"req"=>[
 				"login"=>true,
 				"clan"=>true,
@@ -54,57 +74,19 @@ class Router{
 		],
 		ROUTE_SETTINGS=>[
 			"type"=>ROUTETYPE_BOARD,
+            "title"=>"Einstellungen",
 			"req"=>[
 				"login"=>true,
 			],
-            "js"=>[
-                'js/jquery.ddslick.min.js?100',
-                'js/settings.js?001',
-            ],
-		],
-		ROUTE_NEWS=>[
-			"type"=>ROUTETYPE_BOARD,
-			"req"=>[
-				"login"=>true,
-			],
-            "css"=>[
-                "css/news.css?002",
-            ],
-		],
-        ROUTE_SHOW_NEWS=>[
-            "type"=>ROUTETYPE_BOARD,
-            "loc"=>"news/show.php",
-            "req"=>[
-                "login"=>true,
-            ],
-            "css"=>[
-                "css/news.css?002",
-            ],
-        ],
-        ROUTE_CREATOR_NEWS=>[
-			"type"=>ROUTETYPE_BOARD,
-            "loc"=>"news/edit.php",
-			"req"=>[
-				"login"=>true,
-                "settings"=>["3"=>"1"],
-			],
-            "css"=>[
-                "css/image-picker.css?024",
-                "css/creator.css?002",
-
-            ],
-            "js"=>[
-                "//cdn.ckeditor.com/4.4.7/standard/ckeditor.js?447",
-                "js/image-picker.min.js?024",
-//                "js/class/creator.basic.js?001",
-                "js/creator.news.js?003",
-            ],
+            "js"=>[self::JS_LIB_DDSLICK,self::JS_SETTINGS],
 		],
 		ROUTE_LOGIN=>[
 			"redirect"=>[
+                "offline"=>self::OFFLINE,
 				"delay"=>3,
 				"error"=>ERROR_LOGIN_GET_URL,
 				"url"=>null,
+                "offlineUrl"=>URL_REDIRECT_LOGIN_OFFLINE,
 				"type"=>"wotLogin",
 				"name"=>"worldoftanks.eu",
 			],
@@ -126,6 +108,34 @@ class Router{
 				"login"=>true,
 			],
 		],
+        ROUTE_NEWS=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"News",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[self::CSS_NEWS],
+        ],
+        ROUTE_SHOW_NEWS=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"",
+            "loc"=>"news/show.php",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[self::CSS_NEWS],
+        ],
+        ROUTE_CREATOR_NEWS=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"",
+            "loc"=>"news/edit.php",
+            "req"=>[
+                "login"=>true,
+                "settings"=>["3"=>"1"],
+            ],
+            "css"=>[self::CSS_LIB_IMAGEPICKER,self::CSS_CREATOR],
+            "js"=>[self::JS_LIB_CKEDITOR,self::JS_LIB_IMAGEPICKER,self::JS_CREATOR_NEWS],
+        ],
         ROUTE_POST_NEWS=>[
 			"loc"=>"jobs/news/post.php",
 			"req"=>[
@@ -139,41 +149,102 @@ class Router{
 				"login"=>true,
 			],
 		],
+        ROUTE_EVENTS=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"Events",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[self::CSS_EVENTS]
+        ],
+        ROUTE_EVENT_SHOW=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"",
+            "loc"=>"events/show.php",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[],
+        ],
+        ROUTE_EVENT_EDITOR=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"",
+            "loc"=>"events/edit.php",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[self::CSS_LIB_DATETIMEPICKER, self::CSS_CREATOR],
+            "js"=>[self::JS_LIB_CKEDITOR, self::JS_LIB_DDSLICK,
+                self::JS_LIB_BOOTSTRAP_TC,self::JS_LIB_DATETIMEPICKER,
+                self::JS_LIB_JSTOOLS,self::JS_CREATOR_EVENTS
+            ],
+        ],
+        ROUTE_EVENT_NEW=>[
+            "type"=>ROUTETYPE_BOARD,
+            "title"=>"",
+            "loc"=>"events/new.php",
+            "req"=>[
+                "login"=>true,
+            ],
+            "css"=>[self::CSS_LIB_DATETIMEPICKER, self::CSS_CREATOR],
+            "js"=>[self::JS_LIB_CKEDITOR, self::JS_LIB_DDSLICK,
+                self::JS_LIB_BOOTSTRAP_TC,self::JS_LIB_DATETIMEPICKER,
+                self::JS_LIB_JSTOOLS,self::JS_CREATOR_EVENTS
+            ],
+        ],
+        ROUTE_EVENT_POST=>[
+            "loc"=>"jobs/events/post.php",
+            "req"=>[
+                "login"=>true,
+            ],
+        ],
+        ROUTE_EVENT_DELETE=>[
+            "loc"=>"jobs/events/del.php",
+            "req"=>[
+                "login"=>true,
+            ],
+        ],
+        ROUTE_EVENT_JOIN=>[
+            "loc"=>"jobs/events/join.php",
+            "req"=>[
+                "login"=>true,
+            ],
+        ],
+        ROUTE_EVENT_LEAVE=>[
+            "loc"=>"jobs/events/leave.php",
+            "req"=>[
+                "login"=>true,
+            ],
+        ],
 	];
+
+    private static $sidemap = [
+        ROUTE_HOME=>[
+            ROUTE_NEWS=>[ROUTE_CREATOR_NEWS],
+            ROUTE_EVENTS,
+            ROUTE_CLAN,
+            ROUTE_CLANWARS,
+            ROUTE_SETTINGS,
+        ],
+        ROUTE_IMPRINT=>[],
+        ROUTE_START=>[],
+    ];
 
     private static $default_css = [
         ROUTETYPE_BOARD=>[
-            '//fonts.googleapis.com/css?family=Open+Sans:400,300,700',
-            '//fonts.googleapis.com/css?family=Lora:400,400italic',
-            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332',
-            '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430',
-            'css/board.css?005',
+            self::CSS_FONT_OPENSANS, self::CSS_FONT_LORA,
+            self::CSS_LIB_BOOTSTRAP, self::CSS_LIB_FA,
+            self::CSS_BOARD
         ],
     ];
 
     private static $default_js = [
         ROUTETYPE_BOARD=>[
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112',
-            'js/ajax.js?100',
-            'js/board.js?002',
+            self::JS_LIB_JQUERY, self::JS_LIB_AJAX,
+            self::JS_LIB_MOMENT, self::JS_LIB_MOMENT_DE,
+            self::JS_BOARD
         ]
     ];
-    // TODO: needed?
-//    private $routeTypeDefaults = [
-//        ROUTETYPE_DEFAULT=>[],
-//        ROUTETYPE_BOARD=>[
-//            "css"=>[
-//                'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css?332',
-//                '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?430',
-//                'css/board.css?002',
-//            ],
-//            "js"=>[
-//                'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112',
-//                'js/ajax.js?100',
-//                'js/board.js?001',
-//            ],
-//        ],
-//    ];
 	
 	/* ===================================================================================== */
 	
@@ -285,7 +356,7 @@ class Router{
 			? self::$routes[$id]["redirect"] 
 			: false;
 	}
-	
+
 	public static function getBreadcrumbs(){
 		$loc = $_SERVER["REDIRECT_URL"];
 		$crumbs =  explode("/", $loc);

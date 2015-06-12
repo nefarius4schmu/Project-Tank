@@ -43,7 +43,11 @@ hr{
 
 pre{
     text-align: left;
-	z-index: -1;
+	/*z-index: -1;*/
+}
+
+input[type="number"]{
+    text-align: right;
 }
 
 a,
@@ -60,6 +64,10 @@ h2>a:hover{
 
 *{
 	position: relative;
+}
+
+.text-sub{
+    vertical-align: sub;
 }
 
 .row{
@@ -264,6 +272,14 @@ h2>a:hover{
     text-align: center;
 }
 
+.box-wrapper{
+    padding: 10px;
+}
+
+.inline-wrapper{
+    display: inline-block;
+}
+
 .content {
 	padding: 50px 10px;
 }
@@ -334,9 +350,23 @@ span.sc-info	{color:#5bc0de}
 
 /* custom boxes */
 
+.event.event-full .map{
+    display: inline-block;
+    margin: 5px;
+}
+
+.event.event-full .map img{
+    height: 200px;
+    max-width: 200px;
+}
+
+.event.event-full .caption h4{
+    margin: 0;
+}
+
 .event.event-card-lg{
-    min-width: 240px;
-    margin: 12px;
+    min-width: 220px;
+    margin: 10px 0 0;
     padding: 0;
     text-align: center;
 }
@@ -345,8 +375,28 @@ span.sc-info	{color:#5bc0de}
     padding: 0;
 }
 
-.event.event-card-lg .map > img{
+.event.event-card-lg .map > a{
+    display: block;
     width: 240px;
+    height: 240px;
+    margin: 0 auto;
+}
+
+.event.event-card-lg .map img{
+    width: 100%;
+    height: 100%;
+}
+
+.event.event-card-lg .multimap{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 20px;
+    color: #fff;
+    padding: 5px;
+    margin: 10px;
+    line-height: 1;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .event.event-card-lg h3 {
@@ -386,8 +436,15 @@ span.sc-info	{color:#5bc0de}
     visibility: visible;
 }
 
-.news .info,
-.event .info {
+.event.event-full .info{
+    /*border-left: 3px solid #373B3F;*/
+}
+
+.event.event-full .prices{
+    text-align: center;
+}
+
+.news .info{
     text-align: right;
 }
 
@@ -403,6 +460,7 @@ span.sc-info	{color:#5bc0de}
     text-transform: uppercase;
 }
 
+.event h2,
 .news h2{
     color: #373B3F;
     font-family: "Arial Black",arial-black,'Open Sans',"Helvetica CY",Helvetica,Arial,sans-serif;
@@ -418,6 +476,7 @@ span.sc-info	{color:#5bc0de}
     /*color: #6e6e6e;*/
 }
 
+.event .menu > a+a,
 .news .menu > a+a{
     margin-left: 10px;
 }
@@ -463,20 +522,29 @@ span.sc-info	{color:#5bc0de}
     /*font-family: Georgia, serif;*/
 /*}*/
 
+.event.event-full h2{
+    margin-top: 0;
+}
+
+.event.event-full,
 .news.news-full{
     font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-    padding: 20px;
+    /*padding: 20px;*/
     text-align: left;
     color: #373B3F;
 }
 
+.event.event-full .row+.row,
+.event.event-full .text,
 .news.news-full .text{
     margin: 1.5em 0 0;
 }
 
+.event.event-full .summary,
 .news.news-full .summary{
     display: none;
 }
+
 
 /* news text resetter */
 
@@ -614,6 +682,14 @@ span.sc-info	{color:#5bc0de}
     background-color: #fff;
     color: #6e6e6e;
     box-shadow: 0 1px 0 #ccc;
+}
+
+.c-section{
+    padding: 10px;
+}
+
+.c-section+.c-section{
+    border-top: 1px solid #e2e2e2;
 }
 
 /* custom elements */
@@ -786,7 +862,7 @@ div.dd-container{
     border-left-width: 5px;
     border-radius: 3px;
 }
-.bs-callout h4 {
+.bs-callout > h4 {
 	color: #777;
     margin-top: 0;
     margin-bottom: 5px;
@@ -798,13 +874,13 @@ div.dd-container{
     border-radius: 3px;
 }
 
-.bs-callout-default h4	{color:#777}
-.bs-callout-smooth h4	{color:#9e9e9e}
-.bs-callout-primary h4	{color:#428bca}
-.bs-callout-success h4	{color:#5cb85c}
-.bs-callout-danger h4	{color:#d9534f}
-.bs-callout-warning h4	{color:#f0ad4e}
-.bs-callout-info h4		{color:#5bc0de}
+.bs-callout-default > h4	{color:#777}
+.bs-callout-smooth > h4	{color:#9e9e9e}
+.bs-callout-primary > h4	{color:#428bca}
+.bs-callout-success > h4	{color:#5cb85c}
+.bs-callout-danger > h4	{color:#d9534f}
+.bs-callout-warning > h4	{color:#f0ad4e}
+.bs-callout-info > h4		{color:#5bc0de}
 
 .bs-callout-default	{border-left-color:#777}
 .bs-callout-smooth	{border-left-color:#e7e7e7}
@@ -872,11 +948,11 @@ div.dd-container{
     text-align: left;
 }
 
-.bs-callout-custom h4{
+.bs-callout-custom > h4{
 	margin: 0;
 }
 
-.bs-callout-custom h4,
+.bs-callout-custom > h4,
 .bs-callout-custom > div{
 	width: 100%;
 	padding: 10px;
@@ -916,7 +992,7 @@ div.dd-container{
 	
 }
 
-.bc-dash h4{
+.bc-dash > h4{
 	text-transform: uppercase;
 }
 
@@ -1005,13 +1081,34 @@ div.dd-container{
 	border-width: 1px 1px 3px 1px;
 }
 
+.btn+.btn{
+    margin-left: 10px;
+}
+
 .btn-big{
 	font-size: 18px;
 	padding: 6px 32px;
 }
 
+.btn-end{
+    margin-top: 10px;
+}
+
+.input-group+.input-group{
+    margin-top: 10px;
+}
+
+.input-group-btn > .btn{
+    border-width: 1px;
+}
+
+.input-group-sep > .form-control+.input-group-addon{
+    margin-left: 5px;
+}
+
 /* tooltips */
 
+[data-tooltip],
 li[data-tooltip],
 span[data-tooltip]{
 	cursor: default;

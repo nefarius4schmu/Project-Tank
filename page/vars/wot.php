@@ -8,6 +8,8 @@
 if(!defined("PATH_IMG_RANK")) define("PATH_IMG_RANK", "images/icons/rank/");
 if(!defined("PATH_IMG_RANK_EXT")) define("PATH_IMG_RANK_EXT", ".png");
 if(!defined("PATH_IMG")) define("PATH_IMG", "images/");
+if(!defined("PATH_IMG_MAPS")) define("PATH_IMG_MAPS", "images/wot/maps/");
+if(!defined("PATH_IMG_MAPS_THUMBS")) define("PATH_IMG_MAPS_THUMBS", "images/wot/maps/thumbs/");
 if(!defined("PATH_IMG_TANKS")) define("PATH_IMG_TANKS", "images/tanks/");
 if(!defined("PATH_IMG_TANKS_DE")) define("PATH_IMG_TANKS_DE", "images/tanks/germany/");
 if(!defined("PATH_IMG_TANKS_USSR")) define("PATH_IMG_TANKS_USSR", "images/tanks/ussr/");
@@ -28,6 +30,7 @@ if(!defined("IMG_LOADER_THUMB_DEFAULT")) define("IMG_LOADER_THUMB_DEFAULT", "ima
 if(!defined("IMG_LOADER_THUMB_MEMBERBOX")) define("IMG_LOADER_THUMB_MEMBERBOX", "images/loader/loader-thumb-memberBox.gif");
 
 if(!defined("EXT_IMG_RANK")) define("EXT_IMG_RANK", "png");
+if(!defined("EXT_IMG_MAP")) define("EXT_IMG_MAP", "jpg");
 
 if(!defined("CLAN_NONE_TAG")) define("CLAN_NONE_TAG", "Kein Clan");
 if(!defined("CLAN_NONE_NAME")) define("CLAN_NONE_NAME", "Hier k&ouml;nnte Ihr Clan-Name stehen!");

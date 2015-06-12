@@ -116,7 +116,7 @@ if($dbh->isConnection()){
 //        : $dbh->postNews($_player->getID(), htmlentities($news["title"]), $news["text"], $news["summary"], $newsLink, $news["cat"]);
         : $dbh->postNews($sqlData);
 //	Debug::v($result);
-    if(!$result) finish(_error(ERROR_DB_SET_SETTINGS, null, false, true));
+    if(!$result) finish(_error(ERROR_DB_SET_NEWS, null, false, true));
 	else if($debug) Debug::h($result);
 } else
     finish(_error(ERROR_DB_CONNECTION, null, false, true));

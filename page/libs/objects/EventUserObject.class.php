@@ -3,14 +3,18 @@
 * basic event user object
 * @param PlayerObject $player
 * @param ClanObject $clan
- * @param bool $accepted
- * @param timestamp $joined
+* @param bool $accepted
+* @param string $joined
 */
 class EventUserObject{
-	private $player = null;
-    private $clan = null;
+	private $userID = null;
+//    private $eventID = null;
 	private $accepted = false;
     private $joined = null;
+
+    function __construct($data=null){
+        if(is_array($data)) $this->generate($data);
+    }
 
     // public functions ========================================================
 
@@ -18,43 +22,43 @@ class EventUserObject{
      * @param array $data
      */
     public function generate($data){
-        if(isset($data["player"])) $this->player = $data["player"];
-        if(isset($data["clan"])) $this->clan = $data["clan"];
+        if(isset($data["userID"])) $this->userID = $data["userID"];
         if(isset($data["accepted"])) $this->accepted = $data["accepted"];
         if(isset($data["joined"])) $this->joined = $data["joined"];
+//        if(isset($data["eventID"])) $this->eventID = $data["eventID"];
     }
 
     /**
      * @return null
      */
-    public function getPlayer()
+    public function getUserID()
     {
-        return $this->player;
+        return $this->userID;
     }
 
     /**
-     * @param null $player
+     * @param null $userID
      */
-    public function setPlayer($player)
+    public function setUserID($userID)
     {
-        $this->player = $player;
+        $this->userID = $userID;
     }
 
     /**
      * @return null
      */
-    public function getClan()
-    {
-        return $this->clan;
-    }
+//    public function getEventID()
+//    {
+//        return $this->eventID;
+//    }
 
     /**
-     * @param null $clan
+     * @param null $eventID
      */
-    public function setClan($clan)
-    {
-        $this->clan = $clan;
-    }
+//    public function setEventID($eventID)
+//    {
+//        $this->eventID = $eventID;
+//    }
 
     /**
      * @return boolean

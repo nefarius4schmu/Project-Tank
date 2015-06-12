@@ -38,6 +38,7 @@ else if($data === false) response(false, $data, "failed to get data");
 else response(true, $data);
 /* ===================================================================================== */
 /* ===================================================================================== */
+
 function getMembersStats($dbh, $wh, $clanID){
 	/* get clan member data from api ======================================================= */
 //	return $wh->getClanMemberStats($clanID);

@@ -1,9 +1,9 @@
 <?php
 /**
-* Project Tank Webpage
-* basic layout for board webpages
-* @author Steffen Lange
-*/
+ * Project Tank Webpage
+ * basic layout for board webpages
+ * @author Steffen Lange
+ */
 if(!isset($_page)) exit();
 $debug = false;
 _lib("DB");
@@ -18,7 +18,7 @@ $player = $wotUser["player"];
 $error = false;
 /* ===================================================================================== */
 $uid = isset($_GET["uid"]) ? $_GET["uid"] : null;
-if(empty($uid)) $error = ERROR_DB_GET_NEWS_UID;
+if(empty($uid)) $error = ERROR_DB_GET_PARAM_UID;
 /* ===================================================================================== */
 $news = !$error ? $dbh->getNewsByUid($uid) : null;
 $error = $news === false || !is_array($news) || empty($news);
