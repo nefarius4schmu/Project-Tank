@@ -325,8 +325,10 @@ class DBHandler{
         return $this->queryKeyValuePair($query);
     }
 
-	public function getGameModes(){
+	public function getGameModes($options =[]){
 		if(!$this->isConnection()) return false;
+        $indexed = isset($options["indexed"]) && $options["indexed"];
+
 		$query = "SELECT m.modeID,m.name,d.* FROM ".self::API_WOT_GAMEMODES." m
 		LEFT JOIN (
             SELECT * FROM ".self::API_WOT_GAMEMODES_DESCRIPTION."
@@ -335,7 +337,7 @@ class DBHandler{
             )
         ) d on d.modeID=m.modeID
 		WHERE m.deleted=0";
-		return $this->queryAssoc($query);
+        return $indexed ? $this->queryIndexedArray($query, "modeID") : $this->queryAssoc($query);
 	}
 
 	public function getUserSettings($userID, $settingsIDs=null){

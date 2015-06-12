@@ -493,7 +493,7 @@ class Html{
      * @param array $options
      * @return string
      */
-    public static function createEventFull($player, $event, $mapList, $options=[]){
+    public static function createEventFull($player, $event, $mapList, $gameModes, $options=[]){
         if(isset($options["id"])) $options["id"] = ' id="'.$options["id"].'"';
         $options["class"] = isset($options["class"]) ? ' '.$options["class"] : '';
 
@@ -535,6 +535,10 @@ class Html{
                 if(!isset($mapList[$mapID])) continue;
                 $map = '<img src="images/wot/maps/400x400/' . $mapList[$mapID]["name"] . '.jpg" alt="event_map"/>';
                 $name_i18n = $mapList[$mapID]["name_i18n"];
+//                $mode = isset($gameModes[], $map->getModeID(), "modeID");
+//                $modeID = $mode !== null ? $mode["modeID"] : null;
+//                $modeName = $mode !== null ? $mode["name_i18n"] : "Unbekannter Modus";
+//                $mode_i18n =
                 $maps .= Html::template(self::TMP_EVENT_FULL_MAP, ["map"=>$map, "name_i18n"=>$name_i18n]);
             }
             $event["maps"] = $maps;
@@ -678,7 +682,7 @@ class Html{
         </div>';
 
     const TMP_NEWS_FULL = '<div class="news news-full c-default{{class}}">
-            <div class="news-wrapper">
+            <div class="c-section">
                 <h2>{{title}}</h2>
                 <h3 class="summary">{{summary}}</h3>
                 <div class="text">{{text}}</div>
@@ -687,7 +691,7 @@ class Html{
                     <span class="user">{{user}}</span>
                     <span class="clan">{{clantag}}</span>
                 </div>
-                <div class="info">
+                <div class="info clearfix">
                     <span class="menu pull-left">{{menu}}</span>
                 </div>
             </div>
@@ -745,7 +749,7 @@ class Html{
     const TMP_EVENT_ACTION_FINISHED = '<a class="btn btn-sm btn-default pull-left disabled" href="#" disabled><i class="fa fa-fw fa-flag-checkered"></i>{{lang.finishedevent}}</a>';
     const TMP_EVENT_ACTION_JOINBRIEFING = '<a class="btn btn-sm btn-primary " href="{{url}}"><i class="fa fa-fw fa-coffee"></i>{{lang.startbriefing}}</a>';
 
-    const TMP_EVENT_FULL_MAP = '<div class="map"><span class="thumbnail">{{map}}<div class="caption"><h4>{{name_i18n}}</h4></div></span></div>';
+    const TMP_EVENT_FULL_MAP = '<div class="map"><span class="thumbnail">{{map}}<div class="caption"><h4>{{name_i18n}}</h4><small>{{modeName_i18n}}</small></div></span></div>';
     const TMP_EVENT_PRICE_GOLD = '<div class="price">{{gold}} {{lang.pricegold}}</div>';
     const TMP_EVENT_PRICE_OTHERS = '<div class="price">{{others}}</div>';
     const TMP_EVENT_FULL_PRICE = '<div class="col-lg-3">

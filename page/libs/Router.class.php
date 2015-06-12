@@ -19,7 +19,7 @@ class Router{
     const CSS_NEWS = "css/news.css?002";
     const CSS_CREATOR = "css/creator.css?003";
     const CSS_EVENTS = "css/events.css?002";
-    const CSS_BOARD = "css/board.css?009'";
+    const CSS_BOARD = "css/board.css?010'";
 
     const JS_LIB_JQUERY = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112";
     const JS_LIB_TABLESORTER = "js/jquery.tablesorter.min.js?100";
@@ -357,7 +357,7 @@ class Router{
 	}
 
 	public static function getBreadcrumbs(){
-		$loc = $_SERVER["REDIRECT_URL"];
+		$loc = isset($_SERVER["REDIRECT_URL"]) ? $_SERVER["REDIRECT_URL"] : substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], "?"));
 		$crumbs =  explode("/", $loc);
 		$out = [ROUTE_HOME=>self::getLocation(ROUTE_HOME)];
 		foreach($crumbs as $crumb){

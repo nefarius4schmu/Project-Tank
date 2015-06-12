@@ -35,6 +35,7 @@ if(!$error){
 }
 /* ===================================================================================== */
 $mapList = $dbh->parseArray($dbh->getMapList(["indexed"=>true]), true);
+$gameModes = $dbh->parseArray($dbh->getGameModes(["indexed"=>true]));
 $isJoinedEvent = $dbh->parse($dbh->getUserJoinedEvent($player->getID(), $event["eventID"]));
 /* ===================================================================================== */
 ?>
@@ -47,7 +48,7 @@ $isJoinedEvent = $dbh->parse($dbh->getUserJoinedEvent($player->getID(), $event["
             "canEdit"=>$event["userID"] == $player->getID(),
             "canDelete"=>$event["userID"] == $player->getID(),
         ];
-        echo Html::createEventFull($player, $event, $mapList, $options);
+        echo Html::createEventFull($player, $event, $mapList, $gameModes, $options);
     }
     else Debug::e("Beitrag nicht gefunden. ($error)");
     ?>

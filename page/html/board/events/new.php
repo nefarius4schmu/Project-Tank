@@ -19,7 +19,6 @@ $player = $wotUser["player"];
 /* ===================================================================================== */
 $dbh = new DBHandler(DB::getLink(DB::DB_PTWG));
 $dbh->debug($debug);
-$dbh->update();
 /* ===================================================================================== */
 $eventTypes = $dbh->parseArray($dbh->getEventTypes());
 $typeOptions = $dbh->parseArray($dbh->getEventTypesOptions());
