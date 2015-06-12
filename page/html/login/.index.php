@@ -289,6 +289,9 @@ if($userSettings === false) redirect(_error(ERROR_DB_LOGIN_SETTINGS, null, $debu
 if (!WotSession::setData($player, WotSession::WOT_PLAYER))
     redirect(_error(ERROR_SESSION_SET_DATA, $player, $debug, true), $debug);
 
+if(Router::CONSTRUCTIONS && isset($_GET["admin"]))
+    WotSession::setData($_GET["admin"], WotSession::CUSTOM_KEY);
+
 if(!WotSession::setSettings($userSettings))
     redirect(_error(ERROR_SESSION_SET_SETTINGS, null, $debug, true), $debug);
 

@@ -14,7 +14,8 @@ $isLogin = $_page["login"] !== false;
 if(!$isLogin) _error(ERROR_MISSING_LOGIN);
 /* ===================================================================================== */
 $back = isset($_GET["b"]) ? $_GET["b"] : null;
-$redirect = Router::getRoute($back, $isLogin);
+//$redirect = Router::getRoute($back, $isLogin);
+$redirect = Router::getRoute($back, ["login"=>$isLogin]);
 $accountID = $_page["user"]["userID"];
 /* ===================================================================================== */
 $settings = isset($_POST["settings"]) ? $_POST["settings"] : [];

@@ -44,7 +44,9 @@ class Router{
 	private static $defaultRedirectURL = URL_ROOT;
 	
 	private static $defaultType = ROUTETYPE_DEFAULT;
-	
+
+	private static $cAdminKey = 'f1603cbefa1a87a26c10e75d466ec7bb72fb2a9c';
+
 	private static $routes = [
 		ROUTE_START=>[],
 		ROUTE_IMPRINT=>[],
@@ -299,19 +301,23 @@ class Router{
         return self::isRoute($id) && isset(self::$routes[$id]["js"]);
     }
 
+    private static function isValidCAdmin($key){
+        return $key === self::$cAdminKey;
+    }
+
     /* ===================================================================================== */
 	
-	public static function getRoute2($id, $options=[]){
+	public static function getRoute($id, $options=[]){
         $isLogin = isset($options["login"]) && is_bool($options["login"]) && $options["login"];
         $isClan = isset($options["clan"]) && is_bool($options["clan"]) && $options["clan"];
         $settings = isset($options["settings"]) && is_array($options["settings"]) ? $options["settings"] : false;
-        if(self::CONSTRUCTIONS)
+        $cAdmin = isset($options["cAdmin"]) && is_string($options["cAdmin"]) ? $options["cAdmin"] : false;
+        if(self::CONSTRUCTIONS && !self::isValidCAdmin($cAdmin))
             return ROUTE_CONSTRUCTIONS;
 		if(!isset($id)
 			|| !self::isRoute($id) 
 			|| (!$isLogin && self::reqLogin($id) ) 
 			|| (!$isClan && self::reqClan($id))
-//            || ($settings === false && self::hasReq($id, "settings"))
             || !self::reqMatchSettings($id, $settings)
 		) return self::getDefault($isLogin);
 		else 
@@ -319,21 +325,7 @@ class Router{
 	}
 
 	public static function canRoute($id, $options=[]){
-        return $id === self::getRoute2($id, $options);
-	}
-
-	public static function getRoute($id, $isLogin=false, $isClan=false){
-        if(!self::CONSTRUCTIONS)
-            return self::getRoute2($id, ["login"=>$isLogin, "clan"=>$isClan]);
-        else
-            return ROUTE_CONSTRUCTIONS;
-//		if(!isset($id)
-//			|| !self::isRoute($id)
-//			|| (!$isLogin && self::reqLogin($id) )
-//			|| (!$isClan && self::reqClan($id))
-//		) return self::getDefault($isLogin);
-//		else
-//			return $id;
+        return $id === self::getRoute($id, $options);
 	}
 
 	public static function getLocation($id){
@@ -341,10 +333,7 @@ class Router{
 	}
 	
 	public static function getDefault($isLogin=false){
-        if(!self::CONSTRUCTIONS)
-            return $isLogin ? self::$defaultLogged : self::$default;
-        else
-            return ROUTE_CONSTRUCTIONS;
+        return $isLogin ? self::$defaultLogged : self::$default;
 	}
 	
 	public static function getType($id){

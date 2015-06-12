@@ -15,7 +15,8 @@ class WotSession extends Session{
 	const WOT_CLAN_ID = "clanID";
 	const WOT_PLAYER = "player";
 	const USER_SETTINGS = "settings";
-	
+	const CUSTOM_KEY = "key";
+
 	private static $data = null;
 	
 	private static function isWotSession(){
@@ -50,6 +51,7 @@ class WotSession extends Session{
 			self::WOT_TOKEN_EXPIRES_AT=>$expire,
 			self::USER_SETTINGS=>null,
 			self::WOT_PLAYER=>null,
+			self::CUSTOM_KEY=>null,
 		];
 		self::updateSession();
 		return true;

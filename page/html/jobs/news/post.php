@@ -20,7 +20,9 @@ $_user = $_page["user"];
 $_player = $_user["player"];
 /* ===================================================================================== */
 $options = ["login"=>$isLogin, "clan"=>$_player->hasClan(), "settings"=>$_user["settings"]];
-$_route = isset($_GET["b"]) ? Router::getRoute2($_GET["b"], $options) : Router::getDefault($isLogin);
+$_route = isset($_GET["b"]) ? $_GET["b"] : null;
+$_route = Router::getRoute($_route, $options);
+//$_route = isset($_GET["b"]) ? Router::getRoute2($_GET["b"], $options) : Router::getDefault($isLogin);
 /* ===================================================================================== */
 $isNews = isset($_POST["news"]) && is_array($_POST["news"]);
 if(!$isNews) finish($_route);

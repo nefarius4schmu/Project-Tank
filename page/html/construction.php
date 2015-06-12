@@ -28,7 +28,7 @@ $redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
         PageDefaults::getHeader();
         ?>
         <div class="a-content clearfix">
-            <h1>Achtung: Baustelle!</h1>
+            <h2>Achtung: Baustelle!</h2>
             <small>Wir befinden uns derzeit in Umbaumaßnahmen für ein neues Update<br>und bitten Sie daher um ein wenig Geduld.<br>Schon bald sind wir wieder für Sie da!</small>
         </div>
     </div>

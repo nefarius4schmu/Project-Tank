@@ -9,6 +9,9 @@ if(!isset($_page)) exit();
 _lib("PageDefaults");
 /* ===================================================================================== */
 $redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
+$_cAdmin = Router::CONSTRUCTIONS && isset($_GET["admin"]) ? $_GET["admin"] : null;
+$params = $_cAdmin !== null ? "?admin=".$_cAdmin : null;
+$_route = URL_ROOT."redirect/".ROUTE_LOGIN.$params;
 /* ===================================================================================== */	
 ?>
 <!DOCTYPE html>
@@ -28,7 +31,7 @@ $redirectError = isset($_page["error"]) ? $_page["error"]*1 : 0;
 		PageDefaults::getHeader();	
 		?>
 		<div class="a-content clearfix">
-			<a class='btn btn-danger btn-large btn-login' href="<?=URL_ROOT;?>redirect/login" target="_self">Login</a>
+			<a class='btn btn-danger btn-large btn-login' href="<?=$_route?>" target="_self">Login</a>
 		</div>
 	</div>
 	<?php

@@ -34,18 +34,27 @@ $_user = isset($loginData) ? $loginData : false;
 $_isError =  isset($_GET["e"]);
 $_isWarning =  isset($_GET["w"]);
 $_isMessage = isset($_GET["m"]);
+$_cAdmin = null;
+if(Router::CONSTRUCTIONS){
+    $_cAdmin = $_isLogin && isset($_user[WotSession::CUSTOM_KEY])
+        ? $_user[WotSession::CUSTOM_KEY]
+        : (isset($_GET["admin"]) ? $_GET["admin"] : null);
+    if($_cAdmin !== null && $_isLogin && !isset($_user[WotSession::CUSTOM_KEY])) WotSession::setData($_cAdmin, WotSession::CUSTOM_KEY);
+}
 /** @var WotPlayer $_player */
 $_player = $_user !== false && isset($_user["player"]) && $_user["player"] instanceof WotPlayer ? $_user["player"] : false;
 $_isClan = $_player !== false && $_player->hasClan();
 $_settings = $_user !== false ? $_user["settings"] : false;
 
 if(!$_isError) {
-    $options = ["login"=>$_isLogin, "clan"=>$_isClan, "settings"=>$_settings];
-    $_route = isset($_GET["g"]) ? Router::getRoute2($_GET["g"], $options) : Router::getDefault($_isLogin);
+    $options = ["login"=>$_isLogin, "clan"=>$_isClan, "settings"=>$_settings, "cAdmin"=>$_cAdmin];
+    $_route = isset($_GET["g"]) ? $_GET["g"] : null;
+    $_route = Router::getRoute($_route, $options);
+//    $_route = isset($_GET["g"]) ? Router::getRoute2($_GET["g"], $options) : Router::getDefault($_isLogin);
 //    $_route = isset($_GET["g"]) ? Router::getRoute($_GET["g"], $_isLogin, $_isClan) : Router::getDefault($_isLogin);
 }else {
     // on error: send user to start page and logout
-    $_route = Router::getDefault();
+    $_route = Router::getRoute(null);
 //    WotSession::logout();
 }
 $_routeType = Router::getType($_route);
