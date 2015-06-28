@@ -59,7 +59,6 @@ class WotPlayer{
 	public function getShotsTotal(){return $this->statsShots;}	
 	public function getHitsTotal(){return $this->statsHits;}	
 	public function getDamageTotal(){return $this->statsDamage;}
-	public function getDamageTotal(){return $this->statsDamage;}
 	public function getWinRatePerBattle(){return $this->statsWinRatePerBattle;}
 	public function getAvgHitRate(){return $this->statsAvgHitRate;}
 	public function getAvgDamagePerBattle(){return $this->statsAvgDamagePerBattle;}

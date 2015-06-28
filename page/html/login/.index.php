@@ -23,6 +23,7 @@ $isLogin = $_page["login"] !== false;
 //Debug::r($_GET);
 //Debug::r($_page);
 //Debug::v($isOffline);
+//Debug::r($_SERVER);
 //exit();
 /* ===================================================================================== */
 $redirect = URL_ROOT;
@@ -60,8 +61,8 @@ if($debug){
 <head>
 	<title>Willkommen!</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css?320">
-	<link rel="stylesheet" type="text/css" href="css/base.css?001">
+	<link rel="stylesheet" type="text/css" href="<?=Router::CSS_LIB_BOOTSTRAP?>">
+	<link rel="stylesheet" type="text/css" href="<?=Router::CSS_BASE?>">
 	<style>
 		html, body{
 			height: 100%;

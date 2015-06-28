@@ -39,4 +39,4 @@ if(!defined("ROUTETYPE_BOARD"))  define("ROUTETYPE_BOARD", 1);
 if(!defined("URL_ROOT"))  define("URL_ROOT", "http://".$_SERVER["HTTP_HOST"]."/wot2/");
 if(!defined("URL_REDIRECT_LOGIN"))  define("URL_REDIRECT_LOGIN", "http://".$_SERVER["HTTP_HOST"]."/wot2/login/");
 if(!defined("URL_REDIRECT_LOGIN_OFFLINE"))  define("URL_REDIRECT_LOGIN_OFFLINE", "http://".$_SERVER["HTTP_HOST"]."/wot2/login?offline=1");
-if(!defined("URL_REDIRECT_BRIEFING"))  define("URL_REDIRECT_BRIEFING", "http://".$_SERVER["HTTP_HOST"]."/wot2/events/briefing/");
+if(!defined("URL_REDIRECT_BRIEFING"))  define("URL_REDIRECT_BRIEFING", "http://".$_SERVER["HTTP_HOST"].":3000/start/");

@@ -23,11 +23,23 @@ pre{
 	margin: 0;
 	text-align: center;
 }
+
+small{
+    display: block;
+    color: #858B90;
+    line-height: 3em;
+}
+
 .btn-large {
 	height: 50px;
 	width: 200px;
 	font-size: 24px;
 }
-.btn-login {
-	margin-top: 140px;
+
+.a-content{
+    margin-top: 140px;
+}
+
+.btn{
+    border-width: 1px 1px 3px 1px;
 }

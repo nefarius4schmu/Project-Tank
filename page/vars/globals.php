@@ -63,6 +63,9 @@ if(!defined("WARNING_POST_MISSING_TIME_END"))  define("WARNING_POST_MISSING_TIME
 if(!defined("WARNING_POST_MISSING_EVENT_TYPE"))  define("WARNING_POST_MISSING_EVENT_TYPE", 1014);
 if(!defined("WARNING_EVENT_CANNOT_JOIN"))  define("WARNING_EVENT_CANNOT_JOIN", 1040);
 
+if(!defined("ERROR_CALL_UNKOWN_TYPE"))  define("ERROR_CALL_UNKOWN_TYPE", 3100);
+if(!defined("ERROR_CALL_LOGIN"))  define("ERROR_CALL_LOGIN", 3101);
+
 
 /* ===================================================================================== */
 /* ===================================================================================== */
@@ -212,14 +215,17 @@ function fn_template($temp, $data, $options=[]){
  * @param int $error
  * @return bool|null|string
  */
-function getRedirectByType($type, &$error){//, &$error
+function getRedirectByType($type, &$error, $options=[]){//, &$error
+    $oRedirectURL = isset($options["redirect"]) ? $options["redirect"] : null;
+
 	if($type == "wotLogin"){
+		_lib("Router");
 		_lib("WotData");
 		_lib("Calc");
-
+        $redirectURL = isset($oRedirectURL) ? $oRedirectURL : Router::getLoginRedirectURL();
 		$wotData = new WotData();
 		date_default_timezone_set("UTC");
-		$url = $wotData->getLoginURL(Router::getLoginRedirectURL(), Calc::getWeeks(1, true));
+		$url = $wotData->getLoginURL($redirectURL, Calc::getWeeks(1, true));
 		if($url === false)
 			$error = ERROR_LOGIN_GET_URL;
 		return $url;

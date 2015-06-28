@@ -12,7 +12,7 @@ require_once("objects/RatingObject.class.php");
 * 
 * @author Steffen Lange
 */
-class WotPlayer{
+class WotPlayer implements JsonSerializable{
 	
 	// typeof PlayerObject player
 	private $player = null;
@@ -166,6 +166,18 @@ class WotPlayer{
 	public function setRating($rating){
 		$this->player->rating = $rating;
 	}
-	
-	
+
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     */
+    function jsonSerialize()
+    {
+        // TODO: Implement jsonSerialize() method.
+        return $this->player;
+    }
 }

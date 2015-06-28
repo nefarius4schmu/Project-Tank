@@ -15,32 +15,25 @@ body {
 	height: 100%;
 	min-width: 100%;
 	margin: 0;
-	background: #f2f2f2;
 	background-size: auto;
 	color: #373b3f;
 	font-family: Open Sans,"Helvetica CY",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	line-height: 1.3;
 	text-align: center;
-	background: rgb(242,242,242); /* Old browsers */
-	background: -moz-linear-gradient(left,  rgba(242,242,242,1) 0%, rgba(249,249,249,1) 50%, rgba(242,242,242,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(242,242,242,1)), color-stop(50%,rgba(249,249,249,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(left,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* IE10+ */
-	background: linear-gradient(to right,  rgba(242,242,242,1) 0%,rgba(249,249,249,1) 50%,rgba(242,242,242,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#f2f2f2',GradientType=1 ); /* IE6-9 */
-	background: url('images/content_bg.jpg') repeat-y 50% 0 #fcfcfc;
+    background: #f2f2f2; /* Old browsers */
+    background: url('images/pattern/stripes_d_grey.png') repeat fixed #f2f2f2;
 }
 
 
 header, footer {
-	background-color: #202020;
+    color: #838383;
+	background-color: #2a2d30;
 }
 
 header {
+    height: 175px;
 	background: #101010 url('images/header/red/header_1650.jpg');
-	height: 175px;
 	background-repeat: no-repeat;
 	background-position: center center;
 /*	margin-bottom: 50px;*/
@@ -52,11 +45,15 @@ footer{
 	margin-top: -60px;
 	text-align: center;
 	border-top: 1px solid rgba(255, 255, 255, 0.8);
-	box-shadow: 0px 4px 9px -2px rgba(0,0,0,0.5) inset;
+	box-shadow: 0 4px 9px -2px rgba(0,0,0,0.5) inset;
 }
 
 h1{
 	text-align: left;
+}
+
+small{
+    color: #858B90;
 }
 
 #wotLogoHeader {
@@ -87,8 +84,8 @@ h1{
 	background: #333;
 	text-align: right;
 	padding-right: 20px;
-	box-shadow: 0px 3px 2px -2px rgba(0,0,0,0.5) inset,
-				0px -1px 1px 0px black inset;
+	box-shadow: 0 3px 2px -2px rgba(0,0,0,0.5) inset,
+				0px -1px 1px 0 black inset;
 	border-bottom: 1px solid red;
 }
 
@@ -126,18 +123,6 @@ h1{
 .b-nav {
 	width: 200px;
 	float: left;
-}
-
-.b-col {
-
-}
-
-.outer-box{
-/*	background-color: #efefef;*/
-/*	box-shadow: 0px 1px 3px -1px black inset;*/
-/*	color: #333;*/
-/*	border-radius: 2px;*/
-/*	border: 1px solid #FFFFFF;*/
 }
 
 @media (min-width: 1651px){
@@ -277,11 +262,9 @@ p{
 }
 
 .c-box{
-	background-color: #F8F8F8;
 	background-color: #ececec;
-	border: 1px solid #b0b0b0;
 	border: 1px solid rgba(0,0,0,0.1);
-	box-shadow: 1px 1px 0px 0px rgba(255, 255, 255, 0.7) inset,-1px -1px 1px -1px rgba(0,0,0,0.15) inset
+	box-shadow: 1px 1px 0 0 rgba(255, 255, 255, 0.7) inset,-1px -1px 1px -1px rgba(0,0,0,0.15) inset
 }
 
 /** page defaults **/
@@ -293,14 +276,14 @@ p{
 .content-box{
 	background-color: rgba(255, 255, 255, 0.7);
 	border-top: 1px solid #fff;
-	box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.3), -1px -1px 1px -1px #fff;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3), -1px -1px 1px -1px #fff;
 }
 
 /** navigation **/
 
 .global-nav {
 	background-color: #2A2D30;
-	box-shadow: 0px -4px 2px -2px rgba(0,0,0,0.5) inset;
+	box-shadow: 0 -4px 2px -2px rgba(0,0,0,0.5) inset;
 	color: #717981;
 }
 
@@ -341,8 +324,6 @@ p{
 
 .b-menu {
 	float: right;
-/*	border: 0;*/
-/*	box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.3), -1px -1px 1px -1px #fff*/
 }
 
 .b-item {
@@ -358,8 +339,6 @@ p{
 	line-height: 40px;
 	color: #717981;
 	font-weight: bold;
-/*	border-top: 1px solid #fff;*/
-/*	text-shadow: 0px -1px 0px black;*/
 	cursor: pointer;
 }
 
@@ -367,8 +346,8 @@ p{
 .b-link.active{
 	color: #717981;
 	background-color: #454545;
-	box-shadow: 0px 3px 2px -2px rgba(0,0,0,0.5) inset,
-				0px -1px 1px 0px black inset;
+	box-shadow: 0 3px 2px -2px rgba(0,0,0,0.5) inset,
+				0px -1px 1px 0 black inset;
 }
 
 .b-link.active:before{
@@ -414,7 +393,7 @@ p{
 	background-color: #3c3c3c;
 	border: 1px solid #4d4d4d;
 	color: #888;
-	box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.47);
+	box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.47);
 }
 
 .a-col{
@@ -428,7 +407,7 @@ p{
 	margin-top: 50px;
 	margin-right: 20px;
 	font-size: small;
-	box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.8);
+	box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.8);
 	z-index: 10;
 }
 
@@ -471,14 +450,7 @@ p{
 
 .icon-box .img-mini, .img-rank{
 	margin-right: 3px;
-/*	margin-top: 1px;*/
 }
-
-/*.icon-box .img-rank{
-	margin-right: 3px;
-	margin-top: 3px;
-}*/
-/** text formation **/
 
 span.error{
 	color: red;
@@ -511,7 +483,6 @@ span.info{
 
 #settings img {
 	max-height: 16px;
-	vertical-align: middle;
 	vertical-align: sub;
 }
 

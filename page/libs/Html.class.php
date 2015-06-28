@@ -747,7 +747,7 @@ class Html{
     const TMP_EVENT_ACTION_LEAVE = '<a class="btn btn-sm btn-danger" href="{{url}}"><i class="fa fa-fw fa-times"></i>{{lang.leaveevent}}</a>';
     const TMP_EVENT_ACTION_CLOSED = '<a class="btn btn-sm btn-default disabled" href="#" disabled><i class="fa fa-fw fa-lock"></i>{{lang.closedevent}}</a>';
     const TMP_EVENT_ACTION_FINISHED = '<a class="btn btn-sm btn-default pull-left disabled" href="#" disabled><i class="fa fa-fw fa-flag-checkered"></i>{{lang.finishedevent}}</a>';
-    const TMP_EVENT_ACTION_JOINBRIEFING = '<a class="btn btn-sm btn-primary " href="{{url}}"><i class="fa fa-fw fa-coffee"></i>{{lang.startbriefing}}</a>';
+    const TMP_EVENT_ACTION_JOINBRIEFING = '<a class="btn btn-sm btn-primary " href="{{url}}" target="_blank"><i class="fa fa-fw fa-coffee"></i>{{lang.startbriefing}}</a>';
 
     const TMP_EVENT_FULL_MAP = '<div class="map"><span class="thumbnail">{{map}}<div class="caption"><h4>{{name_i18n}}</h4><small>{{modeName_i18n}}</small></div></span></div>';
     const TMP_EVENT_PRICE_GOLD = '<div class="price">{{gold}} {{lang.pricegold}}</div>';

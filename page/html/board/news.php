@@ -8,12 +8,13 @@ if(!isset($_page)) exit();
 $debug = false;
 _lib("DB");
 _lib("DBHandler");
+_lib("WotSession");
 /* ===================================================================================== */
 $wotUser = $_page["user"];
 /** @var WotPlayer $player */
 $player = $wotUser["player"];
 /* ===================================================================================== */
-$options = ["login"=>$_page["login"], "clan"=>$player->hasClan(), "settings"=>$wotUser["settings"]];
+$options = ["login"=>$_page["login"], "clan"=>$player->hasClan(), "settings"=>$wotUser["settings"], "cAdmin"=>$wotUser[WotSession::CUSTOM_KEY]];
 $canCreateNews = Router::canRoute(ROUTE_CREATOR_NEWS, $options);
 /* ===================================================================================== */
 $dbh = new DBHandler(DB::getLink(DB::DB_PTWG));

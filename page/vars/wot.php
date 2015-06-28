@@ -5,7 +5,7 @@
 * @author Steffen Lange
 */
 
-if(!defined("PATH_IMG_RANK")) define("PATH_IMG_RANK", "images/icons/rank/");
+if(!defined("PATH_IMG_RANK")) define("PATH_IMG_RANK", "images/wot/roles/");
 if(!defined("PATH_IMG_RANK_EXT")) define("PATH_IMG_RANK_EXT", ".png");
 if(!defined("PATH_IMG")) define("PATH_IMG", "images/");
 if(!defined("PATH_IMG_MAPS")) define("PATH_IMG_MAPS", "images/wot/maps/");

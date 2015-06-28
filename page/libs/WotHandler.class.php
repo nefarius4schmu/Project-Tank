@@ -95,7 +95,7 @@ class WotHandler{
     }
 
 	private function parseClanEmblems($clanEmblems, $clanLastUpdate){
-        Debug::r($clanEmblems);
+//        Debug::r($clanEmblems);
 
         $emblems = new ClanEmblemsObject();
         if(!isset($clanEmblems)) return $emblems;

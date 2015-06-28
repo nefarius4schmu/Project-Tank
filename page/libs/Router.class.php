@@ -19,7 +19,10 @@ class Router{
     const CSS_NEWS = "css/news.css?002";
     const CSS_CREATOR = "css/creator.css?003";
     const CSS_EVENTS = "css/events.css?002";
-    const CSS_BOARD = "css/board.css?010'";
+    const CSS_BOARD = "css/board.css?011'";
+    const CSS_BASE = "css/base.css?002'";
+    const CSS_INDEX = "css/index.css?002'";
+    const CSS_IMPRINT = "css/imprint.css?002'";
 
     const JS_LIB_JQUERY = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?1112";
     const JS_LIB_TABLESORTER = "js/jquery.tablesorter.min.js?100";

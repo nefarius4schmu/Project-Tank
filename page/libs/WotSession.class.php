@@ -56,7 +56,20 @@ class WotSession extends Session{
 		self::updateSession();
 		return true;
 	}
-	
+
+	public static function loginData2Array($id, $name, $clan, $token, $expire){
+		return [
+			self::WOT_USER_ID=>$id,
+			self::WOT_USER_NAME=>$name,
+			self::WOT_CLAN_ID=>$clan,
+			self::WOT_TOKEN=>$token,
+			self::WOT_TOKEN_EXPIRES_AT=>$expire,
+			self::USER_SETTINGS=>null,
+			self::WOT_PLAYER=>null,
+			self::CUSTOM_KEY=>null,
+		];
+	}
+
 	public static function getLoginData(){
 		self::startWotSession();
 		return self::isWotLogin() ? parent::get(self::SESSION_KEY) : false;

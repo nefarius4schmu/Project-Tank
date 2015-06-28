@@ -19,9 +19,9 @@ $_route = URL_ROOT."redirect/".ROUTE_LOGIN.$params;
 <head>
 	<title><?=PAGE_BRAND;?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/base.css">
-	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="<?=Router::CSS_LIB_BOOTSTRAP?>">
+	<link rel="stylesheet" type="text/css" href="<?=Router::CSS_BASE?>">
+	<link rel="stylesheet" type="text/css" href="<?=Router::CSS_INDEX?>">
 </head>
 <body>
 	<div class="b-main">
@@ -31,7 +31,8 @@ $_route = URL_ROOT."redirect/".ROUTE_LOGIN.$params;
 		PageDefaults::getHeader();	
 		?>
 		<div class="a-content clearfix">
-			<a class='btn btn-danger btn-large btn-login' href="<?=$_route?>" target="_self">Login</a>
+			<a class='btn btn-danger btn-large' href="<?=$_route?>" target="_self">Login</a>
+            <small>Die Anmeldung erfolgt über Ihren Wargaming.net Account.</small>
 		</div>
 	</div>
 	<?php

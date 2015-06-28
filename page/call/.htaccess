@@ -1,0 +1,11 @@
+#ErrorDocument 404 http://der_komplette_pfad_zur_Datei
+#Redirect 301 [alte_seite] [neue_seite]
+
+# close access for libwww library
+Order deny,allow
+Deny from all
+Allow from 127.0.0.1
+Allow from ::1
+
+# enable error reporting
+php_value error_reporting 2047

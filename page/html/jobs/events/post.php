@@ -138,7 +138,7 @@ if($dbh->isConnection()){
     $isBriefing = $briefingStart !== null;
     $briefingID = null;
     if($isBriefing)
-        $briefingID = $isEdit
+        $briefingID = $isEdit && isset($event["briefingID"]) && !empty($event["briefingID"])
             ? $event["briefingID"]
             : EventEditor::generateBriefingID($event["start"],$event["end"],$event["title"],$_player->getID());
 

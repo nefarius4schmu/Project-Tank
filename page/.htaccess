@@ -2,10 +2,10 @@
 #Redirect 301 [alte_seite] [neue_seite]
 
 # close access for libwww library
-SetEnvIf User-Agent ^libwww pissoff
+SetEnvIf User-Agent ^libwww goaway
 Order allow,deny
 Allow from all
-Deny from env=pissoff
+Deny from env=goaway
 
 # enable error reporting
 php_value error_reporting 2047
@@ -23,6 +23,7 @@ RewriteRule ^\.htaccess$ - [F]
 
 #RewriteRule login/index\.php [L,R=404]
 
+RewriteRule call call/index.php [QSA]
 
 RewriteRule redirect/(.*) index.php?g=$1&r=1 [QSA]
 #RewriteRule (.*)/set index.php?g=set&b=$1 [QSA]
@@ -55,8 +56,8 @@ RewriteRule (.*)/images/(.*) img/$2 [L]
 RewriteRule (.*)/css/(.*) css/$2 [L]
 RewriteRule (.*)/js/(.*) js/$2 [L]
 
-
 RewriteRule db/(.*) index.php?g=$1
+
 
 #RewriteRule ^(.*)\.htm$ $1.php
 #RewriteRule ^(.*)/(.*)\.htm$ index.php?main=$1&sub=$2 [QSA]

@@ -594,6 +594,15 @@ class DBHandler{
         return $this->queryFirstRow($query);
     }
 
+    public function getEventInfoByBriefingID($briefingID, $options=[]){
+        $query = "SELECT e.*,d.*,b.briefingID,b.start as briefingStart
+        FROM ".self::DB_EVENTS." e
+        LEFT JOIN ".self::DB_EVENTS_DESCRIPTION." d USING (eventID)
+        LEFT JOIN ".self::DB_EVENTS_BRIEFINGS." b USING (eventID)
+        WHERE e.deleted=0 AND b.briefingID='$briefingID'";
+        return $this->queryFirstRow($query);
+    }
+
     public function getEventInfoByUid($uid, $options=[]){
         $clanID = isset($options["clanID"]) ? " AND (e.clanID IS NULL OR e.clanID='".$options["clanID"]."')" : " AND e.clanID IS NULL";
 
@@ -613,6 +622,19 @@ class DBHandler{
         return $this->queryAssoc($query);
     }
 
+    public function getEventMapsFull($eventID){
+        $query = "SELECT em.*,mi.mapID,mi.name,d.* FROM ".self::DB_EVENTS_MAPS." em
+        LEFT JOIN ".self::API_WOT_MAPS." mi USING(mapID)
+        LEFT JOIN (
+            SELECT * FROM ".self::API_WOT_MAPS_DESCRIPTION."
+            WHERE lang=(
+                SELECT value FROM ".self::DB_DEFAULTS." WHERE `key`='i18n_lang'
+            )
+        ) d USING(mapID)
+		WHERE em.eventID='$eventID' AND mi.deleted=0;";
+        return $this->queryAssoc($query);
+    }
+
     public function getEventPrices($eventID){
         $query = "SELECT * FROM ".self::DB_EVENTS_PRICES." WHERE eventID='$eventID';";
         return $this->queryAssoc($query);
@@ -620,6 +642,19 @@ class DBHandler{
 
     public function getEventUsers($eventID){
         $query = "SELECT * FROM ".self::DB_EVENTS_USERS." WHERE eventID='$eventID' AND deleted=0;";
+        return $this->queryAssoc($query);
+    }
+
+    public function getEventUserIDs($eventID){
+        $query = "SELECT userID FROM ".self::DB_EVENTS_USERS." WHERE eventID='$eventID' AND deleted=0;";
+        return $this->queryList($query);
+    }
+
+    public function getEventUserDetails($eventID){
+        $query = "SELECT eu.userID, ci.name,cm.role FROM ".self::DB_EVENTS_USERS." eu
+        LEFT JOIN ".self::DB_USER_INFO." ci USING (userID)
+        LEFT JOIN ".self::DB_CLAN_MEMBERS." cm USING (userID)
+        WHERE eventID='$eventID' AND eu.deleted=0;";
         return $this->queryAssoc($query);
     }
 
@@ -918,7 +953,7 @@ class DBHandler{
 
         // query: event description
         $dataDescr = [
-            "eventID"=>"@Event_ID",
+            "eventID"=>"LAST_INSERT_ID()",
             "title"=>$qTitle,
             "summary"=>$qSummary,
             "text"=>$qText,
@@ -927,7 +962,7 @@ class DBHandler{
 
         // query: event briefing
         $dataBriefing = [
-            "eventID"=>"@Event_ID",
+            "eventID"=>"LAST_INSERT_ID()",
             "start"=>"'$briefingStart'",
             "briefingID"=>"'$briefingID'",
         ];
@@ -937,10 +972,12 @@ class DBHandler{
 
         // query: event prices
         $queryPrices = "";
+        $index = 1;
         foreach($prices as $price){
 
             $dataPrice = [
-                "eventID"=>"@Event_ID",
+                "eventID"=>"LAST_INSERT_ID()",
+                "priceID"=>$index++,
                 "rank_from"=>isset($price["rank_from"]) ? "'".$price["rank_from"]."'" : null,
                 "rank_to"=>isset($price["rank_to"]) ? "'".$price["rank_to"]."'" : null,
                 "gold"=>isset($price["gold"]) ? "'".$price["gold"]."'" : null,
@@ -955,7 +992,7 @@ class DBHandler{
         foreach($maps as $map){
 
             $dataMap = [
-                "eventID"=>"@Event_ID",
+                "eventID"=>"LAST_INSERT_ID()",
                 "mapID"=>isset($map["mapID"]) ? "'".$map["mapID"]."'" : null,
                 "modeID"=>isset($map["modeID"]) ? "'".$map["modeID"]."'" : null,
                 "order"=>isset($map["order"]) ? "'".$map["order"]."'" : "DEFAULT",
@@ -964,10 +1001,10 @@ class DBHandler{
 
         }
 
+//        SET @Event_ID = (SELECT LAST_INSERT_ID());
         // build transaction query
         $query = "BEGIN;
             $queryEvents
-            SET @Event_ID = (SELECT LAST_INSERT_ID());
             $queryDescr
             $queryBriefing
             $queryPrices
@@ -1043,10 +1080,11 @@ class DBHandler{
 
         // query: event prices
         $queryPrices = $this->generateQuerySingleDelete(self::DB_EVENTS_PRICES, "eventID", $eventID);
+        $index = 1;
         foreach($prices as $price){
-
             $dataPrice = [
                 "eventID"=>$eventID,
+                "index"=>$index++,
                 "rank_from"=>isset($price["rank_from"]) ? "'".$price["rank_from"]."'" : null,
                 "rank_to"=>isset($price["rank_to"]) ? "'".$price["rank_to"]."'" : null,
                 "gold"=>isset($price["gold"]) ? "'".$price["gold"]."'" : null,
@@ -1075,8 +1113,8 @@ class DBHandler{
             $queryEvents
             $queryDescr
             $queryBriefing
-            $queryPrices
             $queryMaps
+            $queryPrices
         COMMIT;";
 
         return $this->queryInsert($query);
