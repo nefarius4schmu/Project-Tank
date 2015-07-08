@@ -46,6 +46,7 @@ ul.thumbnails.image_picker_selector li .thumbnail img{
 
 .dd-container label{
     margin-bottom: 0!important;
+    line-height: 1.4em!important;
 }
 
 .dd-options,

@@ -73,7 +73,7 @@ if(!$dbh->isConnection()) finish(_error(ERROR_DB_CONNECTION, null, false, true))
 /* ===================================================================================== */
 $options = ["clanID"=>$_player->hasClan() ? $_player->getClanID() : null];
 $event = $dbh->parse($dbh->getEventInfoByUid($uid, $options), false);
-$isEvent = $event !== false && !empty($event) && $event["userID"] == $_player->getID();
+$isEvent = $event !== false && !empty($event);//&& $event["userID"] == $_player->getID();
 if(!$isEvent) finish(_error(ERROR_DB_GET_EVENT_INFO, null, false, true));
 /* ===================================================================================== */
 $isStarted = isset($event["start"]) && strtotime($event["start"]) < time();

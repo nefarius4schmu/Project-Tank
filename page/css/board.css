@@ -349,8 +349,8 @@ span.sc-info	{color:#5bc0de}
 }
 
 .event.event-full .map img{
-    height: 200px;
-    max-width: 200px;
+    height: 240px;
+    max-width: 240px;
 }
 
 .event.event-full .caption h4{
@@ -1176,7 +1176,7 @@ i.wot-noclan{
 }
 
 i.wot-norating:after{
-	content: 'No rating';
+	content: 'keine';
 }
 
 

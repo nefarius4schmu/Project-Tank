@@ -65,6 +65,8 @@ if(!defined("WARNING_EVENT_CANNOT_JOIN"))  define("WARNING_EVENT_CANNOT_JOIN", 1
 
 if(!defined("ERROR_CALL_UNKOWN_TYPE"))  define("ERROR_CALL_UNKOWN_TYPE", 3100);
 if(!defined("ERROR_CALL_LOGIN"))  define("ERROR_CALL_LOGIN", 3101);
+if(!defined("ERROR_CALL_PLAYER"))  define("ERROR_CALL_PLAYER", 3102);
+if(!defined("ERROR_CALL_BRIEFING"))  define("ERROR_CALL_BRIEFING", 3103);
 
 
 /* ===================================================================================== */

@@ -213,7 +213,7 @@ class DBHandler{
      */
 
 //    public function update(){
-//        $query = "UPDATE ".self::DB_EVENTS_TYPES_OPTIONS." set description_i18n=".$this->quote("Es können nur die eigenen Clan-Mitglieder am Event teilnehmen.")." where `name`='clan';";
+//        $query = "UPDATE ".self::API_WOT_MAPS_DESCRIPTION." set name_i18n=".$this->quote("&Uuml;bungsgel&auml;nde")." where mapID=36 and lang='de';";
 //        return $this->queryInsert($query);
 //    }
 

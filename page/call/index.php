@@ -37,13 +37,13 @@ switch($request){
         $loginData = json_decode($inData, true);
         // todo: get error code with is_number for debugging
         $data = is_array($loginData) && !empty($loginData) ? getWotPlayerByLogin($loginData, $debug) : false;
-        if($data === false || $data === null) error(ERROR_CALL_LOGIN, print_r($data, true));
+        if($data === false || $data === null) error(ERROR_CALL_PLAYER, print_r($data, true));
         break;
     case IN_REQUEST_BRIEFING:
         $type = OUT_TYPE_OBJECT;
         // get event data
         $data = is_string($inData) && !empty($inData) ? getWotEvent($inData, $debug) : false;
-        if($data === false || $data === null) error(ERROR_CALL_LOGIN, print_r($data, true));
+        if($data === false || $data === null) error(ERROR_CALL_BRIEFING, print_r($data, true));
         break;
 }
 
@@ -138,7 +138,7 @@ function getWotEvent($briefingID, $debug=false){
     if (!$dbh->isConnection()) return false;
     /* ===================================================================================== */
     $options = ["validation"=>false];
-    $event = $dbh->getEventInfoByBriefingID($briefingID, $options);
+    $event = $dbh->parseArray($dbh->getEventInfoByBriefingID($briefingID, $options));
     if($event === false || $event === null) return false;
 
     $maps = $dbh->parseArray($dbh->getEventMapsFull($event["eventID"]));

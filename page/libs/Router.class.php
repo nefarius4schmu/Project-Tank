@@ -17,9 +17,9 @@ class Router{
     const CSS_LIB_DATETIMEPICKER = "js/datetimepicker/bootstrap-datetimepicker.min.css?400";
     const CSS_CLAN = "css/clan.css?002";
     const CSS_NEWS = "css/news.css?002";
-    const CSS_CREATOR = "css/creator.css?003";
+    const CSS_CREATOR = "css/creator.css?004";
     const CSS_EVENTS = "css/events.css?002";
-    const CSS_BOARD = "css/board.css?011'";
+    const CSS_BOARD = "css/board.css?013'";
     const CSS_BASE = "css/base.css?002'";
     const CSS_INDEX = "css/index.css?002'";
     const CSS_IMPRINT = "css/imprint.css?002'";

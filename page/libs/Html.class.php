@@ -441,7 +441,7 @@ class Html{
         if(!isset($event["summary"]) || empty($event["summary"])) $event["summary"] = self::truncate($event["text"], self::EVENT_LG_SUMMARY_MAX_LEN, ["removeLineBreak"=>true,"ellipsis"=>"...","removeHtml"=>true]);
 
         // set map info
-        $firstMap = isset($event["mapID"]) && isset($mapNames[$event["mapID"]]) ? '<img src="images/wot/maps/400x400/' . $mapNames[$event["mapID"]] . '.jpg" alt="event_map"/>' : null;
+        $firstMap = isset($event["mapID"]) && isset($mapNames[$event["mapID"]]) ? '<img src="'.PATH_IMG_MAPS_SMALL.$mapNames[$event["mapID"]].'.jpg" alt="event_map"/>' : null;
         $mapSum = isset($event["mapsCount"]) && $event["mapsCount"] > 1 ? self::template(self::TMP_EVENT_MULTIMAP_DISPLAY, ["sum"=>$event["mapsCount"]*1-1]) : null;
         $event["map"] = [
             "first"=>$firstMap,
@@ -533,7 +533,8 @@ class Html{
             $maps = "";
             foreach($event["maps"] as $mapID){
                 if(!isset($mapList[$mapID])) continue;
-                $map = '<img src="images/wot/maps/400x400/' . $mapList[$mapID]["name"] . '.jpg" alt="event_map"/>';
+                $map = '<img src="'.PATH_IMG_MAPS_SMALL.$mapList[$mapID]["name"].'.jpg" alt="event_map"/>';
+//                $name_i18n = htmlentities($mapList[$mapID]["name_i18n"], 'ISO-8859-1');
                 $name_i18n = $mapList[$mapID]["name_i18n"];
 //                $mode = isset($gameModes[], $map->getModeID(), "modeID");
 //                $modeID = $mode !== null ? $mode["modeID"] : null;
